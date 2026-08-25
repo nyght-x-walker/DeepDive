@@ -1,0 +1,239 @@
+1
+00:00:03,990 --> 00:00:12,275
+When is a string just a string — and when does it become a security problem?
+
+2
+00:00:12,276 --> 00:00:25,023
+To answer that, we need to see the boundary between memory regions
+that may be physically adjacent, but are logically separate.
+
+3
+00:00:25,024 --> 00:00:38,410
+This is Phase One of my C++ memory-safety deep dive: visualizing
+what happens when input length and buffer capacity do not match.
+
+4
+00:00:44,310 --> 00:00:52,834
+Before we look at memory regions, we need to
+understand what is actually being stored.
+
+5
+00:00:52,835 --> 00:00:57,097
+A byte is made up of eight bits.
+
+6
+00:00:57,098 --> 00:01:01,969
+The same byte can be represented in several ways.
+
+7
+00:01:01,970 --> 00:01:09,276
+In binary, the letter A is written as 0100 0001.
+
+8
+00:01:09,277 --> 00:01:14,757
+In hexadecimal, the same value is written as 0x41.
+
+9
+00:01:14,758 --> 00:01:20,238
+As an ASCII character, it is simply the letter A.
+
+10
+00:01:20,239 --> 00:01:29,981
+These are not three different values
+They are three different ways of representing the same byte.
+
+11
+00:01:29,982 --> 00:01:42,770
+Later, when we examine the memory dump, we will read the data in
+all three forms: offsets, hexadecimal values, and ASCII characters.
+
+12
+00:01:49,010 --> 00:01:57,759
+The C++ program creates one contiguous byte array with twenty bytes of storage.
+
+13
+00:01:57,760 --> 00:02:02,470
+That array is divided into three logical regions.
+
+14
+00:02:02,471 --> 00:02:07,854
+The first eight bytes represent the logical buffer.
+
+15
+00:02:07,855 --> 00:02:12,566
+The next four bytes represent a critical flag.
+
+16
+00:02:12,567 --> 00:02:17,277
+The final eight bytes represent a second buffer.
+
+17
+00:02:17,278 --> 00:02:30,065
+The important distinction is this: the bytes are physically
+adjacent, but each region still has its own logical boundary.
+
+18
+00:02:30,066 --> 00:02:46,218
+In other words, being next to another region does not automatically
+mean that the first buffer owns it or is allowed to write into it.
+
+19
+00:02:46,219 --> 00:02:59,680
+This is a deliberately constructed educational model
+It is not a claim about the layout of a real compiler-generated stack frame.
+
+20
+00:03:04,920 --> 00:03:11,035
+Now we will start with an input that fits.
+
+21
+00:03:11,036 --> 00:03:16,472
+The input is HELLO, which contains five bytes.
+
+22
+00:03:16,473 --> 00:03:28,705
+The logical buffer has a capacity of eight bytes,
+so all five input bytes remain inside the buffer.
+
+23
+00:03:28,706 --> 00:03:34,821
+The adjacent flag and the second buffer are unchanged.
+
+24
+00:03:34,822 --> 00:03:38,219
+This is the safe case.
+
+25
+00:03:38,220 --> 00:03:54,530
+Notice that input length and buffer capacity are different quantities
+Here, the input is smaller than the capacity, so there is no boundary crossing.
+
+26
+00:04:04,610 --> 00:04:09,340
+Now the input is much longer: ABCDEFGHIJKLMNO.
+
+27
+00:04:09,341 --> 00:04:18,801
+This input contains fifteen bytes, while the logical buffer can hold only eight.
+
+28
+00:04:18,802 --> 00:04:26,234
+The first eight bytes fit inside the buffer: A through H.
+
+29
+00:04:26,235 --> 00:04:29,613
+Then we reach the boundary.
+
+30
+00:04:29,614 --> 00:04:39,750
+In this deliberately constructed model, the remaining
+bytes appear in the adjacent logical regions.
+
+31
+00:04:39,751 --> 00:04:52,590
+I through L replace the bytes representing the critical flag,
+and M, N, and O replace the beginning of the second buffer.
+
+32
+00:04:52,591 --> 00:05:03,403
+This visualization shows why input length
+and buffer capacity must be treated as separate quantities.
+
+33
+00:05:03,404 --> 00:05:15,567
+In a real unsafe implementation, bytes that continue
+past a buffer's boundary may overwrite adjacent data.
+
+34
+00:05:15,568 --> 00:05:23,001
+That can corrupt program state and may create a security vulnerability.
+
+35
+00:05:23,002 --> 00:05:29,083
+However, this specific Phase One program is still a safe model.
+
+36
+00:05:29,084 --> 00:05:34,490
+It is not performing an actual out-of-bounds write.
+
+37
+00:05:45,070 --> 00:05:52,597
+We can now read the same memory as a dump.
+
+38
+00:05:52,598 --> 00:06:10,163
+The first column shows the offset. The second column shows the byte in hexadecimal
+The third column shows its ASCII interpretation.
+
+39
+00:06:10,164 --> 00:06:21,874
+For example, A is represented as 0x41, J as 0x4a, and O as 0x4f.
+
+40
+00:06:21,875 --> 00:06:46,132
+The dump makes the boundary crossing visible. At offsets eight through eleven,
+the flag bytes are no longer zero. They now contain the bytes for I, J, K, and L.
+
+41
+00:06:46,133 --> 00:06:58,680
+This is the low-level view of the same event we just watched in the animation.
+
+42
+00:07:08,120 --> 00:07:16,926
+Let us be precise about what this demonstration does — and does not — show.
+
+43
+00:07:16,927 --> 00:07:23,532
+Phase One does not perform an actual out-of-bounds write.
+
+44
+00:07:23,533 --> 00:07:38,945
+The program copies at most the total size of the twenty-byte array
+Every copied byte therefore remains inside that educational model.
+
+45
+00:07:38,946 --> 00:07:47,752
+We are visualizing where bytes would land if they continued across logical regions.
+
+46
+00:07:47,753 --> 00:08:00,963
+In real C++ code, an access outside the bounds of an array is undefined behavior
+The result is not guaranteed.
+
+47
+00:08:00,964 --> 00:08:10,504
+The program might appear to work, produce incorrect output, corrupt data, or crash.
+
+48
+00:08:10,505 --> 00:08:17,844
+That is why this phase focuses on the mental model first.
+
+49
+00:08:17,845 --> 00:08:28,120
+The next phase will isolate an intentionally vulnerable C-string operation
+and examine it with AddressSanitizer.
+
+50
+00:08:36,100 --> 00:08:46,593
+Phase Two will show the vulnerable operation:
+an unchecked C-string copy using strcpy,
+
+51
+00:08:46,594 --> 00:08:53,589
+where the destination capacity is not provided to the function.
+
+52
+00:08:53,590 --> 00:09:04,957
+We will then compile the isolated program with AddressSanitizer
+and examine the diagnostic report.
+
+53
+00:09:04,958 --> 00:09:18,949
+But this phase ends with the central lesson:
+input length is not the same as buffer capacity.
+
+54
+00:09:18,950 --> 00:09:36,440
+Once we can see that boundary clearly, we can understand both the vulnerability
+and the defenses used to reduce its risk.
+
