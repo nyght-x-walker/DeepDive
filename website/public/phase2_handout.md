@@ -4,6 +4,9 @@
 
 C++ Memory Safety Deep Dive Phase 2
 Film: intermediate-2-vulnerable-operation.mp4, 7 minutes 20 seconds, 440s total, 1920x1080, 30fps, burned in captions
+Interactive site: https://nyght-x-walker.github.io/DeepDive/
+Film online: https://nyght-x-walker.github.io/DeepDive/videos/intermediate-2-vulnerable-operation.mp4
+Phase 1 film online: https://nyght-x-walker.github.io/DeepDive/videos/phase1.mp4
 
 ## Abstract
 

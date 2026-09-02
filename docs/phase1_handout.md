@@ -3,7 +3,8 @@
 ## Seeing the Boundary: Visualizing Logical Memory Regions in C++
 
 C++ Memory Safety Deep Dive, Phase 1
-Master's-level Cybersecurity course support material
+Interactive site: https://nyght-x-walker.github.io/DeepDive/
+Film online: https://nyght-x-walker.github.io/DeepDive/videos/phase1.mp4
 
 ## Abstract
 
