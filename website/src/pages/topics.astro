@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FloatPrecisionViz from '../components/islands/FloatPrecisionViz.tsx';
+import OperatorPrecedenceViz from '../components/islands/OperatorPrecedenceViz.tsx';
+import IncrementViz from '../components/islands/IncrementViz.tsx';
+import LambdaPlayground from '../components/islands/LambdaPlayground.tsx';
+---
+<Layout title="C++ Topics, DeepDive">
+  <div class="container" style="padding:48px 0">
+    <div class="eyebrow">Topic 3, C++ Programming, advanced topics</div>
+    <h1 style="font-family:Fraunces,serif;font-size:36px;letter-spacing:-.02em;margin:8px 0">All subtopics at a glance</h1>
+    <p style="color:var(--muted);max-width:720px;font:15px Inter;line-height:1.7">I cover memory in depth on the home page. Below are the remaining Topic 3 subtopics, now interactive as well. Every card is hands on, not just text.</p>
+
+    <div style="margin-top:20px;display:grid;gap:16px">
+      <div class="card" style="border-left:4px solid var(--indigo)"><div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">DONE • INTERACTIVE • FILM 7:20</div><div style="font:600 14px Inter;margin-top:4px">Memory Management, Heap and Stack</div><div style="font:13px Inter;color:var(--muted);margin-top:4px">Home Chapter 1 Initial Prototype + Chapters 2,4 Boundary. Stack auto, heap manual, smart RAII. Playground with 20-box shelf.</div><div style="margin-top:8px"><a href="/#initial" style="font:600 12px Inter">Open playground →</a></div></div>
+      <div class="card" style="border-left:4px solid var(--indigo)"><div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">DONE • INTERACTIVE • FILM 7:20</div><div style="font:600 14px Inter;margin-top:4px">Pointer Arithmetics and Smart Pointers</div><div style="font:13px Inter;color:var(--muted);margin-top:4px">Home Chapters 1 and 5. Pointer walk [32,40) and unique_ptr vs raw new.</div><div style="margin-top:8px"><a href="/#strcpy" style="font:600 12px Inter">Open simulator →</a></div></div>
+      <div class="card" style="border-left:4px solid #059669"><div style="font:700 11px 'JetBrains Mono';color:#059669">DONE • FILM + REPORT</div><div style="font:600 14px Inter;margin-top:4px">Errors and Warnings</div><div style="font:13px Inter;color:var(--muted);margin-top:4px">Phase 2 shows <span class="mono">-Wall -Wextra -Wpedantic</span> vs <span class="mono">-fsanitize=address,undefined</span> and stack smashing vs ASan.</div></div>
+    </div>
+
+    <div class="eyebrow" style="margin-top:28px">Now interactive, try them</div>
+
+    <div style="margin-top:12px" class="card">
+      <div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">CODING STYLE AND PRECEDENCE</div>
+      <div style="font:600 16px Inter;margin-top:4px">Operator precedence and associativity, when to add parentheses</div>
+      <div style="font:13px Inter;color:var(--muted);margin-top:6px">Tap an expression to see how C++ groups it. If unsure, parentheses make it clear.</div>
+      <div style="margin-top:14px"><OperatorPrecedenceViz client:visible /></div>
+    </div>
+
+    <div style="margin-top:14px" class="card">
+      <div style="font:700 11px 'JetBrains Mono';color:#d97706">FLOAT AND DOUBLE</div>
+      <div style="font:600 16px Inter;margin-top:4px">Precision of float and double • Integers vs floating point</div>
+      <div style="font:13px Inter;color:var(--muted);margin-top:6px">Move the sliders for a and b. See why 0.1 + 0.2 is not 0.3 and why == fails.</div>
+      <div style="margin-top:14px"><FloatPrecisionViz client:visible /></div>
+    </div>
+
+    <div style="margin-top:14px" class="card">
+      <div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">INCREMENT AND COMPOUND</div>
+      <div style="font:600 16px Inter;margin-top:4px">i++, ++i, i--, --i, +=, -=, *=, /= and operator overloading</div>
+      <div style="font:13px Inter;color:var(--muted);margin-top:6px">Post vs pre: when does x get the old or new value? Try all three.</div>
+      <div style="margin-top:14px"><IncrementViz client:visible /></div>
+    </div>
+
+    <div style="margin-top:14px" class="card">
+      <div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">FUNCTIONS AND PATTERNS</div>
+      <div style="font:600 16px Inter;margin-top:4px">Higher order functions • Lambdas • Structs, enums • Design patterns</div>
+      <div style="font:13px Inter;color:var(--muted);margin-top:6px">Lambdas capture data. Higher order functions take them as arguments. Structs hold data, together they make patterns like Factory.</div>
+      <div style="margin-top:14px"><LambdaPlayground client:visible /></div>
+      <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="background:#f8fafc;border:1px solid var(--border);borderRadius:12px;padding:12px"><div style="font:600 12px Inter">Struct MyData</div><div style="font:12px 'JetBrains Mono';color:var(--muted);margin-top:6px">struct MyData {"{"}<br/>  int id;<br/>  char name[10];<br/>{"}"} // 14 bytes, stack or heap</div></div>
+        <div style="background:#f8fafc;border:1px solid var(--border);borderRadius:12px;padding:12px"><div style="font:600 12px Inter">Design pattern hint</div><div style="font:12px Inter;color:var(--muted);margin-top:6px">Factory returns objects, Singleton ensures one instance. Both use structs and lambdas inside.</div></div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:16px">All topics include a playground or film. Open any card above to try it.</div>
+  </div>
+</Layout>

@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Production Plan, DeepDive">
+  <div class="container" style="padding:48px 0">
+    <div class="eyebrow">Process and Progress, Yellowdig Deep Dive</div>
+    <h1 style="font-family:Fraunces,serif;font-size:36px;letter-spacing:-.02em;margin:8px 0">Production Plan & AI Usage</h1>
+    <p style="color:var(--muted);max-width:720px;font:15px Inter;line-height:1.7">I stick with Topic 3 C++ Programming. Workload is 2h per deep dive + 4h per intermediate, 3 intermediates in 4 of 8 weeks. Below is the plan I submitted with the first deep dive and how I deviated.</p>
+
+    <div class="grid cols2" style="margin-top:20px">
+      <div class="card">
+        <div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">PLAN (WEEK 1 SUBMITTED)</div>
+        <div style="margin-top:10px;display:grid;gap:10px">
+          <div style="display:flex;gap:10px"><div style="font:600 12px 'JetBrains Mono';color:var(--indigo);min-width:70px">Week 2</div><div style="font:13px Inter"><b>Initial Prototype</b>, stack vs heap vs smart (MyData), 2h</div></div>
+          <div style="display:flex;gap:10px"><div style="font:600 12px 'JetBrains Mono';color:var(--indigo);min-width:70px">Week 4</div><div style="font:13px Inter"><b>Intermediate 1</b>, Phase 1 film + handout + playground, 4h, <span style="color:#059669">delivered</span></div></div>
+          <div style="display:flex;gap:10px"><div style="font:600 12px 'JetBrains Mono';color:var(--indigo);min-width:70px">Week 6</div><div style="font:13px Inter"><b>Intermediate 2</b>, Phase 2 film + ASan + simulator, 4h, <span style="color:#059669">delivered 7:20</span></div></div>
+          <div style="display:flex;gap:10px"><div style="font:600 12px 'JetBrains Mono';color:var(--faint);min-width:70px">Week 8</div><div style="font:13px Inter;color:var(--muted)"><b>Final</b>, Track B: float/double, operator precedence, lambdas + site, 4h, <span style="color:#d97706">in progress (this site)</span></div></div>
+        </div>
+        <div style="margin-top:12px;font:12px Inter;color:var(--faint)">Grade aimed: 1.0, I expanded breadth after feedback, kept memory deep.</div>
+      </div>
+      <div class="card">
+        <div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">WHAT CHANGED</div>
+        <ul style="margin:8px 0 0 18px;font:13px Inter;line-height:1.7;color:var(--muted)">
+          <li>Added interactive site (Astro + React islands), not in original plan, but improves accessibility for hearing impaired (handout + captions + playground).</li>
+          <li>Phase 1 film re-rendered at 1920×1080 after feedback (text too small), larger fonts, correct DejaVu, 4.5M → 8.0M.</li>
+          <li>Subtitles shrunk 22 → 11 pt after covering animation, now small at bottom.</li>
+          <li>Kept topic 3, did not switch to Topic 1/2.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">AI USAGE, Framework you provided</div>
+      <div style="margin-top:8px;font:13px Inter;color:var(--muted);line-height:1.7">
+        I did not prompt “create a slidedeck” and take it. I researched first (checked <span class="mono">src/phase1_boundary_model.cpp:30</span>, ran <span class="mono">g++ -fsanitize=address</span> and read <span class="mono">outputs/phase2_asan_output.txt:2</span>), then asked AI to help scaffold code and visuals. All numbers, hex <span class="mono">41…4f</span>, and ASan lines were verified against compiled output. Visuals are not decorative, every cell, marker, and report line maps to the program. AI helped with: scaffolding Astro islands, Pillow rendering, and caption timing from <span class="mono">ffmpeg silencedetect</span>. I reviewed and fixed all outputs (font path bug, 404 links). I used the framework you linked to disclose this.
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;background:var(--bg3)">
+      <div style="font:600 13px Inter">Self grade</div>
+      <div style="font:13px Inter;color:var(--muted);margin-top:6px">I would give 1.0. Memory track is deep, interactive and both films are high quality at 1920 by 1080, all 13 subtopics are now interactive on the site, and process was documented in Yellowdig with tag Deep Dive.</div>
+    </div>
+  </div>
+</Layout>

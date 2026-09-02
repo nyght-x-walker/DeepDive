@@ -1,0 +1,202 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MemoryAllocatorViz from '../components/islands/MemoryAllocatorViz.tsx';
+import BoundaryPlayground from '../components/islands/BoundaryPlayground.tsx';
+import StrcpySimulator from '../components/islands/StrcpySimulator.tsx';
+import AsanExplorer from '../components/islands/AsanExplorer.tsx';
+---
+
+<Layout title="DeepDive C++ Memory Safety from Zero to Overflow">
+  <div class="container hero">
+    <div class="badge dot">Beginner friendly • No prior exploits needed • Interactive</div>
+    <h1>C++ Memory Safety<br/>from <em>first allocation</em> to real overflow</h1>
+    <p style="max-width:740px">You write C++ and it runs. Behind the scenes, every variable lives at an address in memory. This site teaches you, hands on, where that memory lives, how a buffer can be too small, why copying without checking is dangerous, and how a tool catches it. You will type, see and break things safely, without installing anything.</p>
+    <div class="hero-actions">
+      <a class="btn" href="#about">Start 5 min overview</a>
+      <a class="btn ghost" href="#initial">Jump to playground</a>
+    </div>
+    <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap">
+      <span class="badge">7 min film per phase</span><span class="badge">Try it in browser</span><span class="badge">No exploit, local only</span>
+    </div>
+  </div>
+
+  <section id="about" class="chapter" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="container">
+      <div class="eyebrow">Start here, 2 minutes</div>
+      <h2>What is this about and why should you care?</h2>
+      <div class="grid cols2" style="align-items:start">
+        <div>
+          <h3 style="font:600 16px Inter;margin:14px 0 6px">What is this?</h3>
+          <p style="color:var(--muted);font:15px Inter;line-height:1.7;margin:0">A short, visual course that follows one story: a C++ program that owns memory three different ways, then puts 5 letters into an 8-byte box (fits), then tries to put 15 letters into the same box (overflows), then does it for real with <span class="mono">strcpy</span> and watches a detector report it. You go from where does a variable live to why is this a security problem in one sitting.</p>
+          <h3 style="font:600 16px Inter;margin:18px 0 6px">Why it matters</h3>
+          <p style="color:var(--muted);font:15px Inter;line-height:1.7;margin:0">If a program writes past the end of its box, it may crash, corrupt data, or open a security hole. The same pattern, copying without checking size, has caused real incidents in widely used software. Learning to see the boundary is the first defense.</p>
+        </div>
+        <div class="card" style="background:linear-gradient(180deg,#ffffff,#f8fafc)">
+          <div style="font:700 12px 'JetBrains Mono';letter-spacing:.08em;color:var(--indigo)">WHAT YOU WILL KNOW AFTER</div>
+          <ul style="margin:10px 0 0 18px;color:var(--text);font:14px Inter;line-height:1.7">
+            <li>What <b>memory, address, buffer, stack, heap</b> mean</li>
+            <li>Why <b>buffer capacity</b> and <b>input length</b> are different numbers</li>
+            <li>Why <span class="mono">strcpy</span> is unsafe (it does not know the destination size)</li>
+            <li>How <b>AddressSanitizer</b> reports <span class="mono">stack-buffer-overflow</span> and how to read it</li>
+            <li>Why the same bug may <b>crash, be caught, or look fine</b>, all are undefined behavior</li>
+            <li>How to fix it: size-aware code and layered defenses</li>
+          </ul>
+          <div style="margin-top:12px;font:12px Inter;color:var(--faint)">No C++ expertise needed. You should be comfortable seeing a variable and a function. Everything else is explained.</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px;background:var(--bg3)">
+        <div style="font:600 13px Inter">How they connect, the one story</div>
+        <div style="margin-top:10px;display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:center;text-align:center">
+          <div><div style="background:white;border:1px solid var(--border);border-radius:10px;padding:10px 6px;font:600 12px Inter">Memory is a street of boxes</div><div style="font:11px Inter;color:var(--faint);margin-top:4px">bytes and addresses</div></div>
+          <div style="color:var(--faint)">→</div>
+          <div><div style="background:white;border:1px solid var(--border);border-radius:10px;padding:10px 6px;font:600 12px Inter">Stack vs Heap</div><div style="font:11px Inter;color:var(--faint)">where boxes live</div></div>
+          <div style="color:var(--faint)">→</div>
+          <div><div style="background:white;border:1px solid var(--border);border-radius:10px;padding:10px 6px;font:600 12px Inter">Buffer[8]</div><div style="font:11px Inter;color:var(--faint)">a box with 8 slots</div></div>
+          <div style="color:var(--faint)">→</div>
+          <div><div style="background:white;border:1px solid var(--indigo);border-radius:10px;padding:10px 6px;font:600 12px Inter;color:var(--indigo)">Overflow</div><div style="font:11px Inter;color:var(--faint)">15 into 8</div></div>
+        </div>
+        <div style="margin-top:10px;display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:center;text-align:center">
+          <div><div style="background:white;border:1px solid var(--border);border-radius:10px;padding:10px 6px;font:600 12px Inter">strcpy</div><div style="font:11px Inter;color:var(--faint)">copies blind</div></div>
+          <div style="color:var(--faint)">→</div>
+          <div><div style="background:#fff1f2;border:1px solid #fda4af;border-radius:10px;padding:10px 6px;font:600 12px Inter;color:#be123c">ASan report</div><div style="font:11px Inter;color:var(--faint)">WRITE 16, [32,40)</div></div>
+          <div style="color:var(--faint)">→</div>
+          <div><div style="background:white;border:1px solid var(--border);border-radius:10px;padding:10px 6px;font:600 12px Inter">Fix</div><div style="font:11px Inter;color:var(--faint)">check size</div></div>
+          <div style="color:var(--faint)">→</div>
+          <div><div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:10px 6px;font:600 12px Inter;color:#15803d">Safe code</div><div style="font:11px Inter;color:var(--faint)">defense</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="container">
+      <div class="eyebrow">Plain words first</div>
+      <h2>Seven words you need</h2>
+      <h3>Hover or tap to see the analogy. Every later chapter uses only these.</h3>
+      <div class="grid cols3">
+        <div class="card hover"><div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">MEMORY</div><div style="font:600 14px Inter;margin-top:4px">A street of numbered boxes</div><div style="font:13px Inter;color:var(--muted);margin-top:6px;line-height:1.6">Each box holds one byte (0 to 255). Its house number is its <b>address</b>. C++ puts variables into these boxes.</div><div style="margin-top:8px;font:12px 'JetBrains Mono';background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;color:var(--faint)">Analogy: post boxes in a row, each with a number.</div></div>
+        <div class="card hover"><div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">BUFFER</div><div style="font:600 14px Inter;margin-top:4px">A box you reserved with 8 slots</div><div style="font:13px Inter;color:var(--muted);margin-top:6px;line-height:1.6"><span class="mono">char buffer[8]</span> means: reserve 8 consecutive boxes. Capacity is 8, you must not use 9.</div><div style="margin-top:8px;font:12px 'JetBrains Mono';background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;color:var(--faint)">Analogy: an 8-egg carton, 8 spots, not 9.</div></div>
+        <div class="card hover"><div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">STACK vs HEAP</div><div style="font:600 14px Inter;margin-top:4px">Where the carton lives</div><div style="font:13px Inter;color:var(--muted);margin-top:6px;line-height:1.6"><b>Stack:</b> automatic, fast, freed when the function ends. <b>Heap:</b> you request with <span class="mono">new</span>, you must free with <span class="mono">delete</span>. <b>Smart pointer:</b> heap but auto-freed (RAII).</div><div style="margin-top:8px;font:12px 'JetBrains Mono';background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 8px;color:var(--faint)">Analogy: desk (stack) vs storage room (heap).</div></div>
+        <div class="card hover"><div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">POINTER / SMART</div><div style="font:600 14px Inter;margin-top:4px">A note with a house number</div><div style="font:13px Inter;color:var(--muted);margin-top:6px;line-height:1.6">A pointer stores an address. A <span class="mono">unique_ptr</span> is a pointer that automatically frees the heap box when it goes out of scope.</div></div>
+        <div class="card hover"><div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">STRCPY</div><div style="font:600 14px Inter;margin-top:4px">A copier that does not ask how big the destination is</div><div style="font:13px Inter;color:var(--muted);margin-top:6px;line-height:1.6"><span class="mono">strcpy(dst,src)</span> copies until it sees <span class="mono">'\0'</span>. It never checks if <span class="mono">dst</span> is big enough.</div><div style="margin-top:8px;font:12px 'JetBrains Mono';background:#fff1f2;border:1px solid #fecdd3;border-radius:8px;padding:6px 8px;color:#be123c">This is why it is unsafe.</div></div>
+        <div class="card hover"><div style="font:700 11px 'JetBrains Mono';color:var(--indigo)">ADDRESSSANITIZER</div><div style="font:600 14px Inter;margin-top:4px">A checker that watches every write</div><div style="font:13px Inter;color:var(--muted);margin-top:6px;line-height:1.6">Built with <span class="mono">-fsanitize=address</span>. If you write past your 8, it stops and prints <span class="mono">stack-buffer-overflow, WRITE 16, [32,40)</span>. It does not fix, it tells you.</div></div>
+      </div>
+      <div class="callout" style="margin-top:14px">Writing past your box can crash the program or change data you did not mean to change. That is a security problem, not just a bug.</div>
+    </div>
+  </section>
+
+  <section id="initial" class="chapter" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="container">
+      <div class="eyebrow">Chapter 1, Initial Prototype</div>
+      <h2>Where memory lives: stack, heap and smart</h2>
+      <h3>I start with <span class="mono">initial_prototype.cpp</span> because it shows the three homes a C++ object can have, and why the third is safest.</h3>
+      <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
+        <div style="font:14px Inter;color:var(--muted);line-height:1.7">Think of a variable as a labeled carton. On the <b>stack</b>, the carton is on your desk and disappears when you leave the desk (function ends). On the <b>heap</b> with <span class="mono">new</span>, the carton is in a storage room, you must remember to return it with <span class="mono">delete</span>, or it stays forever (a leak). A <span class="mono">unique_ptr</span> is a heap carton with a string tied to your wrist, when you leave, it is pulled back automatically.</div>
+      </div>
+      <MemoryAllocatorViz client:visible />
+      <div class="card" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><span style="font:600 12px Inter">This chapter:</span><a class="btn ghost" href="/handouts/initial" style="padding:8px 12px">Handout</a><a class="btn ghost" href="/code/initial" style="padding:8px 12px">Code</a><span style="font:12px Inter;color:var(--faint)">Styled handout and code.</span></div>
+      <div class="card" style="margin-top:12px"><div style="font:600 13px Inter">What you just learned and why it matters for the next chapters</div><div style="font:14px Inter;color:var(--muted);margin-top:6px;line-height:1.7">All later memory is the same street of boxes. The stack boxes you will overflow in Phase 2 are like the desk cartons here, they live right next to each other, so writing past one writes into the next. Smart pointers matter because they remove one class of mistakes, but they do not stop you from writing past a buffer.</div></div>
+    </div>
+  </section>
+
+  <section id="boundary" class="chapter">
+    <div class="container">
+      <div class="eyebrow">Chapters 2 to 4, Seeing the Boundary</div>
+      <h2>One long shelf, three labeled sections, one rule</h2>
+      <h3>I build a 20-box shelf: first 8 are your buffer, next 4 are a flag, last 8 are another buffer. The rule: stay in your 8.</h3>
+      <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
+        <div style="font:14px Inter;color:var(--muted);line-height:1.7">Imagine a bookshelf with 20 slots. You own slots 0 to 7. Slots 8 to 11 belong to a do not touch box, 12 to 19 to a second shelf. If you put 5 books (HELLO), they fit in your 8. If you put 15 books (ABCDEFGHIJKLMNO), 7 stick out past your section, they end up in the next boxes. Phase 1 shows this with a safety cap so nothing really breaks. Phase 2 removes the cap.</div>
+      </div>
+      <BoundaryPlayground client:visible />
+      <div class="card" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><span style="font:600 12px Inter">This chapter:</span><a class="btn ghost" href="/handouts/phase1" style="padding:8px 12px">Handout</a><a class="btn ghost" href="/code/phase1" style="padding:8px 12px">Code</a><a class="btn ghost" href="/videos/phase1.mp4" download style="padding:8px 12px">Film 37M</a></div>
+      <div style="margin-top:14px" class="grid cols2">
+        <div class="card hover">
+          <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#059669">PHASE 1 FILM, SAFE</div>
+          <video controls preload="metadata" style="width:100%;border-radius:12px;margin-top:10px;background:#0f172a"><source src="/videos/phase1.mp4" type="video/mp4" />Your browser does not support video.</video>
+          <div style="font:13px Inter;color:var(--faint);margin-top:8px">You will see HELLO stay inside 00..04 and ABCDEFGHIJKLMNO spill into 08..14. The spill is only shown, not really written past the shelf.</div>
+        </div>
+        <div class="card">
+          <div style="font:600 14px Inter">Play and see</div>
+          <div style="font:14px Inter;color:var(--muted);margin-top:8px;line-height:1.7">Type <span class="mono">HELLO</span> then <span class="mono">ABCDEFGHIJKLMNO</span>. Watch the red marker at 07|08, that is the boundary you must respect.</div>
+          <div style="margin-top:12px;display:flex;gap:8px"><span class="badge" style="background:#eff6ff;border-color:#dbeafe;color:#1d4ed8">Tip: try 8 vs 9 characters</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="strcpy" class="chapter" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="container">
+      <div class="eyebrow">Chapter 5, The Real Bug</div>
+      <h2>strcpy copies without asking how big the destination is</h2>
+      <h3><span class="mono">char buffer[8]; strcpy(buffer,input);</span> if input is 15 plus the ending zero, 16 bytes are written into 8. The extra 8 land on the stack next door.</h3>
+      <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
+        <div style="font:14px Inter;color:var(--muted);line-height:1.7">A buffer is an 8-egg carton. <span class="mono">strcpy</span> is a helper that pours eggs until it sees a stopper (the zero byte), without counting the carton size. With 7 eggs plus stopper it fits. With 15 plus stopper it needs 16 spots and 8 pour over. Those 8 overwrite whatever was next on the desk, maybe another variable, maybe the return address that tells the program where to go next. That is why it is a security issue, not just a crash.</div>
+      </div>
+      <StrcpySimulator client:visible />
+      <div class="card" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><span style="font:600 12px Inter">This chapter:</span><a class="btn ghost" href="/handouts/phase2" style="padding:8px 12px">Handout</a><a class="btn ghost" href="/code/phase2" style="padding:8px 12px">Code</a><a class="btn ghost" href="/videos/intermediate-2-vulnerable-operation.mp4" download style="padding:8px 12px">Film 8.0M</a></div>
+    </div>
+  </section>
+
+  <section id="asan" class="chapter">
+    <div class="container">
+      <div class="eyebrow">Chapter 6, Caught</div>
+      <h2>AddressSanitizer makes the invisible visible</h2>
+      <h3>It is a test-time checker (not a fix). Build with <span class="mono">-fsanitize=address</span> and it stops on the first bad write and explains it.</h3>
+      <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
+        <div style="font:600 13px Inter">How to read the report, in 30 seconds</div>
+        <div style="font:14px Inter;color:var(--muted);margin-top:6px;line-height:1.7"><span class="mono">stack-buffer-overflow</span> = you wrote past a stack buffer. <span class="mono">WRITE size 16</span> = you wrote 16 bytes (15 letters + zero). <span class="mono">[32,40) 'buffer' line 44</span> = the buffer is 8 bytes at stack offset 32, declared at line 44. <span class="mono">at offset 40</span> = first bad byte is 8 past the start. Click the tokens below to highlight them.</div>
+      </div>
+      <AsanExplorer client:visible />
+      <div class="card" style="margin-top:14px">
+        <div style="font:600 14px Inter">Film, 7 min 20 s, 440 s</div>
+        <video controls preload="metadata" style="width:100%;border-radius:12px;margin-top:10px;background:#0f172a"><source src="/videos/intermediate-2-vulnerable-operation.mp4" type="video/mp4" /><track kind="captions" src="/videos/phase2_captions.vtt" srclang="en" label="English" default /></video>
+        <div style="font:13px Inter;color:var(--faint);margin-top:8px">Watch once, then come back and click the report tokens above, the video shows the same 8 past 8 you just typed.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="defense" class="chapter" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+    <div class="container">
+      <div class="eyebrow">Chapter 7, So what now?</div>
+      <h2>Undefined does not mean random, it means no promises</h2>
+      <h3>The very same 16 into 8 can abort with AddressSanitizer, abort with a canary, or look fine. All are allowed. That is why you must not rely on it seemed to work.</h3>
+      <div class="grid cols2">
+        <div class="card" style="border-color:#86efac;background:linear-gradient(180deg,#f0fdf4,#ffffff)">
+          <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#059669">PHASE 1 LEARNED</div>
+          <div style="font:600 14px Inter;margin-top:6px">Where the boundary is</div>
+          <div style="font:13px Inter;color:var(--muted);margin-top:6px">One shelf, three sections, marker at 07|08. Input length and capacity are different numbers.</div>
+        </div>
+        <div class="card" style="border-color:#fda4af;background:linear-gradient(180deg,#fff1f2,#ffffff)">
+          <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#e11d48">PHASE 2 LEARNED</div>
+          <div style="font:600 14px Inter;margin-top:6px">What happens when you cross it for real</div>
+          <div style="font:13px Inter;color:var(--muted);margin-top:6px">Real stack buffer, real overwrite, caught as <span class="mono">WRITE 16 into 8</span>.</div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px;text-align:center;background:linear-gradient(180deg,#ffffff,#f8fafc)">
+        <div style="font:700 22px 'Fraunces',serif;color:var(--indigo)">Input length is not buffer capacity, check every time</div>
+        <div style="font:13px Inter;color:var(--faint);margin-top:6px">Fix: use size-aware functions, keep AddressSanitizer in tests, and rely on layers, canaries, ASLR, NX/DEP, control-flow checks. No single layer is enough.</div>
+      </div>
+      <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+        <a class="btn" href="/videos/intermediate-2-vulnerable-operation.mp4" download>Download film (8.0M)</a>
+        <a class="btn ghost" href="/handouts/phase1">Handout Phase 1</a>
+        <a class="btn ghost" href="/handouts/phase2">Handout Phase 2</a>
+        <a class="btn ghost" href="/handouts/initial">Handout Initial</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" style="background:var(--bg3);">
+    <div class="container prose">
+      <h3>Try the real thing locally, isolated, step by step</h3>
+      <p>All playgrounds above are simulations. To see the real detector, run the two builds below in a local folder or VM. They do the same thing you just typed.</p>
+      <div class="card mono" style="font-size:13px;line-height:1.6;color:var(--muted);background:var(--bg2)">
+        g++ -std=c++20 -Wall -Wextra -Wpedantic -g src/phase2_vulnerable_strcpy.cpp -o phase2_vulnerable<br/>
+        ./phase2_vulnerable<br/><br/>
+        g++ -std=c++20 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -g src/phase2_vulnerable_strcpy.cpp -o phase2_vulnerable_asan<br/>
+        ./phase2_vulnerable_asan
+      </div>
+      <p style="font:13px Inter;color:var(--faint)">No network, no external target, synthetic inputs only (<span class="mono">1234567</span> and <span class="mono">ABCDEFGHIJKLMNO</span>). The vulnerable binaries must never be deployed.</p>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,15 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import code from '../../../public/phase2_vulnerable_strcpy.cpp?raw';
+---
+<Layout title="Code, Phase 2 vulnerable">
+  <div class="container" style="padding:40px 0;max-width:860px">
+    <div class="eyebrow">Code • Phase 2</div>
+    <h1 style="font-family:Fraunces,serif;font-size:30px;margin:8px 0">phase2_vulnerable_strcpy.cpp</h1>
+    <p style="color:var(--muted);font:14px Inter">Minimal, isolated, intentionally vulnerable. 87 lines. No exploit payload.</p>
+    <div class="card" style="margin-top:16px;background:#0f172a;border-color:#1e293b">
+      <pre style="margin:0;font:13px 'JetBrains Mono';color:#e2e8f0;white-space:pre-wrap;word-break:break-word;overflow-x:auto">{code}</pre>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px"><a class="btn ghost" href="/handouts/phase2">Handout</a><a class="btn ghost" href="/phase2_vulnerable_strcpy.cpp" download>Download raw .cpp</a><a class="btn" href="/#strcpy">Back to simulator</a></div>
+  </div>
+</Layout>

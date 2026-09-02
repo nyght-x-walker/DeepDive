@@ -1,0 +1,38 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="Handout, Initial Prototype">
+  <div class="container" style="padding:40px 0;max-width:780px">
+    <div class="eyebrow">Handout • Initial Prototype</div>
+    <h1 style="font-family:Fraunces,serif;font-size:32px;letter-spacing:-.02em;margin:8px 0">Where memory lives</h1>
+    <p style="color:var(--muted);font:15px Inter;line-height:1.7">Stack, heap and smart pointers from <span class="mono">initial_prototype.cpp</span>. One page you can print or keep beside the playground.</p>
+
+    <div class="card" style="margin-top:20px">
+      <h3 style="font:600 16px Inter;margin:0 0 8px">Code</h3>
+      <pre style="margin:0;font:13px 'JetBrains Mono';color:var(--muted);background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px;overflow-x:auto;white-space:pre-wrap">struct MyData {"{"}
+  int id;
+  char name[10];
+{"}"};
+
+int main() {"{"}
+  MyData stackData; stackData.id = 42;  // stack, auto
+  MyData *heapData = new MyData(); heapData->id = 100; // heap, manual
+  delete heapData;
+  auto smartData = make_unique&lt;MyData&gt;(); smartData->id = 200; // heap, auto (RAII)
+{"}"}</pre>
+      <div style="margin-top:10px;display:flex;gap:8px"><a class="btn ghost" href="/initial_prototype.cpp" download>Download .cpp</a><span style="font:12px Inter;color:var(--faint);align-self:center">sizeof(MyData) is 14 bytes • addresses shown in playground are illustrative</span></div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3 style="font:600 16px Inter;margin:0 0 8px">What you should take away</h3>
+      <ul style="margin:8px 0 0 18px;font:14px Inter;line-height:1.7;color:var(--muted)">
+        <li>Stack is fast and automatic, freed when the function ends.</li>
+        <li>Heap with <span class="mono">new</span> must be freed with <span class="mono">delete</span>, or it leaks.</li>
+        <li><span class="mono">unique_ptr</span> is heap but freed automatically, safest of the three.</li>
+        <li>All later chapters use the same street of boxes, just with different owners.</li>
+      </ul>
+    </div>
+
+    <div style="margin-top:16px;display:flex;gap:10px"><a class="btn" href="/#initial">Back to playground</a><a class="btn ghost" href="/">Home</a></div>
+  </div>
+</Layout>

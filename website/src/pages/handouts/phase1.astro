@@ -1,0 +1,41 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="Handout, Phase 1 Seeing the Boundary">
+  <div class="container" style="padding:40px 0;max-width:780px">
+    <div class="eyebrow">Handout • Phase 1</div>
+    <h1 style="font-family:Fraunces,serif;font-size:32px;letter-spacing:-.02em;margin:8px 0">Seeing the Boundary</h1>
+    <p style="color:var(--muted);font:15px Inter;line-height:1.7">One contiguous array of 20 bytes, three logical regions, no real overflow. The film is 9 min 41 s. This handout is the printable companion.</p>
+
+    <div class="card" style="margin-top:20px">
+      <h3 style="font:600 16px Inter;margin:0 0 8px">The model</h3>
+      <div style="display:grid;grid-template-columns:80px 1fr;gap:10px;font:13px Inter">
+        <div style="color:var(--faint)">Layout</div><div><span class="mono">buffer[8] 00…07</span> blue • <span class="mono">criticalFlag 4B 08…11</span> orange • <span class="mono">buffer2[8] 12…19</span> green</div>
+        <div style="color:var(--faint)">Start</div><div><span class="mono">SAFE</span> at 00…03, <span class="mono">0x00</span> at 08…11, <span class="mono">SECURE</span> at 12…17</div>
+        <div style="color:var(--faint)">Rule</div><div>Stay in 00…07. Everything past 07 is adjacent, not yours.</div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><span class="badge">HELLO 5 fits</span><span class="badge">ABCDEFGHIJKLMNO 15 crosses 7</span><span class="badge">Hex 41…4f</span></div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3 style="font:600 16px Inter;margin:0 0 8px">Code, the safety cap</h3>
+      <pre style="margin:0;font:12px 'JetBrains Mono';color:var(--muted);background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px;overflow-x:auto;white-space:pre-wrap">std::array&lt;unsigned char,20&gt; memory{"{}"};
+// init SAFE, 0x00, SECURE
+auto n = std::min(input.size(), memory.size());
+memcpy(memory.data(), input.data(), n); // never past 20</pre>
+      <div style="margin-top:10px;font:13px Inter;color:var(--muted)">Phase 1 never writes past the 20. The “crossing” is only shown.</div>
+      <div style="margin-top:10px;display:flex;gap:8px"><a class="btn ghost" href="/phase1_boundary_model.cpp" download>Download .cpp</a><a class="btn ghost" href="/videos/phase1.mp4" download>Download film 37M</a></div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3 style="font:600 16px Inter;margin:0 0 8px">How to use</h3>
+      <ul style="margin:8px 0 0 18px;font:14px Inter;line-height:1.7;color:var(--muted)">
+        <li>Watch once without pausing.</li>
+        <li>Rewatch the 20-box shelf, note the red marker at 07|08.</li>
+        <li>Use the playground: type HELLO (fills 00..04) vs 15 letters (spills to 08..14, leaves URE at 15..17).</li>
+      </ul>
+    </div>
+
+    <div style="margin-top:16px;display:flex;gap:10px"><a class="btn" href="/#boundary">Back to playground</a><a class="btn ghost" href="/">Home</a></div>
+  </div>
+</Layout>

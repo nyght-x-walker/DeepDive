@@ -1,0 +1,40 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="Handout, Phase 2 When Bytes Escape">
+  <div class="container" style="padding:40px 0;max-width:780px">
+    <div class="eyebrow">Handout • Phase 2</div>
+    <h1 style="font-family:Fraunces,serif;font-size:32px;letter-spacing:-.02em;margin:8px 0">When bytes escape</h1>
+    <p style="color:var(--muted);font:15px Inter;line-height:1.7">A real <span class="mono">strcpy</span> into <span class="mono">char buffer[8]</span> with 15 letters plus the ending zero = 16 bytes into 8. AddressSanitizer reports <span class="mono">stack-buffer-overflow</span>. Film 7 min 20 s, 440 s, 1920×1080.</p>
+
+    <div class="card" style="margin-top:20px">
+      <h3 style="font:600 16px Inter;margin:0 0 8px">Code</h3>
+      <pre style="margin:0;font:13px 'JetBrains Mono';color:var(--muted);background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px;overflow-x:auto;white-space:pre-wrap">constexpr std::size_t BUFFER_SIZE = 8;
+char buffer[BUFFER_SIZE];
+strcpy(buffer, "ABCDEFGHIJKLMNO"); // 15 + null = 16 into 8, 8 past</pre>
+      <div style="margin-top:10px;font:13px Inter;color:var(--muted)">Header says: educational demo only, intentionally vulnerable. Run only locally with <span class="mono">-fsanitize=address,undefined</span>.</div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn ghost" href="/phase2_vulnerable_strcpy.cpp" download>Download .cpp</a><a class="btn ghost" href="/videos/intermediate-2-vulnerable-operation.mp4" download>Download film 8.0M</a></div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3 style="font:600 16px Inter;margin:0 0 8px">Reading the report, 4 lines</h3>
+      <div style="display:grid;gap:8px;font:13px Inter;color:var(--muted);line-height:1.6">
+        <div><span class="mono">stack-buffer-overflow</span>, you wrote past a stack buffer.</div>
+        <div><span class="mono">WRITE size 16</span>, 15 letters + zero.</div>
+        <div><span class="mono">[32,40) 'buffer' line 44</span>, 8 bytes at offset 32, declared at line 44.</div>
+        <div><span class="mono">at offset 40</span>, first bad byte is 8 past the start. Then <span class="mono">ABORTING</span>.</div>
+      </div>
+      <div style="margin-top:10px;font:12px Inter;color:var(--faint)">Without ASan the same write may show <span class="mono">stack smashing detected</span> (canary) or look fine, both are allowed. That is undefined behavior.</div>
+    </div>
+
+    <div class="card" style="margin-top:16px;background:#f8fafc">
+      <h3 style="font:600 16px Inter;margin:0 0 8px">Try locally, isolated</h3>
+      <pre style="margin:0;font:12px 'JetBrains Mono';color:var(--muted);background:white;border:1px solid var(--border);border-radius:10px;padding:12px;overflow-x:auto">g++ -std=c++20 -Wall -Wextra -Wpedantic -g src/phase2_vulnerable_strcpy.cpp -o phase2_vulnerable
+./phase2_vulnerable
+g++ -std=c++20 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -g src/phase2_vulnerable_strcpy.cpp -o phase2_vulnerable_asan
+./phase2_vulnerable_asan</pre>
+    </div>
+
+    <div style="margin-top:16px;display:flex;gap:10px"><a class="btn" href="/#asan">Back to playground</a><a class="btn ghost" href="/">Home</a></div>
+  </div>
+</Layout>
