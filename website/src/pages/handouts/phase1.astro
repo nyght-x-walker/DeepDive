@@ -24,7 +24,7 @@ import Layout from '../../layouts/Layout.astro';
 auto n = std::min(input.size(), memory.size());
 memcpy(memory.data(), input.data(), n); // never past 20</pre>
       <div style="margin-top:10px;font:13px Inter;color:var(--muted)">Phase 1 never writes past the 20. The “crossing” is only shown.</div>
-      <div style="margin-top:10px;display:flex;gap:8px"><a class="btn ghost" href="/phase1_boundary_model.cpp" download>Download .cpp</a><a class="btn ghost" href="/videos/phase1.mp4" download>Download film 37M</a></div>
+      <div style="margin-top:10px;display:flex;gap:8px"><a class="btn ghost" href="/DeepDive/phase1_boundary_model.cpp" download>Download .cpp</a><a class="btn ghost" href="/DeepDive/videos/phase1.mp4" download>Download film 37M</a></div>
     </div>
 
     <div class="card" style="margin-top:16px">
@@ -36,6 +36,6 @@ memcpy(memory.data(), input.data(), n); // never past 20</pre>
       </ul>
     </div>
 
-    <div style="margin-top:16px;display:flex;gap:10px"><a class="btn" href="/#boundary">Back to playground</a><a class="btn ghost" href="/">Home</a></div>
+    <div style="margin-top:16px;display:flex;gap:10px"><a class="btn" href="/DeepDive/#boundary">Back to playground</a><a class="btn ghost" href="/DeepDive/">Home</a></div>
   </div>
 </Layout>

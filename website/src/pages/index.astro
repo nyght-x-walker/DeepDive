@@ -95,7 +95,7 @@ import AsanExplorer from '../components/islands/AsanExplorer.tsx';
         <div style="font:14px Inter;color:var(--muted);line-height:1.7">Think of a variable as a labeled carton. On the <b>stack</b>, the carton is on your desk and disappears when you leave the desk (function ends). On the <b>heap</b> with <span class="mono">new</span>, the carton is in a storage room, you must remember to return it with <span class="mono">delete</span>, or it stays forever (a leak). A <span class="mono">unique_ptr</span> is a heap carton with a string tied to your wrist, when you leave, it is pulled back automatically.</div>
       </div>
       <MemoryAllocatorViz client:visible />
-      <div class="card" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><span style="font:600 12px Inter">This chapter:</span><a class="btn ghost" href="/handouts/initial" style="padding:8px 12px">Handout</a><a class="btn ghost" href="/code/initial" style="padding:8px 12px">Code</a><span style="font:12px Inter;color:var(--faint)">Styled handout and code.</span></div>
+      <div class="card" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><span style="font:600 12px Inter">This chapter:</span><a class="btn ghost" href="/DeepDive/handouts/initial" style="padding:8px 12px">Handout</a><a class="btn ghost" href="/DeepDive/code/initial" style="padding:8px 12px">Code</a><span style="font:12px Inter;color:var(--faint)">Styled handout and code.</span></div>
       <div class="card" style="margin-top:12px"><div style="font:600 13px Inter">What you just learned and why it matters for the next chapters</div><div style="font:14px Inter;color:var(--muted);margin-top:6px;line-height:1.7">All later memory is the same street of boxes. The stack boxes you will overflow in Phase 2 are like the desk cartons here, they live right next to each other, so writing past one writes into the next. Smart pointers matter because they remove one class of mistakes, but they do not stop you from writing past a buffer.</div></div>
     </div>
   </section>
@@ -109,11 +109,11 @@ import AsanExplorer from '../components/islands/AsanExplorer.tsx';
         <div style="font:14px Inter;color:var(--muted);line-height:1.7">Imagine a bookshelf with 20 slots. You own slots 0 to 7. Slots 8 to 11 belong to a do not touch box, 12 to 19 to a second shelf. If you put 5 books (HELLO), they fit in your 8. If you put 15 books (ABCDEFGHIJKLMNO), 7 stick out past your section, they end up in the next boxes. Phase 1 shows this with a safety cap so nothing really breaks. Phase 2 removes the cap.</div>
       </div>
       <BoundaryPlayground client:visible />
-      <div class="card" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><span style="font:600 12px Inter">This chapter:</span><a class="btn ghost" href="/handouts/phase1" style="padding:8px 12px">Handout</a><a class="btn ghost" href="/code/phase1" style="padding:8px 12px">Code</a><a class="btn ghost" href="/videos/phase1.mp4" download style="padding:8px 12px">Film 37M</a></div>
+      <div class="card" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><span style="font:600 12px Inter">This chapter:</span><a class="btn ghost" href="/DeepDive/handouts/phase1" style="padding:8px 12px">Handout</a><a class="btn ghost" href="/DeepDive/code/phase1" style="padding:8px 12px">Code</a><a class="btn ghost" href="/DeepDive/videos/phase1.mp4" download style="padding:8px 12px">Film 37M</a></div>
       <div style="margin-top:14px" class="grid cols2">
         <div class="card hover">
           <div style="font:700 11px 'JetBrains Mono';letter-spacing:.08em;color:#059669">PHASE 1 FILM, SAFE</div>
-          <video controls preload="metadata" style="width:100%;border-radius:12px;margin-top:10px;background:#0f172a"><source src="/videos/phase1.mp4" type="video/mp4" />Your browser does not support video.</video>
+          <video controls preload="metadata" style="width:100%;border-radius:12px;margin-top:10px;background:#0f172a"><source src="/DeepDive/videos/phase1.mp4" type="video/mp4" />Your browser does not support video.</video>
           <div style="font:13px Inter;color:var(--faint);margin-top:8px">You will see HELLO stay inside 00..04 and ABCDEFGHIJKLMNO spill into 08..14. The spill is only shown, not really written past the shelf.</div>
         </div>
         <div class="card">
@@ -134,7 +134,7 @@ import AsanExplorer from '../components/islands/AsanExplorer.tsx';
         <div style="font:14px Inter;color:var(--muted);line-height:1.7">A buffer is an 8-egg carton. <span class="mono">strcpy</span> is a helper that pours eggs until it sees a stopper (the zero byte), without counting the carton size. With 7 eggs plus stopper it fits. With 15 plus stopper it needs 16 spots and 8 pour over. Those 8 overwrite whatever was next on the desk, maybe another variable, maybe the return address that tells the program where to go next. That is why it is a security issue, not just a crash.</div>
       </div>
       <StrcpySimulator client:visible />
-      <div class="card" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><span style="font:600 12px Inter">This chapter:</span><a class="btn ghost" href="/handouts/phase2" style="padding:8px 12px">Handout</a><a class="btn ghost" href="/code/phase2" style="padding:8px 12px">Code</a><a class="btn ghost" href="/videos/intermediate-2-vulnerable-operation.mp4" download style="padding:8px 12px">Film 8.0M</a></div>
+      <div class="card" style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><span style="font:600 12px Inter">This chapter:</span><a class="btn ghost" href="/DeepDive/handouts/phase2" style="padding:8px 12px">Handout</a><a class="btn ghost" href="/DeepDive/code/phase2" style="padding:8px 12px">Code</a><a class="btn ghost" href="/DeepDive/videos/intermediate-2-vulnerable-operation.mp4" download style="padding:8px 12px">Film 8.0M</a></div>
     </div>
   </section>
 
@@ -150,7 +150,7 @@ import AsanExplorer from '../components/islands/AsanExplorer.tsx';
       <AsanExplorer client:visible />
       <div class="card" style="margin-top:14px">
         <div style="font:600 14px Inter">Film, 7 min 20 s, 440 s</div>
-        <video controls preload="metadata" style="width:100%;border-radius:12px;margin-top:10px;background:#0f172a"><source src="/videos/intermediate-2-vulnerable-operation.mp4" type="video/mp4" /><track kind="captions" src="/videos/phase2_captions.vtt" srclang="en" label="English" default /></video>
+        <video controls preload="metadata" style="width:100%;border-radius:12px;margin-top:10px;background:#0f172a"><source src="/DeepDive/videos/intermediate-2-vulnerable-operation.mp4" type="video/mp4" /><track kind="captions" src="/DeepDive/videos/phase2_captions.vtt" srclang="en" label="English" default /></video>
         <div style="font:13px Inter;color:var(--faint);margin-top:8px">Watch once, then come back and click the report tokens above, the video shows the same 8 past 8 you just typed.</div>
       </div>
     </div>
@@ -178,10 +178,10 @@ import AsanExplorer from '../components/islands/AsanExplorer.tsx';
         <div style="font:13px Inter;color:var(--faint);margin-top:6px">Fix: use size-aware functions, keep AddressSanitizer in tests, and rely on layers, canaries, ASLR, NX/DEP, control-flow checks. No single layer is enough.</div>
       </div>
       <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
-        <a class="btn" href="/videos/intermediate-2-vulnerable-operation.mp4" download>Download film (8.0M)</a>
-        <a class="btn ghost" href="/handouts/phase1">Handout Phase 1</a>
-        <a class="btn ghost" href="/handouts/phase2">Handout Phase 2</a>
-        <a class="btn ghost" href="/handouts/initial">Handout Initial</a>
+        <a class="btn" href="/DeepDive/videos/intermediate-2-vulnerable-operation.mp4" download>Download film (8.0M)</a>
+        <a class="btn ghost" href="/DeepDive/handouts/phase1">Handout Phase 1</a>
+        <a class="btn ghost" href="/DeepDive/handouts/phase2">Handout Phase 2</a>
+        <a class="btn ghost" href="/DeepDive/handouts/initial">Handout Initial</a>
       </div>
     </div>
   </section>

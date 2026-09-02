@@ -13,7 +13,7 @@ import Layout from '../../layouts/Layout.astro';
 char buffer[BUFFER_SIZE];
 strcpy(buffer, "ABCDEFGHIJKLMNO"); // 15 + null = 16 into 8, 8 past</pre>
       <div style="margin-top:10px;font:13px Inter;color:var(--muted)">Header says: educational demo only, intentionally vulnerable. Run only locally with <span class="mono">-fsanitize=address,undefined</span>.</div>
-      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn ghost" href="/phase2_vulnerable_strcpy.cpp" download>Download .cpp</a><a class="btn ghost" href="/videos/intermediate-2-vulnerable-operation.mp4" download>Download film 8.0M</a></div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn ghost" href="/DeepDive/phase2_vulnerable_strcpy.cpp" download>Download .cpp</a><a class="btn ghost" href="/DeepDive/videos/intermediate-2-vulnerable-operation.mp4" download>Download film 8.0M</a></div>
     </div>
 
     <div class="card" style="margin-top:16px">
@@ -35,6 +35,6 @@ g++ -std=c++20 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -g src/phas
 ./phase2_vulnerable_asan</pre>
     </div>
 
-    <div style="margin-top:16px;display:flex;gap:10px"><a class="btn" href="/#asan">Back to playground</a><a class="btn ghost" href="/">Home</a></div>
+    <div style="margin-top:16px;display:flex;gap:10px"><a class="btn" href="/DeepDive/#asan">Back to playground</a><a class="btn ghost" href="/DeepDive/">Home</a></div>
   </div>
 </Layout>
