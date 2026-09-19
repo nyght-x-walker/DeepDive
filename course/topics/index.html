@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topics Hub: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="../assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm">
+    <a href="../index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="../index.html" style="color:var(--dmuted)">Map</a>
+    <a href="../phase-final.html" style="color:var(--dmuted)">Review chapter</a>
+    <a href="../topic-operators.html" data-next class="font-bold" style="color:var(--dblue)">Next: Expressions</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="Memory is covered in depth in Chapters 1 to 5. This hub covers the rest of Topic 3. Four breadth chapters in the same style: short explanation, one lab, three checks. Expressions, numbers, increments, and data with behaviour.">
+    <div class="eyebrow">TOPIC 3 &middot; C++ BREADTH HUB</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">All subtopics at a glance.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">Memory is covered in depth in Chapters 1 to 5. Below are the remaining Topic 3 subtopics. Every card is hands on: a short explanation, one lab on the chapter page, and three checks. This page describes each lab in words and links to the course labs. No frameworks needed.</p>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+      <a href="../index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Back to Map</a>
+    </div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-done" data-say="Already done in the DeepDive. Memory, pointers, and warnings live in Chapters 1 to 5 with films, playgrounds, and the detector report.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">ALREADY DONE &middot; DEEPDIVE CHAPTERS 1 TO 5</div>
+        <h2 class="font-bold text-2xl mt-1">Depth first, then breadth</h2>
+      </div>
+      <button data-say-btn="sec-done" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="grid gap-3 md:grid-cols-3 mt-4 text-sm">
+      <div class="card p-4"><div class="mono font-bold" style="color:var(--dblue)">Memory: heap and stack</div><div class="mt-1" style="color:var(--dmuted)">Chapters 1 and 2. Stack auto, heap manual, smart RAII. Lab: 20-box shelf playground.</div><div class="mt-2"><a href="../phase-initial.html" class="font-bold" style="color:var(--dblue)">Open playground</a> &middot; <a href="code-initial.html" style="color:var(--dmuted)">Source</a></div></div>
+      <div class="card p-4"><div class="mono font-bold" style="color:var(--dblue)">Pointers and smart pointers</div><div class="mt-1" style="color:var(--dmuted)">Chapters 1 and 5. Pointer walk [32,40), unique_ptr vs raw new.</div><div class="mt-2"><a href="../phase-2.html" class="font-bold" style="color:var(--dblue)">Open simulator</a> &middot; <a href="code-phase2.html" style="color:var(--dmuted)">Source</a></div></div>
+      <div class="card p-4"><div class="mono font-bold" style="color:var(--dsafe)">Errors and warnings</div><div class="mt-1" style="color:var(--dmuted)">Chapter 3. <span class="mono">-Wall -Wextra -Wpedantic</span> vs <span class="mono">-fsanitize=address,undefined</span>. Stack smashing vs ASan report.</div><div class="mt-2"><a href="../phase-2.html" class="font-bold" style="color:var(--dblue)">Read the report</a> &middot; <a href="../phase-3.html" style="color:var(--dmuted)">See the fix</a></div></div>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-top1" data-say="Expressions. Precedence decides what runs first, associativity decides the order at the same level. The lab lets you tap expressions to see grouping. Style rule: when unsure, add parentheses.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">BREADTH 1 OF 4 &middot; CODING STYLE AND PRECEDENCE</div>
+        <h2 class="font-bold text-2xl mt-1">Operator precedence and associativity</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">When to add parentheses. Tap an expression to see how C++ groups it: <span class="mono">a + b * c</span> groups as <span class="mono">a + (b * c)</span>, and <span class="mono">a and b or c</span> groups left to right. If unsure, parentheses make intent clear.</p>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Lab on the chapter page: tap-to-group playground with style checks. Described here without widgets so this hub stays flat.</p>
+        <div class="flex gap-2 flex-wrap mt-3"><a href="../topic-operators.html" class="px-4 py-2 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Open chapter lab</a></div>
+      </div>
+      <button data-say-btn="sec-top1" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-top2" data-say="Floats and doubles approximate, ints count exactly. The lab moves sliders for a and b to show why 0.1 plus 0.2 is not 0.3 and why equal fails. Integer division drops the rest. Warnings and sanitizers catch it early.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">BREADTH 2 OF 4 &middot; FLOAT AND DOUBLE</div>
+        <h2 class="font-bold text-2xl mt-1">Precision: floats vs integers</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Move the sliders for a and b. See why <span class="mono">0.1 + 0.2</span> leaves extra digits and why <span class="mono">==</span> fails on floats. Compare with integer division: <span class="mono">7 / 2</span> gives <span class="mono">3</span>, the rest is dropped. Build with <span class="mono">-Wall</span> plus sanitizers to hear the risk early.</p>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Lab on the chapter page: precision sliders with epsilon comparison and division demos.</p>
+        <div class="flex gap-2 flex-wrap mt-3"><a href="../topic-numbers.html" class="px-4 py-2 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Open chapter lab</a></div>
+      </div>
+      <button data-say-btn="sec-top2" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-top3" data-say="Increment and compound. Post gives old then steps, pre steps then gives. Compound forms update in one place. The same signs can be defined for our own types with operator overloading, kept to step by one.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">BREADTH 3 OF 4 &middot; INCREMENT AND COMPOUND</div>
+        <h2 class="font-bold text-2xl mt-1">i++, ++i, and operator overloading</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Post vs pre: when does <span class="mono">x</span> get the old or the new value? Compare <span class="mono">x = i++</span> against <span class="mono">x = ++i</span>, use <span class="mono">+=</span> in one place, and keep overloaded <span class="mono">++</span> to step by one with expected meaning.</p>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Lab on the chapter page: step-through of post vs pre plus compound-assignment rewrites.</p>
+        <div class="flex gap-2 flex-wrap mt-3"><a href="../topic-increment.html" class="px-4 py-2 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Open chapter lab</a></div>
+      </div>
+      <button data-say-btn="sec-top3" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-top4" data-say="Functions and patterns. Lambdas capture data, higher order functions take them as arguments. Structs group fields, enums name choices. Together they make Factory and Singleton.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">BREADTH 4 OF 4 &middot; FUNCTIONS AND PATTERNS</div>
+        <h2 class="font-bold text-2xl mt-1">Lambdas, structs, enums, patterns</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Lambdas capture data. Higher-order functions take them as arguments. Structs hold data (<span class="mono">struct MyData { int id; char name[10]; }</span>, about 14 bytes, stack or heap). Factory returns objects, Singleton keeps one instance. Both reuse structs and lambdas inside.</p>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Lab on the chapter page: lambda capture playground with struct and pattern cards.</p>
+        <div class="flex gap-2 flex-wrap mt-3"><a href="../topic-functions.html" class="px-4 py-2 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Open chapter lab</a></div>
+      </div>
+      <button data-say-btn="sec-top4" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap">
+    <a href="../index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <div class="flex-1"></div>
+    <a data-next href="../topic-operators.html" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Next: Expressions</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

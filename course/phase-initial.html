@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1: Where Memory Lives: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm">
+    <a href="index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="index.html" style="color:var(--dmuted)">Map</a>
+    <a href="phase-1.html" data-next class="font-bold" style="color:var(--dblue)">Next: Phase 1</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="Before we talk about overflow, we need to know where C++ keeps our variables. In this chapter we meet three places. The stack clears itself when the function ends. The heap stays ours until we return it. And the smart pointer returns itself for us. In the lab you allocate boxes and watch what leaks and what frees itself.">
+    <div class="eyebrow">CHAPTER 1 · INITIAL</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">Where memory lives.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">Before we talk about overflow, we need to know where C++ keeps our variables. In this chapter we meet three places. The stack clears itself when the function ends. The heap stays ours until we return it. And the smart pointer returns itself for us. In the lab you allocate boxes and watch what leaks and what frees itself.</p>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-fulltalk class="px-4 py-2 rounded-full font-bold text-sm card">Play full chapter</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+    <div class="hero-art"><svg viewBox="0 0 640 120" width="640" height="120" aria-hidden="true" role="presentation"><rect x="0" y="0" width="640" height="120" rx="12" fill="#0d141f"/><g font-family="monospace" font-size="11" font-weight="bold" text-anchor="middle"><rect x="20" y="18" width="185" height="84" rx="10" fill="#0d141f" stroke="#4d9de0" stroke-width="2"/><rect x="35" y="32" width="155" height="12" rx="3" fill="#4d9de0" opacity="0.9"/><rect x="35" y="48" width="155" height="12" rx="3" fill="#4d9de0" opacity="0.55"/><rect x="35" y="64" width="155" height="12" rx="3" fill="#4d9de0" opacity="0.3"/><text x="112" y="94" fill="#93a1b5">STACK · AUTO</text><rect x="228" y="18" width="184" height="84" rx="10" fill="#0d141f" stroke="#f2c14e" stroke-width="2"/><rect x="243" y="30" width="34" height="28" rx="4" fill="#f2c14e" opacity="0.9"/><rect x="283" y="30" width="34" height="28" rx="4" fill="#f2c14e" opacity="0.5"/><rect x="323" y="30" width="34" height="28" rx="4" fill="none" stroke="#f2c14e" stroke-width="2" stroke-dasharray="4 3"/><text x="320" y="94" fill="#93a1b5">HEAP · MANUAL</text><rect x="435" y="18" width="185" height="84" rx="10" fill="#0d141f" stroke="#66bb6a" stroke-width="2"/><rect x="450" y="30" width="90" height="28" rx="4" fill="#66bb6a" opacity="0.85"/><circle cx="560" cy="44" r="10" fill="none" stroke="#66bb6a" stroke-width="2"/><path d="M555 44 l4 4 l7 -8" stroke="#66bb6a" stroke-width="2" fill="none"/><path d="M540 44 L450 44" stroke="#66bb6a" stroke-width="2" stroke-dasharray="4 3"/><text x="527" y="94" fill="#93a1b5">SMART · SELF-FREE</text></g></svg></div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-stack" data-say="The stack holds local variables, like a tray on a desk. You place your box, you work, and when the function ends the tray clears itself. There is nothing to return. It is fast and automatic, but small, and trays sit side by side. That closeness matters later when we talk about writing past the end.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">THE STACK</div>
+        <h2 class="font-bold text-2xl mt-1">Local space that clears itself</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">The stack holds local variables, like a tray on a desk. You place your box, you work, and when the function ends the tray clears itself. There is nothing to return. It is fast and automatic, but small, and trays sit side by side. That closeness matters later when we talk about writing past the end.</p>
+      </div>
+      <button data-say-btn="sec-stack" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">void serve() {<br>&nbsp;&nbsp;char tray[8]; <span style="color:var(--dfaint)">// stack carton, auto-freed at the closing brace</span><br>}</div></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-heap" data-say="The heap is like a storage room. You request space with new, and it stays yours until you return it with delete. If you forget, it stays held but useless. That is what we call a leak. In the lab you will see leaked bytes stay counted until you free them.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">THE HEAP</div>
+        <h2 class="font-bold text-2xl mt-1">Space you must return</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">The heap is like a storage room. You request space with new, and it stays yours until you return it with delete. If you forget, it stays held but useless. That is what we call a leak. In the lab you will see leaked bytes stay counted until you free them.</p>
+      </div>
+      <button data-say-btn="sec-heap" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">char* room = new char[8]; <span style="color:var(--dfaint)">// ours until…</span><br>delete[] room; <span style="color:var(--dfaint)">// …we return it. Skip this line and it leaks.</span></div></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-smart" data-say="A smart pointer gives you heap space with automatic return. Think of a box tied to your wrist with a string. When you leave, it comes back with you, so there is no leak. It removes forgetting, but it does not remove the need to stay inside the buffer. You still must not write past the end.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">THE SMART POINTER</div>
+        <h2 class="font-bold text-2xl mt-1">Heap space with automatic return</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">A smart pointer gives you heap space with automatic return. Think of a box tied to your wrist with a string. When you leave, it comes back with you, so there is no leak. It removes forgetting, but it does not remove the need to stay inside the buffer. You still must not write past the end.</p>
+      </div>
+      <button data-say-btn="sec-smart" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">auto room = std::make_unique&lt;char[]&gt;(8); <span style="color:var(--dfaint)">// freed by itself, no delete needed</span></div></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-lab">
+    <div class="eyebrow">LAB · TRY THE THREE PLACES</div>
+    <h2 class="font-bold text-2xl mt-1">Allocate, leave, and watch what returns</h2>
+    <p class="text-sm mt-2" style="color:var(--dmuted)">In this lab you try the three places. Each box costs 8 bytes. Allocate raw boxes and watch the live and leaked counts grow. Press Free all raw to return them. Then use the smart pointer and watch it return itself after 3 seconds.</p>
+    <div class="flex gap-2 flex-wrap mt-4">
+      <button id="heap-alloc" class="px-4 py-2 rounded-full font-bold text-sm card">Allocate heap (8 B)</button>
+      <button id="heap-free" class="px-4 py-2 rounded-full font-bold text-sm card">Free all raw</button>
+      <button id="heap-smart" class="px-4 py-2 rounded-full font-bold text-sm card">Use smart pointer</button>
+      <span class="chip" id="heap-live">live 0 B</span>
+      <span class="chip r" id="heap-leak">leaked 0 B</span>
+      <span class="chip g" id="heap-auto">auto-freed 0</span>
+    </div>
+    <div id="heap-desk" class="flex gap-2 flex-wrap mt-4 min-h-[64px]"></div>
+  </section>
+
+  <section class="mt-6 grid gap-4 md:grid-cols-3">
+    <div class="card p-5 reveal" data-quiz="init-q1" data-why="Stack memory frees when its function ends.">
+      <div class="text-sm font-bold">Who frees stack memory?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">It frees itself at scope end</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">We call delete on it</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">The sanitizer frees it</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="init-q2" data-why="Skipped delete leaves heap memory held forever.">
+      <div class="text-sm font-bold">What is a leak?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">A broken pointer</button>
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">Heap memory never returned</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">A full stack</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="init-q3" data-why="unique_ptr frees on scope exit, but bounds still matter.">
+      <div class="text-sm font-bold">What does unique_ptr guarantee?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">No overflow can happen</button>
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">Automatic free, no leak</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Faster copies</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap">
+    <a href="index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <div class="flex-1"></div>
+    <button data-complete="initial" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dsafe)">Mark chapter complete</button>
+    <a data-next href="phase-1.html" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Next: Phase 1</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="assets/course.js"></script>
+<script>
+(function(){
+  var live=0, leaked=0, auto=0, id=0;
+  var desk=document.getElementById("heap-desk");
+  function paint(){
+    document.getElementById("heap-live").textContent="live "+live+" B";
+    document.getElementById("heap-leak").textContent="leaked "+leaked+" B";
+    document.getElementById("heap-auto").textContent="auto-freed "+auto;
+  }
+  function box(kind){
+    id++;
+    var d=document.createElement("div");
+    d.className="mcell mono "+(kind==="raw"?"o":"g");
+    d.style.minWidth="86px";
+    d.innerHTML='<div class="L" style="font-size:15px">'+(kind==="raw"?"raw #":"smart #")+id+'</div><div class="O">8 B</div>';
+    desk.appendChild(d);
+    return d;
+  }
+  document.getElementById("heap-alloc").onclick=function(){ box("raw"); live+=8; leaked+=8; paint(); };
+  document.getElementById("heap-free").onclick=function(){
+    var kids=desk.querySelectorAll(".mcell.o");
+    for(var i=0;i<kids.length;i++){ desk.removeChild(kids[i]); live-=8; leaked-=8; }
+    if(live<0){live=0;} if(leaked<0){leaked=0;} paint();
+  };
+  document.getElementById("heap-smart").onclick=function(){
+    var d=box("smart"); live+=8; paint();
+    setTimeout(function(){ if(d.parentNode){desk.removeChild(d);} live-=8; auto++; paint(); },3000);
+  };
+  paint();
+})();
+</script>
+</body>
+</html>

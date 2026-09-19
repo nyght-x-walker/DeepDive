@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond 1: How C++ Groups Expressions: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm">
+    <a href="index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="phase-final.html" data-prev style="color:var(--dmuted)">Prev: Review</a>
+    <a href="index.html" style="color:var(--dmuted)">Map</a>
+    <a href="topic-numbers.html" data-next class="font-bold" style="color:var(--dblue)">Next: Numbers</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="In the DeepDive we checked every copy against the size of the buffer. Now we look at the wider C++ language from Topic 3. In this chapter we learn how C++ groups expressions. Precedence decides which operator runs first. Associativity decides the order when precedence is equal. Our style rule is simple. When unsure, add parentheses to show what you mean.">
+    <div class="eyebrow">BEYOND THE DEEPDIVE · 1 OF 4</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">How C++ groups expressions.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">In the DeepDive we checked every copy against the size of the buffer. Now we look at the wider C++ language from Topic 3. In this chapter we learn how C++ groups expressions. Precedence decides which operator runs first. Associativity decides the order when precedence is equal. Our style rule is simple. When unsure, add parentheses to show what you mean.</p>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-fulltalk class="px-4 py-2 rounded-full font-bold text-sm card">Play full chapter</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg width="640" height="110" viewBox="0 0 640 110" role="presentation" aria-hidden="true" style="max-width:100%;height:auto;display:block;margin-top:16px" font-family="ui-monospace,Menlo,Consolas,monospace">
+        <rect x="0" y="0" width="640" height="110" rx="12" fill="#0d141f"></rect>
+        <text x="28" y="42" font-size="26" font-weight="700" fill="#ffffff">a <tspan fill="#4d9de0">+</tspan> b <tspan fill="#f2c14e">*</tspan> c</text>
+        <text x="380" y="42" font-size="14" fill="#66bb6a">* runs first</text>
+        <text x="490" y="42" font-size="14" fill="#e0473a">!= (a+b)*c</text>
+        <path d="M148 54 Q148 78 172 78 H252 Q276 78 276 54" fill="none" stroke="#66bb6a" stroke-width="3"></path>
+        <text x="28" y="100" font-size="22" font-weight="700" fill="#ffffff">a <tspan fill="#4d9de0">+</tspan> <tspan fill="#7c3aed">(</tspan>b <tspan fill="#f2c14e">*</tspan> c<tspan fill="#7c3aed">)</tspan></text>
+        <text x="380" y="100" font-size="14" fill="#4d9de0">grouped as shown</text>
+      </svg>
+    </div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-style" data-say="Coding style is how we make grouping visible. We use clear names, braces on every if, and parentheses around mixed operators. The compiler follows precedence even without parentheses. Readers should not have to memorise the table. If an expression mixes plus and multiply, or and and or, we write the parentheses we mean.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">STYLE AND CONVENTIONS</div>
+        <h2 class="font-bold text-2xl mt-1">Show what you mean</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Coding style is how we make grouping visible. We use clear names, braces on every if, and parentheses around mixed operators. The compiler follows precedence even without parentheses. Readers should not have to memorise the table. If an expression mixes plus and multiply, or and and or, we write the parentheses we mean.</p>
+      </div>
+      <button data-say-btn="sec-style" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">int x = (a + b) * c; <span style="color:var(--dfaint)">// parentheses show grouping</span><br>if ((x &gt; 0) &amp;&amp; (y &lt; 8)) { } <span style="color:var(--dfaint)">// braces + parens, no guessing</span></div></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-prec" data-say="Precedence decides which operator runs first. Multiply runs before plus. Not runs before and, and runs before or. Select an expression below to see how C++ groups it. The grouped form shows the parentheses the compiler uses. Then compare with the style we recommend on the right.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">LAB · TAP TO GROUP</div>
+        <h2 class="font-bold text-2xl mt-1">See how C++ groups it</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Precedence decides which operator runs first. Multiply runs before plus. Not runs before and, and runs before or. Select an expression below to see how C++ groups it. The grouped form shows the parentheses the compiler uses. Then compare with the style we recommend on the right.</p>
+      </div>
+      <button data-say-btn="sec-prec" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-4" id="top1-exprs">
+      <button class="chip" data-expr="a + b * c||a + (b * c)||(a + b) * c">a + b * c</button>
+      <button class="chip" data-expr="a && b || c||(a && b) || c||a && (b || c)">a &amp;&amp; b || c</button>
+      <button class="chip" data-expr="!a && b||(!a) && b||!(a && b)">!a &amp;&amp; b</button>
+    </div>
+    <div class="grid gap-4 md:grid-cols-2 mt-4">
+      <div class="card p-4"><div class="mono text-xs font-bold" style="color:var(--dblue)">COMPILER GROUPS AS</div><div class="mono text-sm mt-2" id="top1-grouped">Select an expression above.</div></div>
+      <div class="card p-4"><div class="mono text-xs font-bold" style="color:var(--dsafe)">STYLE WE RECOMMEND</div><div class="mono text-sm mt-2" id="top1-style">Write the parentheses you mean.</div></div>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-assoc" data-say="Associativity decides the order when precedence is equal. Most operators group left to right, so a minus b minus c means a minus b first, then minus c. Assignment groups right to left, so a equals b equals zero sets both to zero from the right. When a line mixes both, we split it or add parentheses rather than rely on memory.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">ASSOCIATIVITY</div>
+        <h2 class="font-bold text-2xl mt-1">Same level, which side first</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Associativity decides the order when precedence is equal. Most operators group left to right, so a minus b minus c means a minus b first, then minus c. Assignment groups right to left, so a equals b equals zero sets both to zero from the right. When a line mixes both, we split it or add parentheses rather than rely on memory.</p>
+      </div>
+      <button data-say-btn="sec-assoc" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">a - b - c <span style="color:var(--dfaint)">// (a - b) - c, left to right</span><br>a = b = 0; <span style="color:var(--dfaint)">// a = (b = 0), right to left</span></div></div>
+  </section>
+
+  <section class="mt-6 grid gap-4 md:grid-cols-3">
+    <div class="card p-5 reveal" data-quiz="top1-q1" data-why="Multiply has higher precedence than plus.">
+      <div class="text-sm font-bold">How does C++ group a + b * c?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">a + (b * c)</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">(a + b) * c</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="top1-q2" data-why="And binds tighter than or.">
+      <div class="text-sm font-bold">How does a and b or c group?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">(a and b) or c</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">a and (b or c)</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="top1-q3" data-why="Style says show grouping, do not rely on memory.">
+      <div class="text-sm font-bold">Mixed operators and unsure?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">Add parentheses</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Leave it bare</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap">
+    <a href="index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <div class="flex-1"></div>
+    <button data-complete="top1" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dsafe)">Mark chapter complete</button>
+    <a data-next href="topic-numbers.html" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Next: Numbers</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="assets/course.js"></script>
+<script>
+(function(){
+  var btns=document.querySelectorAll("#top1-exprs [data-expr]");
+  for(var i=0;i<btns.length;i++){
+    (function(b){
+      b.addEventListener("click", function(){
+        var parts=(b.getAttribute("data-expr")||"").split("||");
+        document.getElementById("top1-grouped").textContent=parts[1]||"";
+        document.getElementById("top1-style").textContent="Write "+(parts[2]||parts[1]||"")+" to show intent.";
+      });
+    })(btns[i]);
+  }
+})();
+</script>
+</body>
+</html>

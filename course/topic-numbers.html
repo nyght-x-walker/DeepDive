@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond 2: Numbers That Do Not Behave: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm">
+    <a href="index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="topic-operators.html" data-prev style="color:var(--dmuted)">Prev: Expressions</a>
+    <a href="index.html" style="color:var(--dmuted)">Map</a>
+    <a href="topic-increment.html" data-next class="font-bold" style="color:var(--dblue)">Next: Increments</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="In the last chapter we learnt how C++ groups expressions. In this chapter we look at how C++ stores numbers. Integers count exactly. Floating point approximates. That difference explains why 0.1 plus 0.2 is not 0.3, why double equal often fails, and why warnings and sanitizers matter.">
+    <div class="eyebrow">BEYOND THE DEEPDIVE · 2 OF 4</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">Numbers that do not behave.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">In the last chapter we learnt how C++ groups expressions. In this chapter we look at how C++ stores numbers. Integers count exactly. Floating point approximates. That difference explains why 0.1 plus 0.2 is not 0.3, why double equal often fails, and why warnings and sanitizers matter.</p>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-fulltalk class="px-4 py-2 rounded-full font-bold text-sm card">Play full chapter</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg width="640" height="110" viewBox="0 0 640 110" role="presentation" aria-hidden="true" style="max-width:100%;height:auto;display:block;margin-top:16px" font-family="ui-monospace,Menlo,Consolas,monospace">
+        <rect x="0" y="0" width="640" height="110" rx="12" fill="#0d141f"></rect>
+        <text x="28" y="36" font-size="20" font-weight="700" fill="#ffffff">0.1 <tspan fill="#4d9de0">+</tspan> 0.2 <tspan fill="#4d9de0">=</tspan> 0.3<tspan fill="#e0473a">0000000000000004</tspan></text>
+        <rect x="28" y="52" width="584" height="18" rx="9" fill="#1e2a3a"></rect>
+        <rect x="28" y="52" width="500" height="18" rx="9" fill="#4d9de0"></rect>
+        <rect x="528" y="52" width="84" height="18" rx="9" fill="#e0473a"></rect>
+        <rect x="28" y="52" width="584" height="18" rx="9" fill="none" stroke="#7c3aed" stroke-width="1.5"></rect>
+        <text x="28" y="96" font-size="13" fill="#4d9de0">0.3 approx</text>
+        <text x="160" y="96" font-size="13" fill="#e0473a">extra digits</text>
+        <text x="300" y="96" font-size="13" fill="#f2c14e">float approximates</text>
+        <text x="500" y="96" font-size="13" fill="#66bb6a">use epsilon</text>
+      </svg>
+    </div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-float" data-say="Float holds about 7 decimal digits. Double holds about 15. Neither can store 0.1 exactly, because it repeats in binary. Move the sliders below to add a and b. The sum shows extra digits you did not type. That is why we never compare floats with double equal. We check the distance against a small epsilon instead.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">PRECISION OF FLOAT AND DOUBLE</div>
+        <h2 class="font-bold text-2xl mt-1">Why 0.1 + 0.2 is not 0.3</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Float holds about 7 decimal digits. Double holds about 15. Neither can store 0.1 exactly, because it repeats in binary. Move the sliders below to add a and b. The sum shows extra digits you did not type. That is why we never compare floats with double equal. We check the distance against a small epsilon instead.</p>
+      </div>
+      <button data-say-btn="sec-float" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="flex gap-3 flex-wrap items-center mt-4">
+      <label class="text-sm mono">a <input type="range" id="top2-a" min="0" max="100" value="10"></label>
+      <label class="text-sm mono">b <input type="range" id="top2-b" min="0" max="100" value="20"></label>
+      <span class="chip" id="top2-sum">0.1 + 0.2 = 0.30000000000000004</span>
+      <span class="chip r" id="top2-eq">== fails</span>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">if (fabs(a - b) &lt; 1e-9) <span style="color:var(--dfaint)">// close enough, not equal</span></div></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-int" data-say="Integers count exactly inside their range. Floating point trades exactness for range. Integer division drops the rest, so 7 divided by 2 is 3, not 3.5. Mixing int and double converts the int first, which can surprise you. When you need a fraction, make one side double before you divide.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">INTEGERS VS FLOATING POINT</div>
+        <h2 class="font-bold text-2xl mt-1">Counting exactly against approximating</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Integers count exactly inside their range. Floating point trades exactness for range. Integer division drops the rest, so 7 divided by 2 is 3, not 3.5. Mixing int and double converts the int first, which can surprise you. When you need a fraction, make one side double before you divide.</p>
+      </div>
+      <button data-say-btn="sec-int" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">7 / 2 <span style="color:var(--dfaint)">// 3, int division drops .5</span><br>7.0 / 2 <span style="color:var(--dfaint)">// 3.5, double keeps fraction</span></div></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-warn" data-say="Errors stop the build. Warnings mean the build finished but something looks risky. We compile with Wall, Wextra, and Wpedantic to hear those risks early. Sanitizers go further at run time. AddressSanitizer reports bad reads and writes, like our WRITE of size 16 at offset 40. UndefinedSanitizer reports bad math. We fix warnings before they become overflows.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">ERRORS AND WARNINGS</div>
+        <h2 class="font-bold text-2xl mt-1">Listen before it breaks</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Errors stop the build. Warnings mean the build finished but something looks risky. We compile with Wall, Wextra, and Wpedantic to hear those risks early. Sanitizers go further at run time. AddressSanitizer reports bad reads and writes, like our WRITE of size 16 at offset 40. UndefinedSanitizer reports bad math. We fix warnings before they become overflows.</p>
+      </div>
+      <button data-say-btn="sec-warn" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">g++ -Wall -Wextra -Wpedantic main.cpp<br>g++ -fsanitize=address,undefined main.cpp <span style="color:var(--dfaint)">// reports at run time</span></div></div>
+  </section>
+
+  <section class="mt-6 grid gap-4 md:grid-cols-3">
+    <div class="card p-5 reveal" data-quiz="top2-q1" data-why="0.1 repeats in binary, so the sum shows extra digits.">
+      <div class="text-sm font-bold">Why is 0.1 + 0.2 not 0.3?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">Binary approximation leaves extra digits</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">The compiler adds wrong</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="top2-q2" data-why="Integer division drops the fraction.">
+      <div class="text-sm font-bold">What is 7 / 2 in C++ ints?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">3</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">3.5</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="top2-q3" data-why="Warnings and sanitizers report early, before release.">
+      <div class="text-sm font-bold">How to catch risky math early?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">Wall plus sanitizers</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Ignore warnings</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap">
+    <a href="index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <div class="flex-1"></div>
+    <button data-complete="top2" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dsafe)">Mark chapter complete</button>
+    <a data-next href="topic-increment.html" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Next: Increments</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="assets/course.js"></script>
+<script>
+(function(){
+  function upd(){
+    var a=document.getElementById("top2-a").value/100, b=document.getElementById("top2-b").value/100;
+    var s=a+b;
+    document.getElementById("top2-sum").textContent=a.toFixed(2)+" + "+b.toFixed(2)+" = "+s;
+    var eq=document.getElementById("top2-eq");
+    if(Math.abs(s-0.3)<1e-9 && Math.abs(a-0.1)<1e-9 && Math.abs(b-0.2)<1e-9){eq.textContent="== holds here";eq.className="chip g";}
+    else{var exact=(s===(a+b)); eq.textContent="== on floats is risky"; eq.className="chip y";}
+  }
+  document.getElementById("top2-a").addEventListener("input",upd);
+  document.getElementById("top2-b").addEventListener("input",upd); upd();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+WEBVTT
+
+1
+00:00:00.500 --> 00:00:06.000
+Phase 2 — Demonstrating the Vulnerable strcpy Operation
+
+2
+00:00:06.500 --> 00:00:14.000
+Educational demonstration only — intentionally vulnerable.
+Run only locally with AddressSanitizer.
+
+3
+00:00:15.000 --> 00:00:22.000
+Input length and buffer capacity are different quantities.
+Phase 1 showed this safely.
+
+4
+00:00:23.000 --> 00:00:30.000
+When an input exceeds the logical buffer, extra bytes
+may overwrite adjacent data in an unsafe implementation.
+
+5
+00:00:40.500 --> 00:00:48.000
+Phase 1 review: one contiguous array of 20 bytes.
+
+6
+00:00:48.500 --> 00:00:56.000
+Three logical regions: buffer[8] in blue,
+criticalFlag in orange, buffer2[8] in green.
+
+7
+00:00:57.000 --> 00:01:05.000
+HELLO is 5 bytes — it fits within the 8-byte logical buffer.
+
+8
+00:01:06.000 --> 00:01:14.000
+ABCDEFGHIJKLMNO is 15 bytes — it exceeds the buffer
+by 7 characters. Excess 7 beyond the 8-byte boundary.
+
+9
+00:01:15.000 --> 00:01:22.000
+In this deliberately constructed model,
+remaining bytes appear in adjacent logical regions.
+
+10
+00:01:23.000 --> 00:01:35.000
+Phase 1 capped the copy with std::min — no actual
+out-of-bounds write. It was a safe visualization.
+
+11
+00:01:50.500 --> 00:02:00.000
+The vulnerable operation: char buffer[8];
+strcpy(buffer, input);
+
+12
+00:02:01.000 --> 00:02:10.000
+strcpy has no destination size parameter.
+It copies until the first null byte.
+
+13
+00:02:11.000 --> 00:02:20.000
+1234567 is 7 characters plus null — 8 bytes. It fits.
+Status: FITS.
+
+14
+00:02:21.000 --> 00:02:32.000
+ABCDEFGHIJKLMNO is 15 characters plus null — 16 bytes
+into an 8-byte buffer. 8 bytes past the end.
+
+15
+00:02:33.000 --> 00:02:40.000
+The first 8 bytes fill the buffer: A through H.
+Then the boundary ends.
+
+16
+00:02:41.000 --> 00:02:50.000
+The remaining bytes overwrite adjacent stack memory:
+I, J, K, L into the next 4 bytes, M, N, O and null beyond.
+
+17
+00:03:00.500 --> 00:03:08.000
+AddressSanitizer detects the invalid write at runtime.
+
+18
+00:03:09.000 --> 00:03:16.000
+ERROR: AddressSanitizer: stack-buffer-overflow
+
+19
+00:03:17.000 --> 00:03:24.000
+WRITE of size 16 at ... thread T0
+
+20
+00:03:25.000 --> 00:03:33.000
+#1 in vulnerableFunction at src/phase2_vulnerable_strcpy.cpp:58
+The strcpy call site.
+
+21
+00:03:34.000 --> 00:03:42.000
+This frame has 1 object: [32, 40) 'buffer' line 44
+8 bytes at offset 32. Access at offset 40 overflows.
+
+22
+00:03:43.000 --> 00:03:50.000
+SUMMARY: stack-buffer-overflow at src/phase2_vulnerable_strcpy.cpp:58
+
+23
+00:03:51.000 --> 00:03:58.000
+Shadow bytes: 00[f3]f3 — f3 is the stack right redzone,
+the guard that makes the overflow visible.
+
+24
+00:03:59.000 --> 00:04:05.000
+==ABORTING==  Program exits with code 1.
+No code after strcpy is reliable.
+
+25
+00:04:20.500 --> 00:04:28.000
+Safety clarification: a real out-of-bounds access
+is undefined behavior in C++.
+
+26
+00:04:29.000 --> 00:04:36.000
+Left: Phase 1 safe model — one array of 20, capped,
+no actual OOB.
+
+27
+00:04:37.000 --> 00:04:44.000
+Right: Phase 2 real vulnerability — unchecked strcpy,
+16 bytes into 8, stack-buffer-overflow.
+
+28
+00:04:45.000 --> 00:04:53.000
+Without sanitizers, the same bug may abort with
+stack smashing detected, exit 134,
+
+29
+00:04:54.000 --> 00:05:02.000
+or appear to work silently with -fno-stack-protector,
+exit 0. Both are valid undefined behavior outcomes.
+
+30
+00:05:03.000 --> 00:05:10.000
+Undefined does not mean guaranteed crash.
+The compiler owes no requirements after the overflow.
+
+31
+00:05:50.500 --> 00:05:58.000
+Project progression: Phase 1 visualized the boundary.
+
+32
+00:05:59.000 --> 00:06:06.000
+Phase 2 demonstrated the vulnerable strcpy and
+what AddressSanitizer reports.
+
+33
+00:06:07.000 --> 00:06:14.000
+Phase 3 will apply bounds-aware and layered defenses:
+safe APIs, canaries, ASLR, NX/DEP, and static analysis.
+
+34
+00:06:15.000 --> 00:06:23.000
+Takeaway: Input length is not buffer capacity.
+Enforce the boundary every time.
+
+35
+00:06:24.000 --> 00:06:35.000
+Phase 2 used only synthetic inputs locally — never
+deploy vulnerable code. End of Phase 2.

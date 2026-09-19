@@ -1,0 +1,36 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:40.366
+The boundary holds. A checked copy
+defends the 8-byte buffer.
+
+2
+00:00:40.366 --> 00:01:12.566
+Same numbers. Opposite outcomes:
+safe model exit 0. real bug exit 1.
+
+3
+00:01:12.566 --> 00:01:51.566
+strcpy has no size check.
+15 plus null is 16 into 8.
+
+4
+00:01:51.566 --> 00:02:33.899
+Check then copy. n is min(size. 7).
+Truncated safely. cut by plan.
+
+5
+00:02:33.899 --> 00:03:13.765
+Eight cells. Nothing past 07.
+A to G kept. H to O blocked.
+
+6
+00:03:13.765 --> 00:04:06.498
+Same input. Opposite outcome.
+Red abort exit 1. green exit 0.
+
+7
+00:04:06.498 --> 00:04:48.498
+Safe code first. layers behind it.
+Input length is not capacity.

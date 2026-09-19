@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase Final: Bringing It All Together</title>
+<style>
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%}
+  body{
+    background:#0b0f14; color:#f2f5f9;
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    min-height:100vh; overflow-x:hidden;
+  }
+  .mono{font-family:"DejaVu Sans Mono","JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+  .bgfx{position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:linear-gradient(rgba(120,150,190,.05) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(120,150,190,.05) 1px,transparent 1px);
+    background-size:44px 44px;
+  }
+  .orb{position:fixed; border-radius:50%; filter:blur(110px); z-index:0; pointer-events:none; opacity:.5}
+  .orb.a{width:560px;height:560px;left:-160px;top:-160px;background:radial-gradient(circle,rgba(77,157,224,.35),transparent 70%)}
+  .orb.b{width:640px;height:640px;right:-200px;top:20%;background:radial-gradient(circle,rgba(124,58,237,.28),transparent 70%)}
+  .orb.c{width:420px;height:420px;left:30%;bottom:-220px;background:radial-gradient(circle,rgba(232,147,12,.20),transparent 70%)}
+
+  .wrap{position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:22px 28px 40px}
+
+  .topbar{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.02em}
+  .brand .mark{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff;
+    background:linear-gradient(135deg,#4d9de0,#7c3aed); font-family:"DejaVu Sans Mono",monospace; font-weight:700}
+  .brand small{display:block; color:#5d6b80; font-size:10px; letter-spacing:.22em; font-weight:600}
+  .spacer{flex:1}
+  .counter{font-family:"DejaVu Sans Mono",monospace; color:#93a1b5; font-size:14px}
+  .btn{border:1px solid #263242; background:#121924; color:#f2f5f9;
+    border-radius:999px; padding:9px 16px; font-size:13px; font-weight:700; cursor:pointer}
+  .btn:hover{border-color:#4d9de0}
+  .btn.primary{background:#4d9de0; border-color:#4d9de0; color:#06121f}
+  .track{height:6px; background:#141c28; border-radius:999px; overflow:hidden; margin:14px 0 18px}
+  #bar{height:100%; width:14.28%; border-radius:999px;
+    background:linear-gradient(90deg,#4d9de0,#7c3aed,#e8930c); transition:width .35s ease}
+
+  .stage{position:relative; border:1px solid #263242; border-radius:22px; overflow:hidden;
+    background:linear-gradient(180deg,#101823,#0c121b); aspect-ratio:16/9; min-height:560px;
+    box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .slide{position:absolute; inset:0; padding:clamp(24px,4vw,56px); display:none; overflow-y:auto}
+  .slide.active{display:block; animation:enter .45s cubic-bezier(.22,.8,.24,1)}
+  @keyframes enter{from{opacity:0; transform:translateX(36px)} to{opacity:1; transform:none}}
+  .eyebrow{font-family:"DejaVu Sans Mono",monospace; font-size:12px; letter-spacing:.24em;
+    color:#4d9de0; font-weight:700}
+  h1{font-size:clamp(46px,5.2vw,84px); line-height:1.02; letter-spacing:-.03em; margin:10px 0 6px; font-weight:800}
+  h1 .grad{background:linear-gradient(92deg,#4d9de0,#9d7bff 55%,#e8930c);
+    -webkit-background-clip:text; background-clip:text; color:transparent}
+  h2{font-size:clamp(30px,3.2vw,50px); letter-spacing:-.02em; line-height:1.08; margin:8px 0 10px; font-weight:800}
+  .sub{color:#93a1b5; font-size:clamp(15px,1.35vw,20px); line-height:1.65; max-width:62ch}
+  .chips{display:flex; gap:8px; flex-wrap:wrap; margin-top:18px}
+  .chip{font-family:"DejaVu Sans Mono",monospace; font-size:12.5px; font-weight:700; letter-spacing:.04em;
+    border:1px solid #263242; background:#0d141f; color:#f2f5f9;
+    border-radius:999px; padding:8px 14px}
+  .chip.b{border-color:#4d9de0; color:#4d9de0}
+  .chip.g{border-color:#66bb6a; color:#66bb6a}
+  .chip.r{border-color:#e0473a; color:#e0473a}
+  .chip.y{border-color:#f2c14e; color:#f2c14e}
+  .safe-strip{margin-top:22px; border:1px solid rgba(224,71,58,.45); background:rgba(224,71,58,.08);
+    border-radius:14px; padding:14px 18px; font-size:14.5px; line-height:1.6; color:#f3c1bb}
+  .safe-strip b{color:#fff}
+  .hintkeys{position:absolute; right:clamp(24px,4vw,56px); bottom:26px; color:#5d6b80; font-size:12.5px}
+  kbd{font-family:"DejaVu Sans Mono",monospace; background:#0d141f; border:1px solid #263242;
+    border-bottom-width:2px; border-radius:6px; padding:2px 7px; font-size:11.5px; color:#93a1b5}
+
+  .cols2{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px}
+  .cols3{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:18px}
+  .card{border:1px solid #263242; background:rgba(18,25,36,.85); border-radius:16px; padding:20px 22px}
+  .card.green{border-color:rgba(102,187,106,.55)}
+  .card.red{border-color:rgba(224,71,58,.55)}
+  .card h3{font-size:15px; letter-spacing:.14em; font-family:"DejaVu Sans Mono",monospace; margin-bottom:8px}
+  .card.green h3{color:#66bb6a} .card.red h3{color:#e0473a}
+  .card p{color:#93a1b5; font-size:15.5px; line-height:1.65}
+  .card p b{color:#f2f5f9}
+  .bignum{font-family:"DejaVu Sans Mono",monospace; font-size:13px; color:#5d6b80; margin-top:10px}
+
+  .codecard{margin-top:18px; background:#070c12; border:1px solid #263242; border-radius:16px; overflow:hidden}
+  .codehead{display:flex; gap:8px; align-items:center; padding:12px 16px; border-bottom:1px solid #263242}
+  .dot{width:11px;height:11px;border-radius:50%}
+  .codehead .fname{margin-left:8px; font-family:"DejaVu Sans Mono",monospace; font-size:12.5px; color:#5d6b80}
+  .codebody{padding:20px 22px; font-family:"DejaVu Sans Mono",monospace; font-size:clamp(15px,1.5vw,21px); line-height:2}
+  .hl-blue{background:rgba(77,157,224,.16); border:1px solid rgba(77,157,224,.6); border-radius:8px; padding:3px 10px}
+  .hl-red{background:rgba(224,71,58,.16); border:1px solid rgba(224,71,58,.65); border-radius:8px; padding:3px 10px}
+  .hl-green{background:rgba(102,187,106,.14); border:1px solid rgba(102,187,106,.6); border-radius:8px; padding:3px 10px}
+  .hl-yellow{background:rgba(242,193,78,.13); border:1px solid rgba(242,193,78,.55); border-radius:8px; padding:3px 10px}
+  .mathrow{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:18px;
+    font-family:"DejaVu Sans Mono",monospace; font-size:clamp(14px,1.4vw,19px)}
+  .mathrow .eq{background:#0d141f; border:1px solid #263242; border-radius:10px; padding:10px 16px}
+
+  .grid8{display:grid; grid-template-columns:repeat(8,1fr); gap:8px; margin:12px 0 4px}
+  .cell{border:2px solid #263242; border-radius:10px; text-align:center; padding:10px 2px 8px; background:#0d141f}
+  .cell.b{border-color:#4d9de0}
+  .cell .L{font-family:"DejaVu Sans Mono",monospace; font-size:clamp(18px,1.9vw,28px); font-weight:700}
+  .cell .O{font-family:"DejaVu Sans Mono",monospace; font-size:10.5px; color:#5d6b80; margin-top:2px}
+  .slide.active .pop{animation:pop .5s cubic-bezier(.2,.9,.3,1.2) backwards}
+  @keyframes pop{from{opacity:0; transform:scale(.6) translateY(10px)} to{opacity:1; transform:none}}
+  .marker{display:flex; align-items:center; gap:10px; margin:10px 0 2px;
+    font-family:"DejaVu Sans Mono",monospace; font-size:12px; letter-spacing:.12em; color:#f2c14e}
+  .marker::before,.marker::after{content:""; height:1px; flex:1;
+    background:repeating-linear-gradient(90deg,#f2c14e 0 8px,transparent 8px 14px); opacity:.6}
+  .capline{font-size:14px; color:#93a1b5; margin-top:8px}
+  .capline b{color:#66bb6a} .capline .bad{color:#e0473a; font-weight:700}
+
+  .rep{font-family:"DejaVu Sans Mono",monospace; font-size:clamp(13.5px,1.3vw,17px); line-height:2; margin-top:6px}
+  .rep .k{color:#5d6b80}
+  .layers{display:flex; gap:8px; flex-wrap:wrap; margin-top:16px}
+  .takeaway{margin-top:20px; border:1px solid rgba(102,187,106,.5); background:rgba(102,187,106,.07);
+    border-radius:16px; padding:18px 22px; font-size:clamp(18px,1.8vw,26px); font-weight:800; letter-spacing:-.01em}
+  .arc{display:flex; gap:8px; align-items:center; margin-top:14px; color:#5d6b80;
+    font-family:"DejaVu Sans Mono",monospace; font-size:12.5px; flex-wrap:wrap}
+  .arc .now{color:#66bb6a; border:1px solid rgba(102,187,106,.5); border-radius:999px; padding:4px 12px}
+  .arc .dim{opacity:.65}
+
+  .rv{opacity:0; transform:translateY(14px); transition:opacity .45s ease, transform .45s ease}
+  .rv.on{opacity:1; transform:none}
+
+  .dock{margin-top:16px; border:1px solid #263242; border-radius:16px; background:#0e141d; padding:16px 20px}
+  .dock .dh{font-family:"DejaVu Sans Mono",monospace; font-size:11px; letter-spacing:.2em; color:#5d6b80}
+  .dock .dh span{color:#f2f5f9}
+  #ntext{color:#93a1b5; font-size:15px; line-height:1.65; margin-top:6px; font-style:italic}
+  .thumbs{display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-top:14px}
+  .thumb{background:#121924; border:1px solid #263242; border-radius:10px; padding:9px 10px;
+    font-size:12px; font-weight:700; cursor:pointer; color:#f2f5f9; text-align:left}
+  .thumb small{display:block; color:#5d6b80; font-weight:500; font-family:"DejaVu Sans Mono",monospace; font-size:10.5px}
+  .thumb.on{border-color:#4d9de0; background:#16283d}
+  .foot{display:flex; gap:14px; align-items:center; margin-top:12px; color:#5d6b80; font-size:12.5px; flex-wrap:wrap}
+  .voicerow{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:12px}
+  .btn.sm{padding:8px 14px; font-size:12.5px}
+  .btn.ghost{background:transparent}
+  #voicepick{background:#0d141f; color:#f2f5f9; border:1px solid #263242;
+    border-radius:999px; padding:8px 12px; font-size:12.5px; max-width:280px}
+  .voicetip{color:#5d6b80; font-size:12px; margin-top:8px; line-height:1.6}
+
+  input[type=range]{flex:1;min-width:180px;accent-color:#4d9de0}
+  input[type=text]{background:#0d141f;border:1px solid #263242;color:#f2f5f9;border-radius:10px;padding:10px 14px;font-family:"DejaVu Sans Mono",monospace;font-size:15px;max-width:100%}
+  .labrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  .lablabel{font-size:12px;letter-spacing:.12em;color:#93a1b5;font-weight:700}
+  .tray{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;min-height:20px}
+  .blocked{border:1px dashed rgba(224,71,58,.7);color:#e0473a;border-radius:8px;padding:6px 10px;font-family:"DejaVu Sans Mono",monospace;font-size:14px}
+  .tline{display:block;opacity:0;animation:fadeup .45s ease forwards}
+  @keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .layers .chip{cursor:pointer;transition:transform .15s ease}
+  .layers .chip:hover{transform:translateY(-2px)}
+  .qbtn{display:block;width:100%;text-align:left;background:#0d141f;border:1px solid #263242;color:#f2f5f9;border-radius:10px;padding:9px 12px;font-size:13.5px;font-weight:600;cursor:pointer;margin-top:8px}
+  .qbtn:hover{border-color:#4d9de0}
+  .qbtn.picked-right{border-color:#66bb6a;color:#66bb6a}
+  .qbtn.picked-wrong{border-color:#e0473a;color:#e0473a}
+  .qfb{font-size:12.5px;color:#5d6b80;margin-top:8px;line-height:1.6;min-height:18px}
+  .qfb.good{color:#66bb6a} .qfb.bad{color:#e0473a}
+  .bugcard{cursor:pointer;transition:transform .15s ease}
+  .bugcard:hover{transform:translateY(-2px)}
+  .verdict{margin-top:14px;border-radius:12px;padding:14px 18px;font-weight:800;font-size:15px;border:1px solid #263242;background:#0d141f}
+  .verdict.good{border-color:#66bb6a;background:rgba(102,187,106,.08)}
+  @media (max-width:900px){
+    .cols2{grid-template-columns:1fr}
+    .cols3{grid-template-columns:1fr}
+    .thumbs{grid-template-columns:repeat(4,1fr)}
+    .stage{min-height:0}
+  }
+  @media print{
+    .topbar .btn, .dock, .foot, .hintkeys, .bgfx, .orb{display:none !important}
+    .stage{aspect-ratio:auto}
+    .slide{position:static; display:block !important; border-top:1px solid #263242; animation:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .slide.active{animation:none}
+    .slide.active .pop{animation:none}
+    .rv{transition:none; opacity:1; transform:none}
+    .tline{opacity:1 !important;animation:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="bgfx"></div>
+<div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand"><div class="mark">D5</div><div>DeepDive · Final<small>BRINGING IT TOGETHER</small></div></div>
+    <div class="spacer"></div>
+    <div class="counter" id="counter">1 / 7</div>
+    <button class="btn" id="btn-prev">← Prev</button>
+    <button class="btn primary" id="btn-next">Next →</button>
+    <button class="btn" id="btn-notes">Notes</button>
+    <button class="btn" id="btn-full">⛶ Present</button>
+  </div>
+  <div class="track"><div id="bar"></div></div>
+
+  <main class="stage" id="stage">
+    <section class="slide active" id="s1">
+      <div class="eyebrow">C++ MEMORY SAFETY · FINAL</div>
+      <h1>Bringing it all <span class="grad">together.</span></h1>
+      <p class="sub">One input, three outcomes. We replay the full arc — shown, broken, held — and finish with tools that hold the boundary every time.</p>
+      <div class="chips">
+        <span class="chip b">BUFFER 8</span><span class="chip y">INPUT 15</span><span class="chip r">WRITE 16</span><span class="chip">OFFSET 40</span><span class="chip">HEX 41-4F</span>
+      </div>
+      <div class="safe-strip"><b>Safety contract.</b> We ran our Phase 2 program only in an isolated lab with sanitizers, because it was intentionally vulnerable. Everything we show for the Final replay is safe to run anywhere.</div>
+    </section>
+
+    <section class="slide" id="s2">
+      <div class="eyebrow">01 · TRIPLE REPLAY</div>
+      <h2>One input, three outcomes.</h2>
+      <p class="sub">Type below. All three panels update live from the same input.</p>
+      <div class="labrow"><span class="lablabel">LAB · TYPE TO REPLAY</span><input type="text" id="fin-tri-input" value="ABCDEFGHIJKLMNO" maxlength="20" size="16"><span class="chip y" id="fin-tri-len">15 chars</span></div>
+      <div class="cols3">
+        <div class="card">
+          <h3 style="color:#4d9de0">PHASE 1 · SHOWN · EXIT 0</h3>
+          <div class="rep" id="fin-tri-p1">8 kept, 7 cross, capped, exit 0</div>
+          <div class="bignum">Capped visualization, never written past.</div>
+        </div>
+        <div class="card red">
+          <h3>PHASE 2 · REAL · ABORT 1</h3>
+          <div class="rep" id="fin-tri-p2">write 16 into 8, 8 past, abort 1</div>
+          <div class="bignum">Unchecked copy counts the real overflow.</div>
+        </div>
+        <div class="card green">
+          <h3>PHASE 3 · HELD · EXIT 0</h3>
+          <div class="rep" id="fin-tri-p3">kept ABCDEFG, blocked 8, exit 0</div>
+          <div class="bignum">Checked copy keeps 7 plus null.</div>
+        </div>
+      </div>
+      <div class="capline" id="fin-tri-msg">15 letters plus null make WRITE 16 into 8: 8 past the end in the red run, held in the green run.</div>
+    </section>
+
+    <section class="slide" id="s3">
+      <div class="eyebrow">02 · FOUR PATTERNS</div>
+      <h2>Same flaw, four shapes.</h2>
+      <p class="sub">Each card is one copy with no size check. Click a card to reveal its flaw and fix.</p>
+      <div class="cols2">
+        <div class="card bugcard" data-fin-bug data-fin-flaw="Flaw: no size check — 15 plus null into 8. Fix: min(input.size(), 7) + null, our Phase 3 habit."><div class="lablabel">PATTERN 1 · COPY</div><div class="mono" style="margin-top:6px">strcpy(b, input);</div><div class="qfb" data-fin-buglabel>Click to reveal the flaw + fix</div></div>
+        <div class="card bugcard" data-fin-bug data-fin-flaw="Flaw: concat never asks remaining space. Fix: snprintf or tracked length."><div class="lablabel">PATTERN 2 · CONCAT</div><div class="mono" style="margin-top:6px">strcat(log, entry);</div><div class="qfb" data-fin-buglabel>Click to reveal the flaw + fix</div></div>
+        <div class="card bugcard" data-fin-bug data-fin-flaw="Flaw: scan without width writes past the buffer. Fix: width like %7s for size 8."><div class="lablabel">PATTERN 3 · SCAN</div><div class="mono" style="margin-top:6px">scanf(&quot;%s&quot;, name);</div><div class="qfb" data-fin-buglabel>Click to reveal the flaw + fix</div></div>
+        <div class="card bugcard" data-fin-bug data-fin-flaw="Flaw: size argument is source length, not destination. Fix: pass destination capacity."><div class="lablabel">PATTERN 4 · COPY N</div><div class="mono" style="margin-top:6px">memcpy(dst, src, strlen(src));</div><div class="qfb" data-fin-buglabel>Click to reveal the flaw + fix</div></div>
+      </div>
+    </section>
+
+    <section class="slide" id="s4">
+      <div class="eyebrow">03 · SAFE TOOLS</div>
+      <h2>Tools that carry their size.</h2>
+      <p class="sub">Every tool below knows its own capacity. Same rule each time: never copy more than the destination holds.</p>
+      <div class="cols2">
+        <div class="card green"><h3>std::string</h3><p>Grows itself. <b>Size always known.</b></p></div>
+        <div class="card green"><h3>string_view / span</h3><p>Borrow with bounds. <b>Never own blindly.</b></p></div>
+        <div class="card green"><h3>snprintf</h3><p>Prints at most n. <b>Always terminates.</b></p></div>
+        <div class="card green"><h3>memcpy + min</h3><p>Copy <span class="mono">min(size, 7)</span>, seal null. <b>Our Phase 3 habit.</b></p></div>
+      </div>
+      <div class="layers">
+        <span class="chip g" data-fin-tool="Sanitizers + static analysis: catch in review, prove in tests.">SANITIZERS</span><span class="chip" data-fin-tool="Static scan flags risky calls like unchecked strcpy before anything runs.">STATIC SCAN</span><span class="chip" data-fin-tool="Rule for every copy: measure first, copy at most what fits, seal with null.">EVERY COPY</span>
+      </div>
+      <div class="capline" id="fin-tool-detail">Select a layer to see its job.</div>
+    </section>
+
+    <section class="slide" id="s5">
+      <div class="eyebrow">04 · CHECKS</div>
+      <h2>Four quick checks.</h2>
+      <p class="sub">Pick one answer per card. Feedback appears right below.</p>
+      <div class="cols2">
+        <div class="card" data-fin-check data-fin-why="Heap needs delete — stack frees itself.">
+          <div class="lablabel">CHECK 1 · HEAP FREE</div>
+          <div style="font-weight:800;margin-top:6px">Who frees heap memory?</div>
+          <button class="qbtn" data-opt="0">It frees itself</button>
+          <button class="qbtn" data-opt="1">We do, with delete or smart pointers</button>
+          <div class="qfb" data-fin-feedback></div>
+        </div>
+        <div class="card" data-fin-check data-fin-why="8 capacity against longer input leaves 7 past the boundary.">
+          <div class="lablabel">CHECK 2 · EXCESS 7</div>
+          <div style="font-weight:800;margin-top:6px">Buffer 8, input 15. Excess?</div>
+          <button class="qbtn" data-opt="1">7 past the boundary</button>
+          <button class="qbtn" data-opt="0">23 total</button>
+          <div class="qfb" data-fin-feedback></div>
+        </div>
+        <div class="card" data-fin-check data-fin-why="No size parameter exists — strcpy copies until null.">
+          <div class="lablabel">CHECK 3 · STRCPY FLAW</div>
+          <div style="font-weight:800;margin-top:6px">strcpy flaw in one phrase?</div>
+          <button class="qbtn" data-opt="0">Too slow to use</button>
+          <button class="qbtn" data-opt="1">No destination size</button>
+          <div class="qfb" data-fin-feedback></div>
+        </div>
+        <div class="card" data-fin-check data-fin-why="15 plus null equals 16.">
+          <div class="lablabel">CHECK 4 · WRITE 16</div>
+          <div style="font-weight:800;margin-top:6px">WRITE of size 16 means?</div>
+          <button class="qbtn" data-opt="1">15 letters plus null</button>
+          <button class="qbtn" data-opt="0">16 buffers</button>
+          <div class="qfb" data-fin-feedback></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="s6">
+      <div class="eyebrow">05 · FIXES</div>
+      <h2>Fix three snippets.</h2>
+      <p class="sub">Choose the checked form each time. The verdict line updates live.</p>
+      <div class="cols3">
+        <div class="card" data-fin-fix data-fin-why="Bounds first: min plus null.">
+          <div class="lablabel">FIX 1 · COPY name[8]</div>
+          <div class="mono" style="margin-top:6px;font-size:13px">copy name[8] from input:</div>
+          <button class="qbtn mono" data-opt="0">strcpy(name, input)</button>
+          <button class="qbtn mono" data-opt="1">memcpy + min + null</button>
+          <div class="qfb" data-fin-feedback></div>
+        </div>
+        <div class="card" data-fin-fix data-fin-why="Width caps the scan.">
+          <div class="lablabel">FIX 2 · SCAN buf[8]</div>
+          <div class="mono" style="margin-top:6px;font-size:13px">read a word into buf[8]:</div>
+          <button class="qbtn mono" data-opt="1">scanf %7s</button>
+          <button class="qbtn mono" data-opt="0">scanf %s</button>
+          <div class="qfb" data-fin-feedback></div>
+        </div>
+        <div class="card" data-fin-fix data-fin-why="Own the memory safely.">
+          <div class="lablabel">FIX 3 · OWN 8 BYTES</div>
+          <div class="mono" style="margin-top:6px;font-size:13px">own 8 bytes on the heap:</div>
+          <button class="qbtn mono" data-opt="0">new char[8], never delete</button>
+          <button class="qbtn mono" data-opt="1">make_unique char[8]</button>
+          <div class="qfb" data-fin-feedback></div>
+        </div>
+      </div>
+      <div class="verdict" id="fin-verdict">Result: fix all three above to finish.</div>
+    </section>
+
+    <section class="slide" id="s7">
+      <div class="eyebrow">06 · CLOSE</div>
+      <h2>Replay it. Hold it.</h2>
+      <div class="layers">
+        <span class="chip g" data-fin-layer="Size-aware code prevents the overflow from ever happening.">SIZE-AWARE CODE: prevents</span><span class="chip" data-fin-layer="AddressSanitizer finds bad reads and writes during testing.">ASAN IN TESTS: finds</span><span class="chip" data-fin-layer="Stack canary aborts when corruption is detected.">STACK CANARY: aborts</span><span class="chip" data-fin-layer="ASLR shuffles addresses so targets stay unknown.">ASLR: hides addresses</span><span class="chip" data-fin-layer="NX/DEP means data pages never run as code.">NX/DEP: data never executes</span><span class="chip" data-fin-layer="CFI keeps indirect jumps on legal targets.">CFI: jumps stay legal</span><span class="chip" data-fin-layer="Static scan flags risky calls like unchecked strcpy early.">STATIC SCAN: flags early</span>
+      </div>
+      <div class="capline" id="fin-layer-detail">Select a layer to see its job.</div>
+      <div class="takeaway">Input length is not buffer capacity. We enforce the boundary: every copy, every time.</div>
+      <div class="arc"><span class="dim">Phase 1 · we showed it</span> → <span class="dim">Phase 2 · we broke it</span> → <span class="dim">Phase 3 · we held it</span> → <span class="now">Final · we replay + hold ✓</span></div>
+      <div class="chips">
+        <span class="chip b">BUFFER 8</span><span class="chip y">INPUT 15</span><span class="chip g">WRITE 16 BLOCKED</span><span class="chip">OFFSET 40</span><span class="chip">HEX 41-4F</span><span class="chip g">EXIT 0</span>
+      </div>
+    </section>
+  </main>
+
+  <section class="dock" id="dock">
+    <div class="dh">SPEAKER NOTE · <span id="ntime">0:00 to 0:35</span></div>
+    <p id="ntext"></p>
+    <div class="voicerow">
+      <button class="btn sm primary" id="btn-voice">▶ Narrate</button>
+      <button class="btn sm" id="btn-fulltalk">▶ Full talk</button>
+      <button class="btn sm ghost" id="btn-stop">■ Stop</button>
+      <select id="voicepick" title="System voice (backup narration)"></select>
+    </div>
+    <div class="voicetip">Built-in studio track plays first when present; otherwise the selected system voice reads the note.</div>
+    <div class="thumbs" id="thumbs"></div>
+  </section>
+  <div class="foot">
+    <span>← → navigate · F present · N notes</span>
+    <span style="margin-left:auto" class="mono" id="clock">0:00 elapsed</span>
+  </div>
+</div>
+
+<script>
+var slides=["s1","s2","s3","s4","s5","s6","s7"];
+var titles=["Start","Replay","Patterns","Tools","Checks","Fixes","Close"];
+var times=["0:00 to 0:35","0:38 to 1:10","1:13 to 1:50","1:53 to 2:25","2:28 to 3:00","3:03 to 3:35","3:38 to 4:10"];
+var notes=[
+  "Welcome to the final chapter. The five chips below hold our shared numbers across every phase: an 8-byte buffer, a 15-letter input, and the 16-byte write. Because the red program was intentionally vulnerable, we only ran it in an isolated lab. Everything in this replay is safe.",
+  "Type in the box and watch all three panels update together. The blue panel caps the view, the red panel counts how many bytes pass an 8-byte buffer, and the green panel keeps at most 7 letters plus null. One cause produces three effects, so the comparison is direct.",
+  "Here are the four shapes of the same bug. Each card shows a copy with no size check: strcpy, strcat, scanf, and memcpy with the wrong size. Click each card to reveal why it writes past the buffer and which checked form replaces it.",
+  "These are the tools that carry their size with them. Strings grow themselves, views borrow with bounds, snprintf prints at most n, and memcpy plus min seals with null. Select the chips below to see how sanitizers and scans back up the same rule.",
+  "Now four quick checks on the ideas that matter. Each card asks one thing: who frees the heap, how much passes the boundary, what the strcpy flaw is, and what WRITE 16 means. Pick an answer to see the reason right below the card.",
+  "Fix three short snippets with the habits above. Copy a name with min plus null, read a word with percent-7-s, and own memory with make unique. The verdict line at the bottom turns green only when all three are correct.",
+  "We close with the layers behind safe code and the full arc. Phase 1 showed the line, Phase 2 broke it, Phase 3 held it, and the Final replays all three and holds. The chips repeat the numbers: 8, 15, 16 blocked, offset 40, hex 41 to 4F, exit zero."
+];
+var cur=0; var N=slides.length; var t0=null; var tick=null; var notesOn=true;
+var reveals={};
+function revealed(id){var e=document.getElementById(id); return !e || e.classList.contains("on");}
+function allRevealed(){var r=reveals[slides[cur]]||[]; for(var i=0;i<r.length;i++){if(!revealed(r[i])) return false;} return true;}
+function revealNext(){var r=reveals[slides[cur]]||[]; for(var i=0;i<r.length;i++){if(!revealed(r[i])){document.getElementById(r[i]).classList.add("on"); return true;}} return false;}
+function resetReveals(except){for(var k in reveals){var r=reveals[k]; for(var i=0;i<r.length;i++){var e=document.getElementById(r[i]); if(e && k!==except){e.classList.remove("on"); if(i===0){e.classList.add("on");}}}}}
+function show(n){
+  stopSpeak();
+  cur=Math.max(0,Math.min(N-1,n));
+  for(var i=0;i<N;i++){document.getElementById(slides[i]).classList.remove("active");}
+  document.getElementById(slides[cur]).classList.add("active");
+  document.getElementById("counter").textContent=(cur+1)+" / "+N;
+  document.getElementById("bar").style.width=((cur+1)/N*100)+"%";
+  document.getElementById("ntime").textContent=times[cur];
+  document.getElementById("ntext").textContent="\u201C"+notes[cur]+"\u201D";
+  var th=document.getElementById("thumbs").children;
+  for(var j=0;j<th.length;j++){th[j].classList.toggle("on", j===cur);}
+  if(t0===null){t0=Date.now(); tick=setInterval(clock,500);}
+  try{var u=new URL(window.location.href); u.searchParams.set("slide",cur+1); window.history.replaceState(null,"","?"+u.searchParams.toString());}catch(e){}
+}
+function forward(){ if(!allRevealed()){revealNext();} else { if(cur<N-1){resetReveals(slides[cur+1]); show(cur+1);} } }
+function back(){ if(cur>0){resetReveals(slides[cur-1]); show(cur-1);} }
+function clock(){var s=Math.floor((Date.now()-t0)/1000); var m=Math.floor(s/60); var r=s%60; document.getElementById("clock").textContent=m+":"+(r<10?"0"+r:""+r)+" elapsed";}
+function toggleNotes(force){
+  notesOn=(typeof force==="boolean")?force:!notesOn;
+  document.getElementById("dock").style.display=notesOn?"block":"none";
+}
+function present(){var el=document.getElementById("stage"); try{if(document.fullscreenElement){document.exitFullscreen();} else if(el.requestFullscreen){el.requestFullscreen();}}catch(e){}}
+document.getElementById("btn-next").onclick=function(){forward();};
+document.getElementById("btn-prev").onclick=function(){back();};
+document.getElementById("btn-notes").onclick=function(){toggleNotes();};
+document.getElementById("btn-full").onclick=function(){present();};
+document.addEventListener("keydown",function(e){
+  if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"||e.key==="Enter"){e.preventDefault(); forward();}
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault(); back();}
+  else if(e.key==="Home"){show(0);} else if(e.key==="End"){show(N-1);}
+  else if(e.key==="f"||e.key==="F"){present();} else if(e.key==="n"||e.key==="N"){toggleNotes();}
+});
+function revealAll(id){var r=reveals[id]||[]; for(var i=0;i<r.length;i++){var e=document.getElementById(r[i]); if(e){e.classList.add("on");}}}
+/* narration engine: built-in studio track first, system voice fallback */
+var STUDIO=[];
+var narrVoice=null, narrating=false, studioAudio=null, fullTalk=false, autoAdv=false, voiceToken=0;
+function studioSrc(n){if(typeof STUDIO!=="undefined"&&STUDIO[n-1]){return STUDIO[n-1];}return audioSrc(n);}
+function audioSrc(n){return ""; /* no studio files ship; system voice reads the note */}
+function pickBestVoice(voices){
+  var en=[]; for(var i=0;i<voices.length;i++){var l=(voices[i].lang||"").toLowerCase(); if(l.indexOf("en")===0){en.push(voices[i]);}}
+  var pool=en.length?en:voices; if(!pool.length){return null;}
+  function score(v){
+    var n=(v.name+" "+(v.voiceURI||"")).toLowerCase(), lang=(v.lang||"").toLowerCase(), s=0;
+    if(lang.indexOf("en-us")===0){s+=100;}else if(lang.indexOf("en-gb")===0){s+=70;}else if(lang.indexOf("en")===0){s+=40;}
+    if(n.indexOf("natural")>=0){s+=120;}
+    if(n.indexOf("google us english")>=0||n.indexOf("google uk english female")>=0){s+=110;}else if(n.indexOf("google")>=0){s+=80;}
+    if(n.indexOf("microsoft")>=0&&(n.indexOf("online")>=0||n.indexOf("aria")>=0||n.indexOf("jenny")>=0||n.indexOf("guy")>=0)){s+=100;}
+    else if(n.indexOf("microsoft")>=0){s+=60;}
+    if(n.indexOf("samantha")>=0||n.indexOf("karen")>=0||n.indexOf("moira")>=0||n.indexOf("tessa")>=0){s+=50;}
+    if(n.indexOf("enhanced")>=0||n.indexOf("premium")>=0){s+=30;}
+    return s;
+  }
+  var best=pool[0], bs=-1;
+  for(var j=0;j<pool.length;j++){var sc=score(pool[j]); if(sc>bs){bs=sc; best=pool[j];}}
+  return best;
+}
+function populateVoices(){
+  var sel=document.getElementById("voicepick");
+  if(!sel||!("speechSynthesis" in window)){return;}
+  var voices=speechSynthesis.getVoices(); if(!voices.length){return;}
+  if(!narrVoice){narrVoice=pickBestVoice(voices);}
+  sel.innerHTML="";
+  var list=voices.slice(0,40);
+  for(var i=0;i<list.length;i++){
+    var o=document.createElement("option"); o.value=list[i].name;
+    o.textContent=list[i].name+" ("+list[i].lang+")"+(list[i]===narrVoice?" (recommended)":"");
+    if(list[i]===narrVoice){o.selected=true;}
+    sel.appendChild(o);
+  }
+  sel.onchange=function(){
+    var vs=speechSynthesis.getVoices(), v=null;
+    for(var k=0;k<vs.length;k++){if(vs[k].name===sel.value){v=vs[k];}}
+    if(v){narrVoice=v; previewVoice();}
+  };
+}
+function previewVoice(){
+  if(!narrVoice||!("speechSynthesis" in window)){return;}
+  try{speechSynthesis.cancel();}catch(e){}
+  var u=new SpeechSynthesisUtterance("Hi. This voice narrates the final replay.");
+  u.voice=narrVoice; u.rate=1; u.pitch=1; speechSynthesis.speak(u);
+}
+function setSpeakUI(on){
+  narrating=on;
+  var b=document.getElementById("btn-voice");
+  if(b){b.textContent=on?"\u25A0 Playing":"\u25B6 Narrate";}
+}
+function syncFullBtn(){
+  var b=document.getElementById("btn-fulltalk");
+  if(b){b.textContent=fullTalk?"\u25A0 Stop full talk":"\u25B6 Full talk";}
+}
+function stopStudio(){if(studioAudio){try{studioAudio.pause(); studioAudio.src="";}catch(e){} studioAudio=null;}}
+function stopSystem(){try{speechSynthesis.cancel();}catch(e){}}
+function stopSpeak(){
+  voiceToken++;
+  if(!autoAdv){fullTalk=false; syncFullBtn();}
+  stopStudio(); stopSystem(); setSpeakUI(false);
+}
+function playSlideVoice(n,onEnd){
+  stopStudio(); stopSystem();
+  var tk=++voiceToken, settled=false;
+  function fallback(){
+    if(settled||tk!==voiceToken){return;}
+    settled=true; studioAudio=null; speakSystem(onEnd);
+  }
+  var a=new Audio(studioSrc(n)); studioAudio=a; setSpeakUI(true);
+  a.onended=function(){ if(settled||tk!==voiceToken){return;} settled=true; studioAudio=null; setSpeakUI(false); if(onEnd){onEnd();} };
+  a.onerror=function(){fallback();};
+  try{var p=a.play(); if(p&&p.catch){p.catch(function(){fallback();});}}
+  catch(e){fallback();}
+}
+function speakSystem(done){
+  if(!("speechSynthesis" in window)){setSpeakUI(false); if(done){done();} return;}
+  var synth=speechSynthesis; try{synth.cancel();}catch(e){}
+  if(!narrVoice){try{narrVoice=pickBestVoice(synth.getVoices());}catch(e2){}}
+  var text=notes[cur];
+  var chunks=(text.match(/[^.!?\u2026]+[.!?\u2026]+|[^.!?\u2026]+$/g)||[text]).map(function(s){return s.trim();}).filter(Boolean);
+  var i=0; setSpeakUI(true);
+  (function next(){
+    if(!narrating){return;}
+    if(i>=chunks.length){setSpeakUI(false); if(done){done();} return;}
+    var u=new SpeechSynthesisUtterance(chunks[i]);
+    if(narrVoice){u.voice=narrVoice; u.lang=narrVoice.lang;}
+    u.rate=1; u.pitch=1; u.volume=1;
+    u.onend=function(){i++; setTimeout(next,220);};
+    u.onerror=function(){i++; setTimeout(next,220);};
+    synth.speak(u);
+  })();
+}
+function nextInTalk(){
+  if(!fullTalk){return;}
+  if(cur<N-1){
+    autoAdv=true; resetReveals(slides[cur+1]); show(cur+1); autoAdv=false;
+    revealAll(slides[cur]);
+    playSlideVoice(cur+1,nextInTalk);
+  }else{fullTalk=false; syncFullBtn();}
+}
+function speakNote(){
+  if(studioAudio||narrating){stopSpeak(); return;}
+  fullTalk=false; syncFullBtn();
+  revealAll(slides[cur]);
+  playSlideVoice(cur+1,null);
+}
+function playFullTalk(){
+  if(fullTalk){stopSpeak(); return;}
+  fullTalk=true; syncFullBtn();
+  autoAdv=true; resetReveals(slides[0]); show(0); autoAdv=false;
+  revealAll(slides[0]);
+  playSlideVoice(1,nextInTalk);
+}
+document.getElementById("btn-voice").onclick=function(){speakNote();};
+document.getElementById("btn-fulltalk").onclick=function(){playFullTalk();};
+document.getElementById("btn-stop").onclick=function(){stopSpeak();};
+if("speechSynthesis" in window){
+  populateVoices();
+  try{speechSynthesis.onvoiceschanged=populateVoices;}catch(e){}
+}
+/* final labs: fin- prefix throughout */
+function finTriRender(){
+  var inp=document.getElementById("fin-tri-input"); if(!inp){return;}
+  var s=(inp.value||"").slice(0,20), L=s.length;
+  document.getElementById("fin-tri-len").textContent=L+" chars";
+  var over=Math.max(0,L-8), kept=Math.min(L,7);
+  document.getElementById("fin-tri-p1").textContent="8 kept, "+over+" cross, capped, exit 0";
+  if(L<=7){document.getElementById("fin-tri-p2").textContent="write "+(L+1)+" into 8: fits, no report";}
+  else{document.getElementById("fin-tri-p2").textContent="write "+(L+1)+" into 8, "+(L+1-8)+" past, abort 1";}
+  document.getElementById("fin-tri-p3").textContent="kept "+(s.slice(0,kept)||"\u2014")+", blocked "+Math.max(0,(L+1)-8)+", exit 0";
+  var msg=document.getElementById("fin-tri-msg");
+  if(msg){
+    if(L<=7){msg.textContent="Write "+(L+1)+" into 8: fits exactly. This is the green run.";}
+    else{msg.textContent=L+" letters plus null make WRITE "+(L+1)+" into 8: "+(L+1-8)+" past the end in the red run, held in the green run.";}
+  }
+}
+function finBugInit(){
+  var bugs=document.querySelectorAll("[data-fin-bug]");
+  for(var i=0;i<bugs.length;i++){(function(card){
+    card.onclick=function(){
+      var label=card.querySelector("[data-fin-buglabel]");
+      if(label){label.textContent=card.getAttribute("data-fin-flaw"); label.classList.add("good");}
+    };
+  })(bugs[i]);}
+}
+function finQuizBind(attr, verdictId){
+  var cards=document.querySelectorAll("["+attr+"]");
+  for(var i=0;i<cards.length;i++){(function(card){
+    var btns=card.querySelectorAll("[data-opt]");
+    var fb=card.querySelector("[data-fin-feedback]");
+    for(var j=0;j<btns.length;j++){(function(b){
+      b.onclick=function(ev){
+        ev.stopPropagation();
+        var ok=b.getAttribute("data-opt")==="1";
+        for(var k=0;k<btns.length;k++){btns[k].classList.remove("picked-right","picked-wrong");}
+        b.classList.add(ok?"picked-right":"picked-wrong");
+        if(fb){fb.textContent=(ok?"Correct. ":"Not quite. ")+card.getAttribute(attr==="data-fin-check"?"data-fin-why":"data-fin-why"); fb.className="qfb "+(ok?"good":"bad");}
+        if(verdictId){finFixVerdict();}
+      };
+    })(btns[j]);}
+  })(cards[i]);}
+}
+function finFixVerdict(){
+  var v=document.getElementById("fin-verdict"); if(!v){return;}
+  var cards=document.querySelectorAll("[data-fin-fix]");
+  var ok=0;
+  for(var i=0;i<cards.length;i++){if(cards[i].querySelector(".picked-right")){ok++;}}
+  if(ok===cards.length){v.textContent="Result: all three fixed. You held the boundary."; v.classList.add("good");}
+  else{v.textContent="Result: "+ok+" of 3 fixed — keep going."; v.classList.remove("good");}
+}
+function finChipDetail(chipAttr, detailId){
+  var box=document.getElementById(detailId); if(!box){return;}
+  var chips=document.querySelectorAll("["+chipAttr+"]");
+  for(var i=0;i<chips.length;i++){(function(c){
+    c.onclick=function(ev){ev.stopPropagation(); box.textContent=c.getAttribute(chipAttr);};
+  })(chips[i]);}
+}
+(function init(){
+  var w=document.getElementById("thumbs"); w.innerHTML="";
+  for(var i=0;i<N;i++){(function(k){
+    var b=document.createElement("button"); b.className="thumb"+(k===cur?" on":"");
+    var sm=document.createElement("small"); sm.textContent="0"+(k+1)+" \u00B7 "+times[k];
+    var tt=document.createElement("div"); tt.textContent=titles[k];
+    b.appendChild(sm); b.appendChild(tt);
+    b.onclick=function(){resetReveals(slides[k]); show(k);};
+    w.appendChild(b);
+  })(i);}
+  try{var q=new URL(window.location.href).searchParams; var s=parseInt(q.get("slide")||"1",10); if(s>=1&&s<=N){cur=s-1;}}catch(e){}
+  var tri=document.getElementById("fin-tri-input");
+  if(tri){tri.oninput=function(){finTriRender();};}
+  finTriRender(); finBugInit();
+  finQuizBind("data-fin-check", null);
+  finQuizBind("data-fin-fix", "fin-verdict");
+  finChipDetail("data-fin-tool","fin-tool-detail");
+  finChipDetail("data-fin-layer","fin-layer-detail");
+  resetReveals(slides[cur]); show(cur);
+})();
+</script>
+</body>
+</html>

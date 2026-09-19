@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code: phase1_boundary_model.cpp: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="../../assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm">
+    <a href="../../index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="../initial/" data-prev style="color:var(--dmuted)">Prev: Code: Initial</a>
+    <a href="../../index.html" style="color:var(--dmuted)">Map</a>
+    <a href="../../phase-1.html" style="color:var(--dmuted)">Chapter 2: Phase 1</a>
+    <a href="../phase2/" data-next class="font-bold" style="color:var(--dblue)">Next: Code: Phase 2</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="This is the Phase 1 boundary model. One array of 20 bytes holds buffer 8, a 4 byte flag, and a second buffer of 8. Every copy is capped with std min, so there is no real overflow, only a safe visualisation of the boundary between 07 and 08.">
+    <div class="eyebrow">CODE &middot; PHASE 1 BOUNDARY</div>
+    <h1 class="font-extrabold tracking-tight mt-2 mono" style="font-size:clamp(26px,3.6vw,40px)">phase1_boundary_model.cpp</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">One array of 20 bytes modelling buffer 8, flag 4, second buffer 8. Every copy capped with std::min. No real overflow, only a safe boundary visualisation.</p>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+      <a href="../../phase1_boundary_model.cpp" download class="px-4 py-2 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Download raw .cpp</a>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-4"><span class="chip b">BUFFER 8</span><span class="chip o">FLAG 4</span><span class="chip g">BUFFER2 8</span></div>
+    
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-code" data-say="Full source listing. Copy it into a local file with the same name and build it with the command below.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">SOURCE LISTING · VERBATIM</div>
+        <h2 class="font-bold text-2xl mt-1">Full file</h2>
+      </div>
+      <button data-say-btn="sec-code" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><pre class="mono" style="margin:0;padding:18px;font-size:13px;line-height:1.65;color:#e2e8f0;white-space:pre-wrap;word-break:break-word;overflow-x:auto">/*
+ * C++ Memory Safety Deep Dive
+ *
+ * Phase 1:
+ * Seeing the Boundary: Visualizing Logical Memory Regions
+ *
+ * This program uses one intentionally constructed contiguous
+ * byte array to visualize how input bytes can cross a logical
+ * buffer boundary.
+ *
+ * Important:
+ * This is not an actual compiler-generated stack frame.
+ * It does not claim that independent C++ variables are
+ * guaranteed to appear next to one another in memory.
+ *
+ * The copy is limited to the total array size, so this phase
+ * does not perform an actual out-of-bounds write.
+ */
+
+#include &lt;algorithm&gt;
+#include &lt;array&gt;
+#include &lt;cstddef&gt;
+#include &lt;cstdint&gt;
+#include &lt;cstring&gt;
+#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;string_view&gt;
+
+constexpr std::size_t BUFFER_SIZE = 8;
+constexpr std::size_t FLAG_SIZE = sizeof(std::uint32_t);
+constexpr std::size_t SECOND_BUFFER_SIZE = 8;
+
+constexpr std::size_t TOTAL_MEMORY_SIZE =
+    BUFFER_SIZE + FLAG_SIZE + SECOND_BUFFER_SIZE;
+
+void printSeparator() {
+  std::cout &lt;&lt; R&quot;(
+
+== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == 
+)&quot;;
+}
+
+void printHexByte(unsigned char byte) {
+  std::cout &lt;&lt; std::hex &lt;&lt; std::setw(2) &lt;&lt; std::setfill(&#x27;0&#x27;)
+            &lt;&lt; static_cast&lt;unsigned int&gt;(byte) &lt;&lt; std::dec &lt;&lt; std::setfill(&#x27; &#x27;);
+}
+
+void printMemory(const unsigned char *memory, std::size_t size) {
+  std::cout &lt;&lt; R&quot;(
+      Memory dump :
+
+      Offset   Hexadecimal                         ASCII
+      ------   ----------------------------------   ----------------
+)&quot;;
+
+  for (std::size_t i = 0; i &lt; size; ++i) {
+    std::cout &lt;&lt; &quot;  &quot; &lt;&lt; std::setw(2) &lt;&lt; std::setfill(&#x27;0&#x27;) &lt;&lt; i
+              &lt;&lt; std::setfill(&#x27; &#x27;) &lt;&lt; &quot;     &quot;;
+    printHexByte(memory[i]);
+    std::cout &lt;&lt; &quot;                                &quot;;
+    if (memory[i] &gt;= 32 &amp;&amp; memory[i] &lt;= 126) {
+      std::cout &lt;&lt; static_cast&lt;char&gt;(memory[i]);
+    } else {
+      std::cout &lt;&lt; &#x27;.&#x27;;
+    }
+    std::cout &lt;&lt; &#x27;\n&#x27;;
+  }
+}
+
+void printPrintableRegion(const unsigned char *memory, std::size_t start,
+                          std::size_t length) {
+  for (std::size_t i = start; i &lt; start + length; ++i) {
+    if (memory[i] &gt;= 32 &amp;&amp; memory[i] &lt;= 126) {
+      std::cout &lt;&lt; static_cast&lt;char&gt;(memory[i]);
+    } else {
+      std::cout &lt;&lt; &#x27;.&#x27;;
+    }
+  }
+}
+
+void demonstrateBoundary(std::string_view input) {
+  printSeparator();
+
+  std::cout &lt;&lt; R&quot;(INPUT: )&quot; &lt;&lt; input &lt;&lt; R&quot;(
+
+Input size: )&quot;
+            &lt;&lt; input.size() &lt;&lt; R&quot;( bytes
+
+Logical buffer size: )&quot;
+            &lt;&lt; BUFFER_SIZE &lt;&lt; R&quot;( bytes
+
+)&quot;;
+
+  /*
+   * This array represents one contiguous educational
+   * memory region.
+   */
+  std::array&lt;unsigned char, TOTAL_MEMORY_SIZE&gt; memory{};
+
+  constexpr std::size_t bufferOffset = 0;
+  constexpr std::size_t flagOffset = BUFFER_SIZE;
+  constexpr std::size_t secondBufferOffset = BUFFER_SIZE + FLAG_SIZE;
+
+  /*
+   * Initialize the three logical regions.
+   */
+
+  const std::string initialBuffer = &quot;SAFE&quot;;
+
+  std::memcpy(memory.data() + bufferOffset, initialBuffer.data(),
+              std::min(initialBuffer.size(), BUFFER_SIZE));
+
+  const std::uint32_t criticalFlag = 0;
+
+  std::memcpy(memory.data() + flagOffset, &amp;criticalFlag, sizeof(criticalFlag));
+
+  const std::string secondBuffer = &quot;SECURE&quot;;
+
+  std::memcpy(memory.data() + secondBufferOffset, secondBuffer.data(),
+              std::min(secondBuffer.size(), SECOND_BUFFER_SIZE));
+
+  std::cout &lt;&lt; R&quot;(
+      Logical memory layout :
+
+      +------------------------+
+      |       buffer[8]        |
+      +------------------------+
+      |      criticalFlag      |
+      +------------------------+
+      |       buffer2[8]       |
+      +------------------------+
+
+      This is an intentionally constructed contiguous byte array.
+      It is not an actual compiler-generated stack frame.
+
+)&quot;;
+
+  /*
+   * Limit the copy to the total memory-model size.
+   *
+   * Therefore, this phase does not perform an actual
+   * out-of-bounds write.
+   */
+  const std::size_t bytesToCopy = std::min(input.size(), memory.size());
+
+  std::memcpy(memory.data(), input.data(), bytesToCopy);
+
+  if (input.size() &lt;= BUFFER_SIZE) {
+    std::cout &lt;&lt; R&quot;(Result : input fits within the logical buffer.
+
+)&quot;;
+  } else {
+    std::cout &lt;&lt; R&quot;(Result : input exceeds the logical buffer boundary.
+Additional bytes enter adjacent logical regions
+within this educational memory model.
+
+)&quot;;
+  }
+
+  printMemory(memory.data(), memory.size());
+
+  std::cout &lt;&lt; R&quot;(
+      Region interpretation : 
+      buffer[0..7]      : )&quot;;
+
+  printPrintableRegion(memory.data(), bufferOffset, BUFFER_SIZE);
+
+  std::cout &lt;&lt; R&quot;(
+      criticalFlag bytes: )&quot;;
+
+  for (std::size_t i = flagOffset; i &lt; flagOffset + FLAG_SIZE; ++i) {
+    printHexByte(memory[i]);
+    std::cout &lt;&lt; &#x27; &#x27;;
+  }
+
+  std::cout &lt;&lt; R&quot;(
+      buffer2 bytes     : )&quot;;
+
+  printPrintableRegion(memory.data(), secondBufferOffset, SECOND_BUFFER_SIZE);
+
+  std::cout &lt;&lt; R&quot;(
+
+      Key lesson : A logical buffer boundary can be smaller than the
+      contiguous memory region surrounding it.
+
+)&quot;;
+}
+
+int main() {
+  printSeparator();
+
+  std::cout &lt;&lt; R&quot;(
+PHASE 1:
+SEEING THE BOUNDARY
+VISUALIZING LOGICAL MEMORY REGIONS
+
+This program demonstrates how input bytes may cross
+from one logical region into adjacent regions.
+
+The model contains :
+  - buffer[8]
+  - criticalFlag
+  - buffer2[8]
+
+)&quot;;
+
+  demonstrateBoundary(&quot;HELLO&quot;);
+  demonstrateBoundary(&quot;ABCDEFGHIJKLMNO&quot;);
+
+  printSeparator();
+
+  std::cout &lt;&lt; R&quot;(
+END OF PHASE 1
+
+Important distinction : This phase visualizes a boundary safely.
+The next phase demonstrates an actual vulnerable
+operation using an unchecked C-string copy.
+
+)&quot;;
+
+  return 0;
+}
+</pre></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-build" data-say="Build and run locally. Paste this command in a terminal next to the downloaded file.">
+    <div class="eyebrow">BUILD AND RUN · LOCAL ONLY</div>
+    <h2 class="font-bold text-2xl mt-1">Try it yourself</h2>
+    <div class="codecard mt-4"><pre class="mono" style="margin:0;padding:18px;font-size:13px;color:#e2e8f0;white-space:pre-wrap;word-break:break-word">g++ -std=c++17 -Wall -Wextra -o phase1 phase1_boundary_model.cpp &amp;&amp; ./phase1</pre></div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap">
+    <a href="../../index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <a href="../../phase-1.html" class="px-4 py-2 rounded-full font-bold text-sm card">Back to chapter</a>
+    
+    <div class="flex-1"></div>
+    <a href="../phase2/" data-next class="font-bold" style="color:var(--dblue)">Next: Code: Phase 2</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

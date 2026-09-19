@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 3: When Bytes Escape: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm">
+    <a href="index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="phase-1.html" data-prev style="color:var(--dmuted)">Prev: Phase 1</a>
+    <a href="index.html" style="color:var(--dmuted)">Map</a>
+    <a href="phase-3.html" data-next class="font-bold" style="color:var(--dblue)">Next: Phase 3</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="In the last chapter, we learnt where the line is drawn, where the 8-byte buffer ends and the adjacent memory begins. Now we look at what happens when a byte goes past its storage, when we run a real unchecked copy. In this chapter we use strcpy into char buffer 8 with 15 letters plus the null marker, which makes 16 bytes in total, and we watch the detector report below catch the overflow.">
+    <div class="eyebrow">CHAPTER 3 · PHASE 2</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">When bytes escape.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">In the last chapter, we learnt where the line is drawn, where the 8-byte buffer ends and the adjacent memory begins. Now we look at what happens when a byte goes past its storage, when we run a real unchecked copy. In this chapter we use strcpy into char buffer 8 with 15 letters plus the null marker, which makes 16 bytes in total, and we watch the detector report below catch the overflow.</p>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-fulltalk class="px-4 py-2 rounded-full font-bold text-sm card">Play full chapter</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+    <div class="hero-art"><svg viewBox="0 0 640 120" width="640" height="120" aria-hidden="true" role="presentation"><rect x="0" y="0" width="640" height="120" rx="12" fill="#0d141f"/><g><rect x="14" y="26" width="26" height="46" rx="4" fill="#4d9de0"/><rect x="44" y="26" width="26" height="46" rx="4" fill="#4d9de0"/><rect x="74" y="26" width="26" height="46" rx="4" fill="#4d9de0"/><rect x="104" y="26" width="26" height="46" rx="4" fill="#4d9de0"/><rect x="134" y="26" width="26" height="46" rx="4" fill="#4d9de0"/><rect x="164" y="26" width="26" height="46" rx="4" fill="#4d9de0"/><rect x="194" y="26" width="26" height="46" rx="4" fill="#4d9de0"/><rect x="224" y="26" width="26" height="46" rx="4" fill="#4d9de0"/><path d="M258 49 L318 49" stroke="#e0473a" stroke-width="3"/><path d="M308 41 L320 49 L308 57" fill="none" stroke="#e0473a" stroke-width="3"/><rect x="330" y="26" width="26" height="46" rx="4" fill="#e0473a" opacity="0.9"/><rect x="360" y="26" width="26" height="46" rx="4" fill="#e0473a" opacity="0.9"/><rect x="390" y="26" width="26" height="46" rx="4" fill="#e0473a" opacity="0.85"/><rect x="420" y="26" width="26" height="46" rx="4" fill="#e0473a" opacity="0.8"/><rect x="450" y="26" width="26" height="46" rx="4" fill="#e0473a" opacity="0.75"/><rect x="480" y="26" width="26" height="46" rx="4" fill="#e0473a" opacity="0.7"/><rect x="510" y="26" width="26" height="46" rx="4" fill="#e0473a" opacity="0.65"/><rect x="540" y="26" width="26" height="46" rx="4" fill="none" stroke="#e0473a" stroke-width="2" stroke-dasharray="4 3"/><g font-family="monospace" font-size="11" font-weight="bold" text-anchor="middle"><text x="132" y="90" fill="#4d9de0">BUFFER 8 · 00-07</text><text x="448" y="90" fill="#e0473a">SPILL 8 · OFFSET 40</text><text x="600" y="90" fill="#93a1b5">+N</text></g></g></svg></div>
+    <div class="rounded-xl mt-5 p-3 text-xs leading-relaxed" style="background:rgba(224,71,58,.08);border:1px solid rgba(224,71,58,.4);color:#f3c1bb">Safety note: the vulnerable pattern here runs only as text and simulation in this course, plus locally compiled demos in an isolated lab. Never deploy it.</div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-call" data-say="Let's focus on the problem itself. This single line is where everything goes wrong. strcpy takes no size for the destination, so it just keeps copying until it hits the null byte, which is the end marker. It cannot know our buffer holds only 8, so the code on this card shows the full cause.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">THE PROBLEM IN ONE LINE</div>
+        <h2 class="font-bold text-2xl mt-1">A copy with no size check</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Let's focus on the problem itself. This single line is where everything goes wrong. strcpy takes no size for the destination, so it just keeps copying until it hits the null byte, which is the end marker. It cannot know our buffer holds only 8, so the code on this card shows the full cause.</p>
+      </div>
+      <button data-say-btn="sec-call" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm sm:text-base" style="line-height:2"><span style="border:1px solid var(--dblue);border-radius:8px;padding:2px 8px">char buffer[8];</span> &nbsp; <span style="border:1px solid var(--dred);border-radius:8px;padding:2px 8px">strcpy(buffer, input);</span> <span style="color:var(--dfaint)">// no size, copies to null</span></div></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-slider" data-say="Now we try different lengths with the slider below and watch the math. Seven letters plus the null marker make 8 bytes, so they fit exactly. Eight letters need 9 bytes and already go past the end, and our 15 letters need 16 bytes, which lands 8 past the end.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">LAB · TRY DIFFERENT LENGTHS</div>
+        <h2 class="font-bold text-2xl mt-1">Drag the input length</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Now we try different lengths with the slider below and watch the math. Seven letters plus the null marker make 8 bytes, so they fit exactly. Eight letters need 9 bytes and already go past the end, and our 15 letters need 16 bytes, which lands 8 past the end.</p>
+      </div>
+      <button data-say-btn="sec-slider" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="flex gap-3 flex-wrap items-center mt-4">
+      <input type="range" id="lenrange" min="1" max="20" value="15" class="flex-1" style="min-width:180px">
+      <span class="chip y" id="lenval">15 chars</span>
+      <span class="chip r" id="lenstatus">OVERFLOWS</span>
+    </div>
+    <div class="text-sm mt-3" style="color:var(--dmuted)" id="lenmsg">Write 16 into 8: 8 past the end. This is our red run.</div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-report" data-say="Next we read the detector report on this card, which names each part of the overflow. Click each token to see what it means: WRITE of size 16 counts our 15 letters plus the null, the bracket names our 8-byte buffer, and offset 40 is the first byte past the end. The report ends with ABORTING, which means the run stops here.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">LAB · READ THE DETECTOR REPORT</div>
+        <h2 class="font-bold text-2xl mt-1">Click each token</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Next we read the detector report on this card, which names each part of the overflow. Click each token to see what it means: WRITE of size 16 counts our 15 letters plus the null, the bracket names our 8-byte buffer, and offset 40 is the first byte past the end. The report ends with ABORTING, which means the run stops here.</p>
+      </div>
+      <button data-say-btn="sec-report" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm leading-loose" id="asan">
+      <div>ERROR: <button data-token class="chip r" data-mean="The bug class: a write past a stack buffer.">stack-buffer-overflow</button></div>
+      <div><button data-token class="chip y" data-mean="We wrote 16 bytes: 15 letters plus the null.">WRITE of size 16</button> at 0x… thread T0</div>
+      <div>frame object <button data-token class="chip b" data-mean="Our buffer: 8 bytes at stack offset 32, declared at line 44.">[32, 40) 'buffer' line 44</button></div>
+      <div>access <button data-token class="chip o" data-mean="First bad byte: 8 past our start.">at offset 40</button> overflows this variable</div>
+      <div>SUMMARY: stack-buffer-overflow · <button data-token class="chip" data-mean="The program stops here with exit 1. Nothing after the copy counts.">ABORTING</button></div>
+    </div></div>
+    <div class="text-sm mt-3 min-h-[24px]" style="color:var(--dmuted)" id="token-mean">Click a highlighted token to decode it.</div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-ub" data-say="There is one more thing to understand before we leave this chapter. Without the detector, the same overflow may abort or may look perfectly fine, and both outcomes are allowed. Undefined means there are no promises about what happens next, which is why we never trust a run that just seemed to work.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">WHAT UNDEFINED MEANS</div>
+        <h2 class="font-bold text-2xl mt-1">No promises after the overflow</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">There is one more thing to understand before we leave this chapter. Without the detector, the same overflow may abort or may look perfectly fine, and both outcomes are allowed. Undefined means there are no promises about what happens next, which is why we never trust a run that just seemed to work.</p>
+      </div>
+      <button data-say-btn="sec-ub" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+  </section>
+
+  <section class="mt-6 grid gap-4 md:grid-cols-3">
+    <div class="card p-5 reveal" data-quiz="p2-q1" data-why="strcpy stops at null, never at capacity.">
+      <div class="text-sm font-bold">Why is strcpy unsafe?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">It takes no destination size</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">It is too slow</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">It needs C++20</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="p2-q2" data-why="15 letters plus null make WRITE of size 16.">
+      <div class="text-sm font-bold">What does WRITE of size 16 mean?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">16 separate buffers</button>
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">15 letters plus null</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Line 16 of the file</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="p2-q3" data-why="Same overflow may abort or look fine.">
+      <div class="text-sm font-bold">The bug looks fine on one machine. Safe?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Yes, that build is safe</button>
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">No, still undefined behavior</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Only on weekends</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap">
+    <a href="index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <div class="flex-1"></div>
+    <button data-complete="phase2" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dsafe)">Mark chapter complete</button>
+    <a data-next href="phase-3.html" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Next: Phase 3</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="assets/course.js"></script>
+<script>
+(function(){
+  var r = document.getElementById("lenrange");
+  function upd(){
+    var L = parseInt(r.value,10), w = L+1;
+    document.getElementById("lenval").textContent = L+" chars";
+    var st = document.getElementById("lenstatus"), msg = document.getElementById("lenmsg");
+    if(L<=7){ st.textContent="FITS"; st.className="chip g"; msg.textContent="Write "+w+" into 8: fits exactly. This is our green run."; }
+    else{ st.textContent="OVERFLOWS"; st.className="chip r"; msg.textContent="Write "+w+" into 8: "+(w-8)+" past the end. This is our red run."; }
+  }
+  r.addEventListener("input", upd); upd();
+  var toks = document.querySelectorAll("[data-token]");
+  var mean = document.getElementById("token-mean");
+  for(var i=0;i<toks.length;i++){
+    (function(b){ b.addEventListener("click", function(){ mean.textContent = b.getAttribute("data-mean"); }); })(toks[i]);
+  }
+})();
+</script>
+</body>
+</html>

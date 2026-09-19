@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 2: Seeing the Boundary: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm">
+    <a href="index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="phase-initial.html" data-prev style="color:var(--dmuted)">Prev: Initial</a>
+    <a href="index.html" style="color:var(--dmuted)">Map</a>
+    <a href="phase-2.html" data-next class="font-bold" style="color:var(--dblue)">Next: Phase 2</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="In the last chapter we learnt where memory lives. In this chapter we draw the line we will defend later. We build one shelf of 20 boxes and mark three parts. Our buffer is 8 in blue, the flag is 4 in orange, and the second buffer is 8 in green. Our rule is simple. We stay inside our 8. Every copy here is capped, so it is safe to explore.">
+    <div class="eyebrow">CHAPTER 2 · PHASE 1</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">Where we draw the line.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">In the last chapter we learnt where memory lives. In this chapter we draw the line we will defend later. We build one shelf of 20 boxes and mark three parts. Our buffer is 8 in blue, the flag is 4 in orange, and the second buffer is 8 in green. Our rule is simple. We stay inside our 8. Every copy here is capped, so it is safe to explore.</p>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-fulltalk class="px-4 py-2 rounded-full font-bold text-sm card">Play full chapter</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+    <div class="hero-art"><svg viewBox="0 0 640 120" width="640" height="120" aria-hidden="true" role="presentation"><rect x="0" y="0" width="640" height="120" rx="12" fill="#0d141f"/><g><rect x="10" y="22" width="24" height="52" rx="4" fill="#4d9de0"/><rect x="41" y="22" width="24" height="52" rx="4" fill="#4d9de0"/><rect x="72" y="22" width="24" height="52" rx="4" fill="#4d9de0"/><rect x="103" y="22" width="24" height="52" rx="4" fill="#4d9de0"/><rect x="134" y="22" width="24" height="52" rx="4" fill="#4d9de0"/><rect x="165" y="22" width="24" height="52" rx="4" fill="#4d9de0"/><rect x="196" y="22" width="24" height="52" rx="4" fill="#4d9de0"/><rect x="227" y="22" width="24" height="52" rx="4" fill="#4d9de0"/><rect x="258" y="22" width="24" height="52" rx="4" fill="#f2c14e"/><rect x="289" y="22" width="24" height="52" rx="4" fill="#f2c14e"/><rect x="320" y="22" width="24" height="52" rx="4" fill="#f2c14e"/><rect x="351" y="22" width="24" height="52" rx="4" fill="#f2c14e"/><rect x="382" y="22" width="24" height="52" rx="4" fill="#66bb6a"/><rect x="413" y="22" width="24" height="52" rx="4" fill="#66bb6a"/><rect x="444" y="22" width="24" height="52" rx="4" fill="#66bb6a"/><rect x="475" y="22" width="24" height="52" rx="4" fill="#66bb6a"/><rect x="506" y="22" width="24" height="52" rx="4" fill="#66bb6a"/><rect x="537" y="22" width="24" height="52" rx="4" fill="#66bb6a"/><rect x="568" y="22" width="24" height="52" rx="4" fill="#66bb6a"/><rect x="599" y="22" width="24" height="52" rx="4" fill="#66bb6a"/><line x1="254.5" y1="10" x2="254.5" y2="92" stroke="#f2c14e" stroke-width="2" stroke-dasharray="6 4"/><g font-family="monospace" font-size="11" font-weight="bold" text-anchor="middle"><text x="130" y="92" fill="#0d141f">00-07</text><text x="254.5" y="106" fill="#f2c14e">07 | 08 MARKER</text><text x="502" y="92" fill="#0d141f">12-19</text></g></g></svg></div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-layout" data-say="Our shelf holds 20 boxes, offsets 00 to 19. Blue cells 00 to 07 are our buffer. Orange cells 08 to 11 are the flag. Green cells 12 to 19 are the second buffer. The dashed marker between 07 and 08 is our boundary. This is the same line we will meet again in the next chapters.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">THE SHELF · 20 BOXES</div>
+        <h2 class="font-bold text-2xl mt-1">Three parts with one boundary</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Our shelf holds 20 boxes, offsets 00 to 19. Blue cells 00 to 07 are our buffer. Orange cells 08 to 11 are the flag. Green cells 12 to 19 are the second buffer. The dashed marker between 07 and 08 is our boundary. This is the same line we will meet again in the next chapters.</p>
+      </div>
+      <button data-say-btn="sec-layout" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="cell20 mt-4" id="shelf"></div>
+    <div class="text-center mono text-xs mt-2" style="color:var(--dyellow)">- - marker: buffer ends 07 · 08 begins - -</div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-play" data-say="Now try it. Type any text and watch where its bytes land. HELLO uses 5 boxes and fits inside our 8. The 15-letter input fills our 8, then 7 spill past the marker into the neighbours. Here the spill is only shown. Nothing is really written past anything, because every copy is capped.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">LAB · TRY IT YOURSELF</div>
+        <h2 class="font-bold text-2xl mt-1">Type and watch where bytes land</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Now try it. Type any text and watch where its bytes land. HELLO uses 5 boxes and fits inside our 8. The 15-letter input fills our 8, then 7 spill past the marker into the neighbours. Here the spill is only shown. Nothing is really written past anything, because every copy is capped.</p>
+      </div>
+      <button data-say-btn="sec-play" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-4">
+      <input type="text" id="play-input" class="lab" value="HELLO" maxlength="20" size="20">
+      <button id="play-demo" class="px-4 py-2 rounded-full font-bold text-sm card">Demo: 15-letter input</button>
+      <span class="chip" id="play-status">READY</span>
+      <span class="chip" id="play-excess">excess 0</span>
+    </div>
+    <div class="cell20 mt-4" id="play-grid"></div>
+    <div class="text-sm mt-3" style="color:var(--dmuted)" id="play-msg">5 bytes into 8: fits. Flag and second buffer stay untouched.</div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-lesson" data-say="The point of this chapter is the difference between length and capacity. Length is how many bytes the input has. Capacity is how many the buffer holds. HELLO is 5 into 8, so it fits. The 15-letter input is 15 into 8, so 7 cross the marker. In the next chapter we remove the cap and see where those extra bytes really go.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">WHAT THIS CHAPTER SHOWS</div>
+        <h2 class="font-bold text-2xl mt-1">Length is not capacity</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">The point of this chapter is the difference between length and capacity. Length is how many bytes the input has. Capacity is how many the buffer holds. HELLO is 5 into 8, so it fits. The 15-letter input is 15 into 8, so 7 cross the marker. In the next chapter we remove the cap and see where those extra bytes really go.</p>
+      </div>
+      <button data-say-btn="sec-lesson" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+  </section>
+
+  <section class="mt-6 grid gap-4 md:grid-cols-3">
+    <div class="card p-5 reveal" data-quiz="p1-q1" data-why="Capacity is fixed at 8, input length varies.">
+      <div class="text-sm font-bold">Our buffer holds 8. Input is 15. What happens?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">It fits, 15 is small</button>
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">7 bytes cross the boundary</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">The buffer grows to 15</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="p1-q2" data-why="Offsets 00 to 07 are 8 cells, 08 starts the flag.">
+      <div class="text-sm font-bold">Where does our buffer end?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">Offset 07, flag starts 08</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Offset 08, flag starts 12</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Offset 19, the shelf end</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="p1-q3" data-why="Phase 1 caps every copy, so nothing really overflows.">
+      <div class="text-sm font-bold">Why is Phase 1 safe?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Inputs are always short</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Overflow is allowed here</button>
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">Every copy is capped</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap">
+    <a href="index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <div class="flex-1"></div>
+    <button data-complete="phase1" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dsafe)">Mark chapter complete</button>
+    <a data-next href="phase-2.html" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Next: Phase 2</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="assets/course.js"></script>
+<script>
+(function(){
+  var HEX = "0123456789ABCDEF";
+  function cell(cls, ch, off){
+    var d = document.createElement("div");
+    d.className = "mcell mono " + cls;
+    var code = ch==="" ? "··" : ch.toUpperCase().charCodeAt(0).toString(16).toUpperCase();
+    d.innerHTML = '<div class="L" style="font-size:14px">'+(ch===""?"·":ch.toUpperCase())+'</div><div class="O">'+off+" "+code+"</div>";
+    return d;
+  }
+  function region(i){ if(i<8){return "b";} if(i<12){return "o";} return "g"; }
+  var shelf = document.getElementById("shelf");
+  var names = ["S","A","F","E","","","","","0","0","0","0","S","E","C","U","R","E","",""];
+  for(var i=0;i<20;i++){
+    var off = (i<10?"0"+i:""+i);
+    shelf.appendChild(cell(region(i), names[i], off));
+  }
+  var grid = document.getElementById("play-grid");
+  for(var k=0;k<20;k++){ grid.appendChild(cell(region(k), "", (k<10?"0"+k:""+k))); }
+  var input = document.getElementById("play-input");
+  function render(){
+    var s = (input.value||"").slice(0,20);
+    var kids = grid.children;
+    for(var i=0;i<20;i++){
+      var ch = i<s.length ? s.charAt(i) : "";
+      var code = ch==="" ? "··" : ch.toUpperCase().charCodeAt(0).toString(16).toUpperCase();
+      kids[i].querySelector(".L").textContent = ch==="" ? "·" : ch.toUpperCase();
+      kids[i].querySelector(".O").textContent = (i<10?"0"+i:""+i)+" "+code;
+      kids[i].className = "mcell mono "+region(i);
+      if(i<s.length && i>=8){ kids[i].classList.add("r"); }
+    }
+    var st = document.getElementById("play-status"), ex = document.getElementById("play-excess"), msg = document.getElementById("play-msg");
+    if(s.length<=8){ st.textContent="FITS"; st.className="chip g"; ex.textContent="excess 0"; msg.textContent=s.length+" bytes into 8: fits. Flag and second buffer stay untouched."; }
+    else{ st.textContent="CROSSED"; st.className="chip r"; ex.textContent="excess "+(s.length-8); msg.textContent=s.length+" bytes into 8: "+(s.length-8)+" cross into the neighbors. Shown only, capped safely."; }
+  }
+  input.addEventListener("input", render);
+  document.getElementById("play-demo").onclick = function(){ input.value="ABCDEFGHIJKLMNO"; render(); };
+  render();
+})();
+</script>
+</body>
+</html>

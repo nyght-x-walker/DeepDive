@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code: phase2_vulnerable_strcpy.cpp: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="../../assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm">
+    <a href="../../index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="../phase1/" data-prev style="color:var(--dmuted)">Prev: Code: Phase 1</a>
+    <a href="../../index.html" style="color:var(--dmuted)">Map</a>
+    <a href="../../phase-2.html" style="color:var(--dmuted)">Chapter 3: Phase 2</a>
+    <a href="../phase3/" data-next class="font-bold" style="color:var(--dblue)">Next: Code: Phase 3</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="This is the Phase 2 vulnerable source. It calls strcpy into an 8 byte buffer with no size check. The 7 byte control fits. The 15 letter input plus the end marker makes 16 bytes into 8 and the detector aborts. Never use this pattern in real code.">
+    <div class="eyebrow">CODE &middot; PHASE 2 VULNERABLE</div>
+    <h1 class="font-extrabold tracking-tight mt-2 mono" style="font-size:clamp(26px,3.6vw,40px)">phase2_vulnerable_strcpy.cpp</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">Minimal, isolated, intentionally vulnerable demo. Unchecked strcpy into an 8-byte buffer. Safe input 1234567 fits, oversized ABCDEFGHIJKLMNO overflows. No exploit payload.</p>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+      <a href="../../phase2_vulnerable_strcpy.cpp" download class="px-4 py-2 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Download raw .cpp</a>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-4"><span class="chip b">BUFFER 8</span><span class="chip y">INPUT 15</span><span class="chip r">WRITE 16</span><span class="chip">OFFSET 40</span></div>
+    <div class="rounded-xl mt-4 p-3 text-xs leading-relaxed" style="background:rgba(224,71,58,.08);border:1px solid rgba(224,71,58,.4);color:#f3c1bb">Safety note: intentionally vulnerable. Read here and run only locally in an isolated build with sanitizers. Never deploy strcpy without a size check. No exploit payload in this file.</div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-code" data-say="Full source listing. Copy it into a local file with the same name and build it with the command below.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">SOURCE LISTING · VERBATIM</div>
+        <h2 class="font-bold text-2xl mt-1">Full file</h2>
+      </div>
+      <button data-say-btn="sec-code" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><pre class="mono" style="margin:0;padding:18px;font-size:13px;line-height:1.65;color:#e2e8f0;white-space:pre-wrap;word-break:break-word;overflow-x:auto">/*
+ * C++ Memory Safety Deep Dive Phase 2
+ * Demonstrating the Vulnerable strcpy Operation
+ *
+ * EDUCATIONAL DEMONSTRATION ONLY INTENTIONALLY VULNERABLE
+ *
+ * This program intentionally performs an unchecked strcpy into a
+ * fixed size buffer to demonstrate why the operation is unsafe and
+ * how AddressSanitizer detects the resulting out of bounds write.
+ *
+ * SAFETY DISCLAIMER:
+ *   Do not use this pattern in production code.
+ *   strcpy does not receive the destination capacity. If the
+ *   source is longer than the destination, the write past the end
+ *   is undefined behavior.
+ *   Run only locally in an isolated development environment
+ *   preferably with fsanitize=address,undefined.
+ *   No exploit payload, no return address overwrite, no ROP chain,
+ *   no external target, no real credentials are involved.
+ *
+ * Relationship to Phase 1:
+ *   Phase 1 used one array unsigned char 20 and capped every copy with
+ *   std::min, no real out of bounds write, only a visualization. Phase 2
+ *   removes the cap and performs a real unchecked copy so the same 8 byte
+ *   boundary is actually crossed.
+ *
+ * Expected sizes verified against outputs/phase1_output.txt:
+ *   BUFFER_SIZE equals 8
+ *   Oversized input ABCDEFGHIJKLMNO equals 15 bytes, excess 7
+ *   Safe input 1234567 equals 7 bytes, fits 7 plus null fits exactly
+ */
+
+#include &lt;cstring&gt;
+#include &lt;iostream&gt;
+
+constexpr std::size_t BUFFER_SIZE = 8;
+
+// Isolated vulnerable function, contains the only unsafe operation
+// in this file. Kept minimal so the AddressSanitizer report points
+// clearly at the strcpy line.
+void vulnerableFunction(const char *input) {
+  char buffer[BUFFER_SIZE];
+
+  std::cout &lt;&lt; &quot;\n[VULNERABLE FUNCTION]\n&quot;;
+  std::cout &lt;&lt; &quot;Buffer capacity: &quot; &lt;&lt; BUFFER_SIZE &lt;&lt; &quot; bytes\n&quot;;
+  std::cout &lt;&lt; &quot;Input: \&quot;&quot; &lt;&lt; input &lt;&lt; &quot;\&quot;\n&quot;;
+  std::cout &lt;&lt; &quot;Input length: &quot; &lt;&lt; std::strlen(input) &lt;&lt; &quot; bytes\n&quot;;
+  std::cout &lt;&lt; &quot;Calling strcpy(buffer, input)...\n&quot;;
+
+  // SECURITY BUG strcpy does not know BUFFER_SIZE
+  // If strlen input is greater or equal to BUFFER_SIZE, the terminating null also
+  // overflows. The write beyond buffer is undefined behavior.
+  // AddressSanitizer will report stack buffer overflow WRITE of size 16 at [32,40) buffer
+  std::strcpy(buffer, input);
+
+  // If execution reaches here for the oversized input, the program
+  // has already performed an invalid memory access.
+  std::cout &lt;&lt; &quot;Buffer contains: \&quot;&quot; &lt;&lt; buffer &lt;&lt; &quot;\&quot;\n&quot;;
+}
+
+int main() {
+  std::cout &lt;&lt; &quot;============================================================\n&quot;;
+  std::cout &lt;&lt; &quot;  PHASE 2 DEMONSTRATING THE VULNERABLE strcpy OPERATION\n&quot;;
+  std::cout &lt;&lt; &quot;  Educational demonstration only intentionally vulnerable\n&quot;;
+  std::cout &lt;&lt; &quot;============================================================\n&quot;;
+  std::cout &lt;&lt; &quot;\nThis program is isolated and local. No external target,\n&quot;;
+  std::cout &lt;&lt; &quot;no exploit payload, no real credentials are used.\n&quot;;
+  std::cout &lt;&lt; &quot;Run with AddressSanitizer to see the diagnostic.\n&quot;;
+
+  std::cout &lt;&lt; &quot;\nControl: safe input 7 bytes fits \n&quot;;
+  vulnerableFunction(&quot;1234567&quot;);
+
+  std::cout &lt;&lt; &quot;\nTest: oversized input 15 bytes exceeds 8 \n&quot;;
+  std::cout &lt;&lt; &quot;Expect AddressSanitizer stack buffer overflow\n&quot;;
+  vulnerableFunction(&quot;ABCDEFGHIJKLMNO&quot;);
+
+  std::cout &lt;&lt; &quot;\n============================================================\n&quot;;
+  std::cout &lt;&lt; &quot;  END OF PHASE 2 DEMO if reached, out of bounds already occurred\n&quot;;
+  std::cout &lt;&lt; &quot;============================================================\n&quot;;
+  return 0;
+}
+</pre></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-build" data-say="Build and run locally. Paste this command in a terminal next to the downloaded file.">
+    <div class="eyebrow">BUILD AND RUN · LOCAL ONLY</div>
+    <h2 class="font-bold text-2xl mt-1">Try it yourself</h2>
+    <div class="codecard mt-4"><pre class="mono" style="margin:0;padding:18px;font-size:13px;color:#e2e8f0;white-space:pre-wrap;word-break:break-word">g++ -std=c++17 -Wall -Wextra -fsanitize=address,undefined -o phase2 phase2_vulnerable_strcpy.cpp &amp;&amp; ./phase2</pre></div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap">
+    <a href="../../index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <a href="../../phase-2.html" class="px-4 py-2 rounded-full font-bold text-sm card">Back to chapter</a>
+    
+    <div class="flex-1"></div>
+    <a href="../phase3/" data-next class="font-bold" style="color:var(--dblue)">Next: Code: Phase 3</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

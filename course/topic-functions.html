@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond 4: Data and Behaviour: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm">
+    <a href="index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="topic-increment.html" data-prev style="color:var(--dmuted)">Prev: Increments</a>
+    <a href="index.html" style="color:var(--dmuted)">Map</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="In the last chapter we learnt what small signs do. In this final breadth chapter we group data and behaviour. Structs hold fields together. Enums name choices. Lambdas hold small behaviour we can pass around. Higher-order functions take that behaviour as input. Together they make patterns like Factory and Singleton.">
+    <div class="eyebrow">BEYOND THE DEEPDIVE · 4 OF 4</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">Data and behaviour.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">In the last chapter we learnt what small signs do. In this final breadth chapter we group data and behaviour. Structs hold fields together. Enums name choices. Lambdas hold small behaviour we can pass around. Higher-order functions take that behaviour as input. Together they make patterns like Factory and Singleton.</p>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-fulltalk class="px-4 py-2 rounded-full font-bold text-sm card">Play full chapter</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg width="640" height="110" viewBox="0 0 640 110" role="presentation" aria-hidden="true" style="max-width:100%;height:auto;display:block;margin-top:16px" font-family="ui-monospace,Menlo,Consolas,monospace">
+        <rect x="0" y="0" width="640" height="110" rx="12" fill="#0d141f"></rect>
+        <rect x="28" y="18" width="180" height="74" rx="10" fill="none" stroke="#4d9de0" stroke-width="2.5"></rect>
+        <text x="44" y="42" font-size="13" font-weight="700" fill="#4d9de0">struct</text>
+        <text x="44" y="62" font-size="14" fill="#ffffff">id | name[10]</text>
+        <line x1="44" y1="70" x2="192" y2="70" stroke="#4d9de0" stroke-width="1.5"></line>
+        <text x="44" y="86" font-size="12" fill="#66bb6a">14 bytes</text>
+        <rect x="228" y="38" width="110" height="34" rx="17" fill="none" stroke="#f2c14e" stroke-width="2.5"></rect>
+        <text x="244" y="60" font-size="15" font-weight="700" fill="#ffffff">[f](x)</text>
+        <line x1="338" y1="55" x2="380" y2="55" stroke="#f2c14e" stroke-width="2.5"></line>
+        <path d="M380 55 l-12 -6 M380 55 l-12 6" stroke="#f2c14e" stroke-width="2.5" fill="none"></path>
+        <circle cx="359" cy="55" r="4" fill="#e0473a"></circle>
+        <rect x="392" y="18" width="108" height="74" rx="10" fill="none" stroke="#66bb6a" stroke-width="2.5"></rect>
+        <text x="404" y="44" font-size="12" font-weight="700" fill="#66bb6a">Factory</text>
+        <text x="404" y="62" font-size="11" fill="#ffffff">make()</text>
+        <text x="404" y="78" font-size="11" fill="#ffffff">hide new</text>
+        <rect x="508" y="18" width="104" height="74" rx="10" fill="none" stroke="#7c3aed" stroke-width="2.5"></rect>
+        <text x="518" y="44" font-size="12" font-weight="700" fill="#7c3aed">Singleton</text>
+        <text x="518" y="62" font-size="11" fill="#ffffff">one</text>
+        <text x="518" y="78" font-size="11" fill="#ffffff">shared</text>
+      </svg>
+    </div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-struct" data-say="A struct holds fields that belong together, like id plus a name of 10. An enum names the allowed choices, like direction with north, south, east, west. Both make wrong states harder to write. Our MyData struct from the DeepDive is 14 bytes and can live on stack or heap, same memory you already know.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">STRUCTS AND ENUMS</div>
+        <h2 class="font-bold text-2xl mt-1">Hold data that belongs together</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">A struct holds fields that belong together, like id plus a name of 10. An enum names the allowed choices, like direction with north, south, east, west. Both make wrong states harder to write. Our MyData struct from the DeepDive is 14 bytes and can live on stack or heap, same memory you already know.</p>
+      </div>
+      <button data-say-btn="sec-struct" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">struct MyData { int id; char name[10]; }; <span style="color:var(--dfaint)">// 14 bytes</span><br>enum class Dir { North, South, East, West };</div></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-lambda" data-say="A lambda is a small function without a name, written where you use it. Brackets hold what it captures. Parentheses hold its inputs. Try the lab below. Change the factor and press Run. The higher-order apply runs your lambda on each item. This is how sort, filter, and transform take behaviour as input.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">LAMBDAS AND HIGHER-ORDER</div>
+        <h2 class="font-bold text-2xl mt-1">Small behaviour you can pass</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">A lambda is a small function without a name, written where you use it. Brackets hold what it captures. Parentheses hold its inputs. Try the lab below. Change the factor and press Run. The higher-order apply runs your lambda on each item. This is how sort, filter, and transform take behaviour as input.</p>
+      </div>
+      <button data-say-btn="sec-lambda" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="flex gap-2 flex-wrap items-center mt-4">
+      <label class="text-sm mono">factor <input type="text" id="top4-factor" class="lab" value="3" size="4"></label>
+      <button id="top4-run" class="px-4 py-2 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Run apply</button>
+      <span class="chip" id="top4-out">[3, 6, 9]</span>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">auto times = [factor](int x){ return x * factor; }; <span style="color:var(--dfaint)">// capture, input, body</span></div></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-pattern" data-say="Design patterns are reused shapes built from structs and lambdas. Factory returns the right object while hiding how it is made. Singleton ensures one shared instance. Both rely on what you already learnt. Structs hold the state. Functions and lambdas hold the choice. Smart pointers from Chapter 1 hold the ownership.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">DESIGN PATTERNS</div>
+        <h2 class="font-bold text-2xl mt-1">Reused shapes, same pieces</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Design patterns are reused shapes built from structs and lambdas. Factory returns the right object while hiding how it is made. Singleton ensures one shared instance. Both rely on what you already learnt. Structs hold the state. Functions and lambdas hold the choice. Smart pointers from Chapter 1 hold the ownership.</p>
+      </div>
+      <button data-say-btn="sec-pattern" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="grid gap-3 md:grid-cols-2 mt-4 text-sm">
+      <div class="card p-4"><span class="mono font-bold">Factory</span><div style="color:var(--dmuted)">Returns objects, hides construction. Uses structs inside.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Singleton</span><div style="color:var(--dmuted)">One shared instance. Uses static plus smart pointer.</div></div>
+    </div>
+  </section>
+
+  <section class="mt-6 grid gap-4 md:grid-cols-3">
+    <div class="card p-5 reveal" data-quiz="top4-q1" data-why="Struct groups fields, enum names choices.">
+      <div class="text-sm font-bold">Struct vs enum?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">Struct holds fields, enum names choices</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Both loop over arrays</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="top4-q2" data-why="Brackets capture, parentheses take inputs.">
+      <div class="text-sm font-bold">What do lambda brackets hold?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">Captured data</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Return type only</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="top4-q3" data-why="Factory hides construction, Singleton keeps one.">
+      <div class="text-sm font-bold">Factory and Singleton do what?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">Return objects / keep one instance</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Sort numbers faster</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap">
+    <a href="index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <div class="flex-1"></div>
+    <button data-complete="top4" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dsafe)">Mark chapter complete</button>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="assets/course.js"></script>
+<script>
+(function(){
+  function run(){
+    var f=parseInt(document.getElementById("top4-factor").value,10);
+    if(isNaN(f)){f=3;}
+    document.getElementById("top4-out").textContent="["+[1*f,2*f,3*f].join(", ")+"]";
+  }
+  document.getElementById("top4-run").onclick=run; run();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeepDive Course: From First Allocation to Defended Code</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-6xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap">
+    <div class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </div>
+    <div class="flex-1"></div>
+    <span class="text-xs mono" style="color:var(--dmuted)" data-progress-label>0 of 9 chapters complete</span>
+    <div class="prog w-36"><div data-progress-bar style="width:0%"></div></div>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-12 mt-4 hero-glow card reveal" id="sec-welcome" data-say="This full course has two parts. The DeepDive in Chapters 1 to 5 follows one story from first allocation to defended code. We learn where memory lives, where our 8-byte buffer ends, what happens when 15 letters plus the end marker try to fit, and how a checked copy holds every time. The breadth in Chapters 6 to 9 covers the rest of Topic 3 in the same style. How C++ groups expressions, why floats approximate, what pre and post do, and how structs, enums, lambdas, and patterns fit together.">
+    <div class="eyebrow">FULL COURSE · DEEPDIVE + BREADTH · 9 CHAPTERS</div>
+    <h1 class="font-extrabold tracking-tight leading-none mt-3" style="font-size:clamp(38px,5vw,64px)">From first allocation<br>to defended code, and beyond.</h1>
+    <p class="mt-4 max-w-2xl leading-relaxed" style="color:var(--dmuted);font-size:17px">This full course has two parts. The DeepDive in Chapters 1 to 5 follows one story from first allocation to defended code. We learn where memory lives, where our 8-byte buffer ends, what happens when 15 letters plus the end marker try to fit, and how a checked copy holds every time. The breadth in Chapters 6 to 9 covers the rest of Topic 3 in the same style. How C++ groups expressions, why floats approximate, what pre and post do, and how structs, enums, lambdas, and patterns fit together.</p>
+    <div class="flex gap-2 flex-wrap mt-6">
+      <a id="start-btn" href="phase-initial.html" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Start from the beginning</a>
+      <button data-say-btn="sec-welcome" class="px-5 py-2.5 rounded-full font-bold text-sm card">Narrate welcome</button>
+      <button data-stop class="px-5 py-2.5 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 640 150" role="img">
+        <rect x="10" y="20" width="180" height="110" rx="12" fill="#0d141f" stroke="#4d9de0" stroke-width="2"/>
+        <text x="100" y="45" text-anchor="middle" fill="#4d9de0" font-family="monospace" font-size="12" font-weight="700">STACK · HEAP</text>
+        <text x="100" y="65" text-anchor="middle" fill="#93a1b5" font-family="monospace" font-size="11">8 boxes</text>
+        <rect x="30" y="78" width="20" height="20" rx="4" fill="#4d9de0"/><rect x="54" y="78" width="20" height="20" rx="4" fill="#4d9de0"/><rect x="78" y="78" width="20" height="20" rx="4" fill="#4d9de0"/><rect x="102" y="78" width="20" height="20" rx="4" fill="#0d141f" stroke="#263242"/><rect x="126" y="78" width="20" height="20" rx="4" fill="#0d141f" stroke="#263242"/>
+        <text x="100" y="115" text-anchor="middle" fill="#5d6b80" font-family="monospace" font-size="10">where memory lives</text>
+        <line x1="200" y1="75" x2="240" y2="75" stroke="#5d6b80" stroke-width="2" class="dash"/>
+        <polygon points="240,68 252,75 240,82" fill="#5d6b80"/>
+        <rect x="260" y="20" width="180" height="110" rx="12" fill="#0d141f" stroke="#e0473a" stroke-width="2"/>
+        <text x="350" y="45" text-anchor="middle" fill="#e0473a" font-family="monospace" font-size="12" font-weight="700">16 INTO 8 · OFFSET 40</text>
+        <text x="350" y="65" text-anchor="middle" fill="#93a1b5" font-family="monospace" font-size="11">8 past the end</text>
+        <rect x="280" y="78" width="16" height="20" rx="4" fill="#e0473a"/><rect x="298" y="78" width="16" height="20" rx="4" fill="#e0473a"/><rect x="316" y="78" width="16" height="20" rx="4" fill="#e0473a"/><rect x="334" y="78" width="16" height="20" rx="4" fill="none" stroke="#e0473a" stroke-dasharray="4 3"/><rect x="352" y="78" width="16" height="20" rx="4" fill="none" stroke="#e0473a" stroke-dasharray="4 3"/>
+        <text x="350" y="115" text-anchor="middle" fill="#5d6b80" font-family="monospace" font-size="10">detector aborts · exit 1</text>
+        <line x1="450" y1="75" x2="490" y2="75" stroke="#5d6b80" stroke-width="2" class="dash"/>
+        <polygon points="490,68 502,75 490,82" fill="#5d6b80"/>
+        <rect x="510" y="20" width="120" height="110" rx="12" fill="#0d141f" stroke="#66bb6a" stroke-width="2"/>
+        <text x="570" y="45" text-anchor="middle" fill="#66bb6a" font-family="monospace" font-size="12" font-weight="700">KEEP 7 + END</text>
+        <text x="570" y="65" text-anchor="middle" fill="#93a1b5" font-family="monospace" font-size="11">block 8 · exit 0</text>
+        <rect x="525" y="78" width="14" height="20" rx="4" fill="#66bb6a"/><rect x="541" y="78" width="14" height="20" rx="4" fill="#66bb6a"/><rect x="557" y="78" width="14" height="20" rx="4" fill="#66bb6a"/><rect x="573" y="78" width="14" height="20" rx="4" fill="#0d141f" stroke="#66bb6a"/><text x="594" y="93" fill="#66bb6a" font-family="monospace" font-size="12">∅</text>
+      </svg>
+    </div>
+    <div class="flex gap-4 flex-wrap mt-6 text-xs mono" style="color:var(--dmuted)">
+      <span class="flex items-center gap-2"><span class="badge-dot" data-badge="initial"></span>Memory</span>
+      <span class="flex items-center gap-2"><span class="badge-dot" data-badge="phase1"></span>Boundary</span>
+      <span class="flex items-center gap-2"><span class="badge-dot" data-badge="phase2"></span>Overflow</span>
+      <span class="flex items-center gap-2"><span class="badge-dot" data-badge="phase3"></span>Fix</span>
+      <span class="flex items-center gap-2"><span class="badge-dot" data-badge="final"></span>Review</span>
+      <span class="flex items-center gap-2"><span class="badge-dot" data-badge="top1"></span>Expressions</span>
+      <span class="flex items-center gap-2"><span class="badge-dot" data-badge="top2"></span>Numbers</span>
+      <span class="flex items-center gap-2"><span class="badge-dot" data-badge="top3"></span>Signs</span>
+      <span class="flex items-center gap-2"><span class="badge-dot" data-badge="top4"></span>Data</span>
+    </div>
+  </header>
+
+  <div class="flex gap-2 flex-wrap mt-6 justify-center">
+    <span class="chip b">BUFFER 8</span><span class="chip y">INPUT 15</span><span class="chip r">WRITE 16</span><span class="chip">OFFSET 40</span><span class="chip">HEX 41 TO 4F</span>
+  </div>
+  <p class="text-center text-sm mt-3" style="color:var(--dmuted)">These five numbers stay the same through the DeepDive in Chapters 1 to 5, so you can compare each step. The breadth in Chapters 6 to 9 uses its own small examples. All are explained below.</p>
+
+  <section class="card p-6 sm:p-8 mt-8 reveal" id="sec-about" data-say="This course has a deep part and a broad part. The DeepDive in Chapters 1 to 5 is about one small mistake and how to prevent it. We work with an 8-byte buffer. We try to put 15 letters plus the end marker into that space. That makes 16 bytes into 8. You see where the extra bytes go and how a checked copy stops it. The breadth in Chapters 6 to 9 covers the rest of Topic 3 in the same hands-on style. Grouping with precedence, floats against ints, pre and post signs, and structs, enums, lambdas, and patterns.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">WHAT THIS COURSE IS ABOUT</div>
+        <h2 class="font-bold text-2xl mt-1">Depth on memory, breadth on C++</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">This course has a deep part and a broad part. The DeepDive in Chapters 1 to 5 is about one small mistake and how to prevent it. We work with an 8-byte buffer. We try to put 15 letters plus the end marker into that space. That makes 16 bytes into 8. You see where the extra bytes go and how a checked copy stops it. The breadth in Chapters 6 to 9 covers the rest of Topic 3 in the same hands-on style. Grouping with precedence, floats against ints, pre and post signs, and structs, enums, lambdas, and patterns.</p>
+        <div class="viz viz-2 mt-4">
+          <div class="vizbox blue"><div class="t">TRACK A · DEEPDIVE 1–5</div><div class="s">8-byte buffer, 15 letters, checked copy. One story, same numbers.</div><div class="meter"><div class="trackA" style="width:100%"></div></div></div>
+          <div class="vizbox purple"><div class="t">TRACK B · BREADTH 6–9</div><div class="s">Grouping, floats, signs, data + behaviour. Same labs, new examples.</div><div class="meter"><div class="trackB" style="width:100%"></div></div></div>
+        </div>
+      </div>
+      <button data-say-btn="sec-about" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-why" data-say="C++ trusts you in two ways. It lets you manage memory directly, which is powerful and risky. If you copy without checking the size, extra bytes land next door and cause crashes and security holes. It also follows grouping, conversion, and overload rules silently. If you mix plus and multiply without parentheses, compare floats with equal, or use post when you meant pre, the program runs but means something else. Learning both kinds of checking is how you write code others can trust.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">WHY IT MATTERS</div>
+        <h2 class="font-bold text-2xl mt-1">C++ trusts you to check twice</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">C++ trusts you in two ways. It lets you manage memory directly, which is powerful and risky. If you copy without checking the size, extra bytes land next door and cause crashes and security holes. It also follows grouping, conversion, and overload rules silently. If you mix plus and multiply without parentheses, compare floats with equal, or use post when you meant pre, the program runs but means something else. Learning both kinds of checking is how you write code others can trust.</p>
+        <div class="viz viz-2 mt-4">
+          <div class="vizbox red"><div class="t">MEMORY TRUST</div><div class="s">No bounds check. 16 into 8 lands at offset 40.</div></div>
+          <div class="vizbox yellow"><div class="t">LOGIC TRUST</div><div class="s">No warning. a+b*c, 0.1+0.2, i++ all silently group.</div></div>
+        </div>
+      </div>
+      <button data-say-btn="sec-why" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-risks" data-say="Risks come in two forms. Without a size check, 8 bytes land past the end at offset 40. The detector reports stack-buffer-overflow and aborts with exit 1. Without the detector the same bug may look fine and exit 0, but it is still undefined. The second form is silent logic. Wrong grouping, float equal, truncating division, or post used as pre all run but mean something else. Both forms reach users, so we prevent both with checks and clear style.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">THE RISKS IF YOU SKIP THE CHECK</div>
+        <h2 class="font-bold text-2xl mt-1">Crash, wrong answer, or breach</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Risks come in two forms. Without a size check, 8 bytes land past the end at offset 40. The detector reports stack-buffer-overflow and aborts with exit 1. Without the detector the same bug may look fine and exit 0, but it is still undefined. The second form is silent logic. Wrong grouping, float equal, truncating division, or post used as pre all run but mean something else. Both forms reach users, so we prevent both with checks and clear style.</p>
+        <div class="diagram" aria-hidden="true">
+          <svg viewBox="0 0 560 90">
+            <rect x="10" y="10" width="250" height="70" rx="10" fill="#0d141f" stroke="#e0473a"/>
+            <text x="135" y="32" text-anchor="middle" fill="#e0473a" font-family="monospace" font-size="11" font-weight="700">MEMORY RISK · ABORT</text>
+            <text x="135" y="50" text-anchor="middle" fill="#93a1b5" font-family="monospace" font-size="10">WRITE 16 · OFFSET 40 · exit 1</text>
+            <text x="135" y="66" text-anchor="middle" fill="#5d6b80" font-family="monospace" font-size="10">or silent exit 0, still wrong</text>
+            <rect x="300" y="10" width="250" height="70" rx="10" fill="#0d141f" stroke="#f2c14e"/>
+            <text x="425" y="32" text-anchor="middle" fill="#f2c14e" font-family="monospace" font-size="11" font-weight="700">LOGIC RISK · WRONG ANSWER</text>
+            <text x="425" y="50" text-anchor="middle" fill="#93a1b5" font-family="monospace" font-size="10">0.1+0.2, 7/2=3, x=i++</text>
+            <text x="425" y="66" text-anchor="middle" fill="#5d6b80" font-family="monospace" font-size="10">runs fine, means something else</text>
+          </svg>
+        </div>
+      </div>
+      <button data-say-btn="sec-risks" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="rounded-xl mt-4 p-3 text-xs leading-relaxed" style="background:rgba(224,71,58,.08);border:1px solid rgba(224,71,58,.4);color:#f3c1bb">Safety note: the unsafe copy in this course runs only as text and simulation here, plus isolated lab builds on your own machine. Never deploy it. The fixed copy and all breadth labs are safe to run anywhere.</div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-outcomes" data-say="After this full course you will know the DeepDive and the breadth. You will know where memory lives and who returns it. You will know how to read the boundary at 07 and 08. You will know why strcpy without a size is unsafe and how to read its detector report. You will know how to write the three-line checked copy and spot the same problem elsewhere. You will also know how C++ groups expressions, why floats approximate, what pre and post do, and how structs, enums, lambdas, and patterns fit together.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">WHAT YOU WILL KNOW AFTER</div>
+        <h2 class="font-bold text-2xl mt-1">Nine chapters, nine abilities</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">After this full course you will know the DeepDive and the breadth. You will know where memory lives and who returns it. You will know how to read the boundary at 07 and 08. You will know why strcpy without a size is unsafe and how to read its detector report. You will know how to write the three-line checked copy and spot the same problem elsewhere. You will also know how C++ groups expressions, why floats approximate, what pre and post do, and how structs, enums, lambdas, and patterns fit together.</p>
+      </div>
+      <button data-say-btn="sec-outcomes" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <ol class="text-sm mt-4 leading-loose list-decimal ml-5" style="color:var(--dmuted)">
+      <li>Explain stack, heap, and smart pointer, and say who returns each one.</li>
+      <li>Show length against capacity on the 20-box shelf, with HELLO fitting and 15 crossing by 7.</li>
+      <li>Explain WRITE of size 16, offset 40, and ABORTING with exit 1 in your own words.</li>
+      <li>Write n = min(size, 7), copy n, seal with null, and show kept 7, blocked 8, exit 0.</li>
+      <li>Spot unchecked copy, blind concat, scan with no width, and wrong size, and pick the safe call.</li>
+      <li>Show how C++ groups a + b * c and a and b or c, and write parentheses to show intent.</li>
+      <li>Explain why 0.1 + 0.2 leaves extra digits, what 7 / 2 gives for ints, and how Wall plus sanitizers catch it early.</li>
+      <li>Show x = i++ against x = ++i, use += in one place, and keep overloaded ++ to step by one.</li>
+      <li>Group fields in a struct, name choices in an enum, capture in a lambda, and tell Factory from Singleton.</li>
+    </ol>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-terms" data-say="These words appear across the full course. DeepDive words first. Memory is every stored byte, like shelves in a store. Stack clears itself, like a tray that empties when you leave. Heap stays until you return it, like a storage room. Buffer is a fixed row, here 8, like 8 cups in a tray. Pointer is an address, like a shelf label. Smart pointer returns itself, like a box tied to your wrist. Strcpy copies until the end marker with no size check, like pouring until the jug is empty. AddressSanitizer reports bad reads and writes, like a spill sensor. Breadth words next. Precedence decides what runs first. Float approximates while int counts exactly. Post gives old then steps, pre steps then gives. Struct groups fields, enum names choices, lambda holds small behaviour, Factory and Singleton reuse those pieces.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">KEY TERMS IN ONE LINE EACH</div>
+        <h2 class="font-bold text-2xl mt-1">DeepDive words plus breadth words</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">These words appear across the full course. DeepDive words first. Memory is every stored byte, like shelves in a store. Stack clears itself, like a tray that empties when you leave. Heap stays until you return it, like a storage room. Buffer is a fixed row, here 8, like 8 cups in a tray. Pointer is an address, like a shelf label. Smart pointer returns itself, like a box tied to your wrist. Strcpy copies until the end marker with no size check, like pouring until the jug is empty. AddressSanitizer reports bad reads and writes, like a spill sensor. Breadth words next. Precedence decides what runs first. Float approximates while int counts exactly. Post gives old then steps, pre steps then gives. Struct groups fields, enum names choices, lambda holds small behaviour, Factory and Singleton reuse those pieces.</p>
+      </div>
+      <button data-say-btn="sec-terms" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="eyebrow mt-4">DEEPDIVE · CHAPTERS 1 TO 5</div>
+    <div class="grid gap-3 md:grid-cols-2 mt-2 text-sm">
+      <div class="card p-4"><span class="mono font-bold">Memory</span><div style="color:var(--dmuted)">Every stored byte. Like shelves in a store.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Stack</span><div style="color:var(--dmuted)">Local variables, clears itself. Like a tray that empties when you leave.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Heap</span><div style="color:var(--dmuted)">Long-lived data until you return it. Like a storage room.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Buffer</span><div style="color:var(--dmuted)">A fixed row of bytes, here 8. Like 8 cups in a tray.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Pointer</span><div style="color:var(--dmuted)">An address that says where to go. Like a shelf label.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Smart pointer</span><div style="color:var(--dmuted)">Owns heap space and returns itself. Like a box tied to your wrist.</div></div>
+      <div class="card p-4"><span class="mono font-bold">strcpy</span><div style="color:var(--dmuted)">Copies until the end marker, no size check. Like pouring until the jug is empty.</div></div>
+      <div class="card p-4"><span class="mono font-bold">AddressSanitizer</span><div style="color:var(--dmuted)">Test tool that reports bad reads and writes. Like a spill sensor.</div></div>
+    </div>
+    <div class="eyebrow mt-4">BREADTH · CHAPTERS 6 TO 9</div>
+    <div class="grid gap-3 md:grid-cols-2 mt-2 text-sm">
+      <div class="card p-4"><span class="mono font-bold">Precedence / associativity</span><div style="color:var(--dmuted)">What runs first and which side first. Like maths before reading left to right.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Float / double vs int</span><div style="color:var(--dmuted)">Approximate range against exact counting. Like estimate against count.</div></div>
+      <div class="card p-4"><span class="mono font-bold">i++ / ++i, +=</span><div style="color:var(--dmuted)">Old-then-step, step-then-new, update in place. Like take-then-tick.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Operator overloading</span><div style="color:var(--dmuted)">Same signs for our types. Keep expected meaning.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Struct / enum</span><div style="color:var(--dmuted)">Group fields, name choices. Like form plus fixed list.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Lambda / higher-order</span><div style="color:var(--dmuted)">Small behaviour you pass. Like recipe card handed to cook.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Factory / Singleton</span><div style="color:var(--dmuted)">Return objects, keep one instance. Reused shapes.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Warnings / sanitizers</span><div style="color:var(--dmuted)">Wall plus run-time reports. Hear risk early.</div></div>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-connect" data-say="The course connects in two lines. DeepDive first. You learn where memory lives. Then you draw the boundary at 07 and 08. Then you see 16 into 8 without a check. Then you fix it by keeping 7 plus the end marker. Last you replay all three. Breadth next. You see grouping, then floats against ints, then pre and post signs, then structs, lambdas, and patterns. Same style throughout.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">HOW THE PARTS CONNECT</div>
+        <h2 class="font-bold text-2xl mt-1">Two lines through nine chapters</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">The course connects in two lines. DeepDive first. You learn where memory lives. Then you draw the boundary at 07 and 08. Then you see 16 into 8 without a check. Then you fix it by keeping 7 plus the end marker. Last you replay all three. Breadth next. You see grouping, then floats against ints, then pre and post signs, then structs, lambdas, and patterns. Same style throughout.</p>
+      </div>
+      <button data-say-btn="sec-connect" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="eyebrow mt-4">DEEPDIVE · 1 TO 5</div>
+    <div class="flex gap-2 flex-wrap items-center mt-2 text-sm mono" style="color:var(--dmuted)">
+      <span class="chip">1 Memory</span><span>→</span><span class="chip">2 Boundary 07/08</span><span>→</span><span class="chip r">3 16 into 8</span><span>→</span><span class="chip g">4 Keep 7 + end</span><span>→</span><span class="chip b">5 Replay + spot</span>
+    </div>
+    <div class="eyebrow mt-4">BREADTH · 6 TO 9</div>
+    <div class="flex gap-2 flex-wrap items-center mt-2 text-sm mono" style="color:var(--dmuted)">
+      <span class="chip">6 Grouping</span><span>→</span><span class="chip">7 Floats vs ints</span><span>→</span><span class="chip">8 Pre / post</span><span>→</span><span class="chip">9 Structs + lambdas</span>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-numbers" data-say="Five DeepDive numbers stay the same so you can compare. Buffer 8 is our space. Input 15 is ABCDEFGHIJKLMNO. Write 16 is 15 plus the end marker. Offset 40 is the first byte past our 8. Hex 41 to 4F are A to G, the letters we keep. Breadth chapters use their own small numbers, like 0.1 plus 0.2, 7 divided by 2, and factor 3, each explained where it appears.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">NUMBERS THAT STAY THE SAME</div>
+        <h2 class="font-bold text-2xl mt-1">DeepDive numbers plus breadth examples</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Five DeepDive numbers stay the same so you can compare. Buffer 8 is our space. Input 15 is ABCDEFGHIJKLMNO. Write 16 is 15 plus the end marker. Offset 40 is the first byte past our 8. Hex 41 to 4F are A to G, the letters we keep. Breadth chapters use their own small numbers, like 0.1 plus 0.2, 7 divided by 2, and factor 3, each explained where it appears.</p>
+      </div>
+      <button data-say-btn="sec-numbers" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="grid gap-3 md:grid-cols-2 mt-4 text-sm mono">
+      <div class="card p-4"><span class="chip b">BUFFER 8</span><div class="mt-2" style="color:var(--dmuted)">Our space. Cells 00 to 07.</div><div class="meter"><div class="trackA" style="width:50%"></div></div></div>
+      <div class="card p-4"><span class="chip y">INPUT 15</span><div class="mt-2" style="color:var(--dmuted)">ABCDEFGHIJKLMNO. 7 cross the marker.</div><div class="meter"><div style="width:93%;background:var(--dyellow)"></div></div></div>
+      <div class="card p-4"><span class="chip r">WRITE 16</span><div class="mt-2" style="color:var(--dmuted)">15 plus end marker. 8 past the end.</div><div class="meter"><div style="width:100%;background:var(--dred)"></div></div></div>
+      <div class="card p-4"><span class="chip">OFFSET 40</span><div class="mt-2" style="color:var(--dmuted)">First byte past our 8. Detector names it.</div><div class="meter"><div style="width:12%;background:var(--dmuted)"></div></div></div>
+    </div>
+    <p class="text-sm mt-3" style="color:var(--dmuted)">Hex 41 to 4F are A to G in the detector and the grid. You keep ABCDEFG in the fixed run.</p>
+  </section>
+
+  <h2 class="font-extrabold tracking-tight mt-12 mb-1" style="font-size:30px">The DeepDive in order</h2>
+  <p class="mb-5" style="color:var(--dmuted)">Chapters 1 to 5 follow one story with the same numbers. Each one builds on the last, but you can open them in any order.</p>
+  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div class="card card-hover p-6 reveal" data-chapter="initial">
+      <div class="chapter-art" style="background:linear-gradient(135deg,rgba(77,157,224,.25),rgba(124,58,237,.25));color:var(--dblue)">▦ 01</div>
+      <div class="eyebrow">CHAPTER 1 · INITIAL</div>
+      <h3 class="font-bold text-xl mt-2">Where memory lives</h3>
+      <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">We start with where C++ keeps our variables. The stack clears itself, the heap stays until you return it, and the smart pointer returns itself. In the lab you allocate boxes and watch what leaks and what frees itself.</p>
+      <div class="flex items-center gap-3 mt-4"><a href="phase-initial.html" class="text-sm font-bold" style="color:var(--dblue)">Open chapter</a><span class="chip ml-auto" data-state>Open</span></div>
+    </div>
+    <div class="card card-hover p-6 reveal" data-chapter="phase1">
+      <div class="chapter-art" style="background:linear-gradient(135deg,rgba(77,157,224,.25),rgba(242,193,78,.2));color:var(--dyellow)">▤ 02</div>
+      <div class="eyebrow">CHAPTER 2 · PHASE 1</div>
+      <h3 class="font-bold text-xl mt-2">Where we draw the line</h3>
+      <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">We draw the line we will defend later. One shelf of 20 boxes holds our 8-byte buffer, a 4-byte flag, and a second buffer. You type HELLO and the 15-letter input to see what fits and what crosses the marker between 07 and 08.</p>
+      <div class="flex items-center gap-3 mt-4"><a href="phase-1.html" class="text-sm font-bold" style="color:var(--dblue)">Open chapter</a><span class="chip ml-auto" data-state>Open</span></div>
+    </div>
+    <div class="card card-hover p-6 reveal" data-chapter="phase2">
+      <div class="chapter-art" style="background:linear-gradient(135deg,rgba(224,71,58,.3),rgba(232,147,12,.2));color:var(--dred)">⚠ 03</div>
+      <div class="eyebrow">CHAPTER 3 · PHASE 2</div>
+      <h3 class="font-bold text-xl mt-2">What happens without a size check</h3>
+      <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">We look at what happens without a size check. We call strcpy into an 8-byte buffer. 15 letters plus the end marker make 16 bytes into 8. You move the length slider and read the detector report line by line.</p>
+      <div class="flex items-center gap-3 mt-4"><a href="phase-2.html" class="text-sm font-bold" style="color:var(--dblue)">Open chapter</a><span class="chip ml-auto" data-state>Open</span></div>
+    </div>
+    <div class="card card-hover p-6 reveal" data-chapter="phase3">
+      <div class="chapter-art" style="background:linear-gradient(135deg,rgba(102,187,106,.3),rgba(77,157,224,.2));color:var(--dsafe)">✓ 04</div>
+      <div class="eyebrow">CHAPTER 4 · PHASE 3</div>
+      <h3 class="font-bold text-xl mt-2">How a checked copy holds</h3>
+      <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">We fix it with a checked copy. We measure, copy only what fits, and seal with the end marker. The same 15 letters keep 7 plus the end marker and block 8. You run it with your own input and step through the full 7-slide deck.</p>
+      <div class="flex items-center gap-3 mt-4"><a href="phase-3.html" class="text-sm font-bold" style="color:var(--dblue)">Open chapter</a><span class="chip ml-auto" data-state>Open</span></div>
+    </div>
+    <div class="card card-hover p-6 reveal" data-chapter="final">
+      <div class="chapter-art" style="background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(77,157,224,.2));color:#a78bfa">◈ 05</div>
+      <div class="eyebrow">CHAPTER 5 · FINAL</div>
+      <h3 class="font-bold text-xl mt-2">Bringing it all together</h3>
+      <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">We bring the whole story together. One input through all three models, four common unsafe patterns, safe tools that carry their size, and short checks. You finish by fixing three short snippets.</p>
+      <div class="flex items-center gap-3 mt-4"><a href="phase-final.html" class="text-sm font-bold" style="color:var(--dblue)">Open chapter</a><span class="chip ml-auto" data-state>Open</span></div>
+    </div>
+    <div class="card p-6 reveal" style="border-style:dashed">
+      <div class="eyebrow">HOW TO USE THIS COURSE</div>
+      <ol class="text-sm mt-2 leading-loose list-decimal ml-5" style="color:var(--dmuted)">
+        <li>Read each section in order. Press Narrate if you want to listen.</li>
+        <li>Run each lab and change the inputs to see what changes.</li>
+        <li>Answer the short checks, then mark the chapter complete.</li>
+      </ol>
+    </div>
+  </div>
+
+  <section class="card p-6 sm:p-8 mt-8 reveal" id="sec-beyond" data-say="The DeepDive above is the depth. The four chapters below are the breadth from Topic 3. They use the same style. Short explanation, one lab, three checks. Expressions shows grouping and style. Numbers shows floats, ints, and warnings. Increments shows pre and post plus overloading. Functions shows structs, enums, lambdas, and patterns.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">BEYOND THE DEEPDIVE · TOPIC 3 BREADTH</div>
+        <h2 class="font-bold text-2xl mt-1">Other C++ topics in the same style</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">The DeepDive above is the depth. The four chapters below are the breadth from Topic 3. They use the same style. Short explanation, one lab, three checks. Expressions shows grouping and style. Numbers shows floats, ints, and warnings. Increments shows pre and post plus overloading. Functions shows structs, enums, lambdas, and patterns.</p>
+      </div>
+      <button data-say-btn="sec-beyond" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+  </section>
+
+  <h2 class="font-extrabold tracking-tight mt-8 mb-1" style="font-size:30px">Beyond the DeepDive</h2>
+  <p class="mb-5" style="color:var(--dmuted)">Four short chapters covering the rest of Topic 3. Same labs, same checks, same voice.</p>
+  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div class="card card-hover p-6 reveal" data-chapter="top1">
+      <div class="chapter-art" style="background:linear-gradient(135deg,rgba(77,157,224,.25),rgba(242,193,78,.2));color:var(--dblue)">( ) 06</div>
+      <div class="eyebrow">BEYOND · 1 OF 4</div>
+      <h3 class="font-bold text-xl mt-2">How C++ groups expressions</h3>
+      <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Precedence decides what runs first. Associativity decides order at the same level. Tap expressions to see grouping. Style rule: when unsure, add parentheses.</p>
+      <div class="flex items-center gap-3 mt-4"><a href="topic-operators.html" class="text-sm font-bold" style="color:var(--dblue)">Open chapter</a><span class="chip ml-auto" data-state>Open</span></div>
+    </div>
+    <div class="card card-hover p-6 reveal" data-chapter="top2">
+      <div class="chapter-art" style="background:linear-gradient(135deg,rgba(242,193,78,.25),rgba(224,71,58,.2));color:var(--dyellow)">0.1 07</div>
+      <div class="eyebrow">BEYOND · 2 OF 4</div>
+      <h3 class="font-bold text-xl mt-2">Numbers that do not behave</h3>
+      <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Float approximates, int counts exactly. Move sliders to see 0.1 + 0.2 leave extra digits. Integer division drops the rest. Warnings and sanitizers catch it early.</p>
+      <div class="flex items-center gap-3 mt-4"><a href="topic-numbers.html" class="text-sm font-bold" style="color:var(--dblue)">Open chapter</a><span class="chip ml-auto" data-state>Open</span></div>
+    </div>
+    <div class="card card-hover p-6 reveal" data-chapter="top3">
+      <div class="chapter-art" style="background:linear-gradient(135deg,rgba(102,187,106,.25),rgba(77,157,224,.2));color:var(--dsafe)">++ 08</div>
+      <div class="eyebrow">BEYOND · 3 OF 4</div>
+      <h3 class="font-bold text-xl mt-2">Small signs, big difference</h3>
+      <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Post gives old then steps, pre steps then gives. Compound forms update in one place. Same signs can be defined for our own types with overloading.</p>
+      <div class="flex items-center gap-3 mt-4"><a href="topic-increment.html" class="text-sm font-bold" style="color:var(--dblue)">Open chapter</a><span class="chip ml-auto" data-state>Open</span></div>
+    </div>
+    <div class="card card-hover p-6 reveal" data-chapter="top4">
+      <div class="chapter-art" style="background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(102,187,106,.2));color:#a78bfa">{ } 09</div>
+      <div class="eyebrow">BEYOND · 4 OF 4</div>
+      <h3 class="font-bold text-xl mt-2">Data and behaviour</h3>
+      <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Structs hold fields, enums name choices. Lambdas hold small behaviour, higher-order takes it as input. Together they make Factory and Singleton.</p>
+      <div class="flex items-center gap-3 mt-4"><a href="topic-functions.html" class="text-sm font-bold" style="color:var(--dblue)">Open chapter</a><span class="chip ml-auto" data-state>Open</span></div>
+    </div>
+  </div>
+
+  <footer class="flex gap-4 mt-12 text-sm flex-wrap" style="color:var(--dfaint)">
+    <span>Educational course. Vulnerable patterns run as text and simulation only, never as live exploits.</span>
+    <span style="display:flex;gap:12px;flex-wrap:wrap"><a href="plan.html" style="color:var(--dblue)">Plan + AI usage</a><a href="topics.html" style="color:var(--dblue)">Topics</a><a href="handout-phase1.html" style="color:var(--dblue)">Handouts</a><a href="code-phase2.html" style="color:var(--dblue)">Code</a><a href="phase3-showcase.html" style="color:var(--dblue)">Slides deck</a><a href="videos/phase1.mp4" style="color:var(--dblue)">Films</a></span>
+    <span class="ml-auto">Voice: <select class="lab" data-voicepick></select></span>
+  </footer>
+</div>
+<script src="assets/course.js"></script>
+<script>
+(function(){
+  var order = ["phase-initial.html","phase-1.html","phase-2.html","phase-3.html","phase-final.html","topic-operators.html","topic-numbers.html","topic-increment.html","topic-functions.html"];
+  var keys = ["initial","phase1","phase2","phase3","final","top1","top2","top3","top4"];
+  function paint(){
+    var done = {};
+    try{ done = JSON.parse(localStorage.getItem("deepdive.done")||"{}"); }catch(e){}
+    for(var i=0;i<keys.length;i++){ if(!done[keys[i]]){ document.getElementById("start-btn").setAttribute("href", order[i]); return; } }
+    document.getElementById("start-btn").textContent = "Review from the start";
+  }
+  document.addEventListener("DOMContentLoaded", paint);
+})();
+</script>
+</body>
+</html>

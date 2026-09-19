@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 4: The Boundary Holds: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm">
+    <a href="index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="phase-2.html" data-prev style="color:var(--dmuted)">Prev: Phase 2</a>
+    <a href="index.html" style="color:var(--dmuted)">Map</a>
+    <a href="phase-final.html" data-next class="font-bold" style="color:var(--dblue)">Next: Final</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="This chapter shows how the boundary holds with a checked copy. The chips below hold our shared numbers: an 8-byte buffer, a 15-letter input, and the 16-byte write we block. The same input that overflowed before now keeps 7 characters plus null, and 8 bytes never enter.">
+    <div class="eyebrow">CHAPTER 4 · PHASE 3</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">The boundary holds.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">This chapter shows how the boundary holds with a checked copy. The chips below hold our shared numbers: an 8-byte buffer, a 15-letter input, and the 16-byte write we block. The same input that overflowed before now keeps 7 characters plus null, and 8 bytes never enter.</p>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-fulltalk class="px-4 py-2 rounded-full font-bold text-sm card">Play full chapter</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+    <div class="hero-art"><svg viewBox="0 0 640 120" width="640" height="120" aria-hidden="true" role="presentation"><rect x="0" y="0" width="640" height="120" rx="12" fill="#0d141f"/><g font-family="monospace" font-weight="bold" text-anchor="middle"><rect x="14" y="14" width="34" height="40" rx="5" fill="#66bb6a"/><text x="31" y="40" font-size="14" fill="#0d141f">A</text><rect x="52" y="14" width="34" height="40" rx="5" fill="#66bb6a"/><text x="69" y="40" font-size="14" fill="#0d141f">B</text><rect x="90" y="14" width="34" height="40" rx="5" fill="#66bb6a"/><text x="107" y="40" font-size="14" fill="#0d141f">C</text><rect x="128" y="14" width="34" height="40" rx="5" fill="#66bb6a"/><text x="145" y="40" font-size="14" fill="#0d141f">D</text><rect x="166" y="14" width="34" height="40" rx="5" fill="#66bb6a"/><text x="183" y="40" font-size="14" fill="#0d141f">E</text><rect x="204" y="14" width="34" height="40" rx="5" fill="#66bb6a"/><text x="221" y="40" font-size="14" fill="#0d141f">F</text><rect x="242" y="14" width="34" height="40" rx="5" fill="#66bb6a"/><text x="259" y="40" font-size="14" fill="#0d141f">G</text><rect x="280" y="14" width="44" height="40" rx="5" fill="none" stroke="#66bb6a" stroke-width="2" stroke-dasharray="5 3"/><text x="302" y="40" font-size="12" fill="#66bb6a">NULL</text><line x1="330" y1="10" x2="330" y2="102" stroke="#66bb6a" stroke-width="2" stroke-dasharray="6 4"/><rect x="348" y="64" width="30" height="26" rx="4" fill="none" stroke="#e0473a" stroke-width="2"/><text x="363" y="82" font-size="13" fill="#e0473a">H</text><rect x="382" y="64" width="30" height="26" rx="4" fill="none" stroke="#e0473a" stroke-width="2"/><text x="397" y="82" font-size="13" fill="#e0473a">I</text><rect x="416" y="64" width="30" height="26" rx="4" fill="none" stroke="#e0473a" stroke-width="2"/><text x="431" y="82" font-size="11" fill="#e0473a">··</text><text x="170" y="106" font-size="11" fill="#66bb6a">8 CELLS · 00-07 HELD</text><text x="470" y="82" font-size="11" fill="#93a1b5">BLOCKED TRAY · 8 KEPT OUT</text></g></svg></div>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <span class="chip b">BUFFER 8</span><span class="chip y">INPUT 15</span><span class="chip r">WRITE 16 BLOCKED</span><span class="chip">OFFSET 40 GUARDED</span><span class="chip">HEX 41 TO 4F</span>
+    </div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-film" data-say="I present my fix in this film. I use my 8 byte buffer and my 15 byte input. I keep 7 plus null and I block 8. Captions are on by default.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">FILM · PHASE 3 · 7 SLIDES · 4:48</div>
+        <h2 class="font-bold text-2xl mt-1">Watch my defended run</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">I present my fix in this film. I use my 8 byte buffer and my 15 byte input. I keep 7 plus null and I block 8. My audio runs slide by slide. Captions stay small and low.</p>
+      </div>
+      <button data-say-btn="sec-film" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4" style="padding:0"><video controls preload="metadata" style="width:100%;border-radius:12px;background:#0b0f14"><source src="videos/phase3_defended_operation.mp4" type="video/mp4" /><track kind="captions" src="videos/phase3_defended_operation.vtt" srclang="en" label="English" default />Your browser does not support video.</video></div>
+    <div class="flex gap-2 flex-wrap mt-4">
+      <a href="videos/phase3_defended_operation.mp4" download class="px-4 py-2 rounded-full font-bold text-sm card">Download film (8.1M)</a>
+      <a href="videos/phase3_defended_operation.vtt" download class="px-4 py-2 rounded-full font-bold text-sm card">Captions</a>
+      <span class="chip g">EXIT 0</span>
+      <span class="chip">BUFFER 8</span>
+      <span class="chip y">BLOCKED 8</span>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-slides" data-say="This frame holds the full 7-slide deck, from the start through the two outcomes, the fix, the grid, and the proof. Use Next and Prev or the arrow keys to move, Present for fullscreen, and Notes for the speaker notes. Every lab inside the deck still runs.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">SLIDES · FULL 7-SLIDE DECK</div>
+        <h2 class="font-bold text-2xl mt-1">Watch the full deck here</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">This frame holds the full 7-slide deck, from the start through the two outcomes, the fix, the grid, and the proof. Use Next and Prev or the arrow keys to move, Present for fullscreen, and Notes for the speaker notes. Every lab inside the deck still runs.</p>
+      </div>
+      <button data-say-btn="sec-slides" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="mt-4 rounded-2xl overflow-hidden" style="border:1px solid var(--dline);background:#070c12">
+      <iframe src="phase3-showcase.html" title="Phase 3 slides: The Boundary Holds" loading="lazy" style="width:100%;height:760px;border:0;display:block;background:#0b0f14" allow="fullscreen"></iframe>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-4">
+      <a href="phase3-showcase.html" class="px-4 py-2 rounded-full font-bold text-sm card">Open deck fullscreen</a>
+      <span class="chip">7 slides</span>
+      <span class="chip">s1 Start</span>
+      <span class="chip">s2 Two outcomes</span>
+      <span class="chip">s3 Unsafe copy</span>
+      <span class="chip">s4 The fix</span>
+      <span class="chip">s5 The grid</span>
+      <span class="chip">s6 Proof</span>
+      <span class="chip">s7 Layers + close</span>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-fix" data-say="Here is our fix. It is just three lines, but it is a habit that protects us every time. First we measure: we check how much space we actually have, then we copy only what fits, at most 7 characters so we leave room for the null terminator.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">THE FIX IN THREE STEPS</div>
+        <h2 class="font-bold text-2xl mt-1">Check first, then copy</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Here is our fix. It is just three lines, but it is a habit that protects us every time. First we measure: we check how much space we actually have, then we copy only what fits, at most 7 characters so we leave room for the null terminator.</p>
+      </div>
+      <button data-say-btn="sec-fix" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm sm:text-base" style="line-height:2"><span style="border:1px solid var(--dsafe);border-radius:8px;padding:2px 8px">n = min(size, 7)</span><br>memcpy(buffer, input, n); &nbsp; <span style="border:1px solid var(--dyellow);border-radius:8px;padding:2px 8px">buffer[n] = null</span></div></div>
+    <div class="flex gap-2 flex-wrap items-center mt-4">
+      <input type="text" id="fixinput" class="lab" value="ABCDEFGHIJKLMNO" maxlength="20" size="16">
+      <span class="chip" id="fixn">n = 7</span>
+      <span class="chip g" id="fixres">ABCDEFG + null</span>
+      <span class="chip y" id="fixblocked">blocked 8</span>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-grid" data-say="Let us see this in action in the 8-cell grid below. A short input fills cells 00 through 07 and ends with null, so it fits. With our long 15-letter input, A through G plus null fill 00 through 07, and H through O never make it in past the marker between 07 and 08.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">LAB · RUN IT WITH YOUR OWN INPUT</div>
+        <h2 class="font-bold text-2xl mt-1">Eight cells, nothing past 07</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Let us see this in action in the 8-cell grid below. A short input fills cells 00 through 07 and ends with null, so it fits. With our long 15-letter input, A through G plus null fill 00 through 07, and H through O never make it in past the marker between 07 and 08.</p>
+      </div>
+      <button data-say-btn="sec-grid" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="flex gap-2 flex-wrap items-center mt-4">
+      <input type="text" id="labinput" class="lab" value="ABCDEFGHIJKLMNO" maxlength="20" size="16">
+      <button id="labrun" class="px-4 py-2 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Run checked copy</button>
+      <button id="labreset" class="px-4 py-2 rounded-full font-bold text-sm card">Reset</button>
+      <span class="chip" id="labstatus">READY</span>
+    </div>
+    <div class="cellgrid mt-4" id="labgrid"></div>
+    <div class="text-sm mt-3" style="color:var(--dmuted)" id="labmsg">Type up to 20 characters, then run.</div>
+    <div class="flex gap-2 flex-wrap mt-2" id="labtray"></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-proof" data-say="This compares the same 15-letter input in the two cards below. Without the check, it tried a write of 16 at offset 40, so the sanitizer reported stack-buffer-overflow and exited with 1. With the check, it kept 7 plus null, blocked 8, printed ABCDEFG, and exited with 0 because the bound removed the bad access.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">PROOF · SAME INPUT, TWO OUTCOMES</div>
+        <h2 class="font-bold text-2xl mt-1">Same input, opposite outcome</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">This compares the same 15-letter input in the two cards below. Without the check, it tried a write of 16 at offset 40, so the sanitizer reported stack-buffer-overflow and exited with 1. With the check, it kept 7 plus null, blocked 8, printed ABCDEFG, and exited with 0 because the bound removed the bad access.</p>
+      </div>
+      <button data-say-btn="sec-proof" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="grid gap-4 md:grid-cols-2 mt-4">
+      <div class="card p-5" style="border-color:var(--dred)">
+        <div class="mono text-xs font-bold" style="color:var(--dred)">PHASE 2 · RED</div>
+        <div class="mono text-sm mt-2 leading-loose">ERROR stack-buffer-overflow<br>WRITE 16 · OFFSET 40<br>ABORTING · exit 1</div>
+      </div>
+      <div class="card p-5" style="border-color:var(--dsafe)">
+        <div class="mono text-xs font-bold" style="color:var(--dsafe)">PHASE 3 · GREEN</div>
+        <div class="mono text-sm mt-2 leading-loose">ERROR none · COPIED 7 · BLOCKED 8<br>RESULT ABCDEFG · exit 0</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-layers" data-say="We close with the layer chips below, each with one job. Size-aware code prevents the overflow, the sanitizer finds bad reads and writes in testing, and the rest stand behind: canary, address shuffle, no-execute, flow check, and static scan. Select each chip to see its job.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">LAYERS · WHAT EACH ONE DOES</div>
+        <h2 class="font-bold text-2xl mt-1">Safe code first, extra layers behind it</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">We close with the layer chips below, each with one job. Size-aware code prevents the overflow, the sanitizer finds bad reads and writes in testing, and the rest stand behind: canary, address shuffle, no-execute, flow check, and static scan. Select each chip to see its job.</p>
+      </div>
+      <button data-say-btn="sec-layers" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-4" id="layerchips">
+      <button class="chip g" data-job="Measure first, copy at most what fits, seal with null.">SIZE-AWARE CODE</button>
+      <button class="chip" data-job="Finds bad reads and writes during testing, before release.">SANITIZER</button>
+      <button class="chip" data-job="A guard value on the stack. A mismatch aborts the program.">CANARY</button>
+      <button class="chip" data-job="Shuffles addresses so targets stay unknown.">ASLR</button>
+      <button class="chip" data-job="Data pages never run as code.">NO-EXECUTE</button>
+      <button class="chip" data-job="Indirect jumps may only land on legal targets.">FLOW CHECK</button>
+      <button class="chip" data-job="Flags risky calls like unchecked strcpy before anything runs.">STATIC SCAN</button>
+    </div>
+    <div class="text-sm mt-3 min-h-[24px]" style="color:var(--dmuted)" id="layerdetail">Select a layer to see its job.</div>
+    <div class="mt-4 p-4 rounded-xl font-extrabold tracking-tight" style="background:rgba(102,187,106,.08);border:1px solid var(--dsafe);font-size:19px">Input length is not capacity. We enforce the boundary: every copy, every time.</div>
+  </section>
+
+  <section class="mt-6 grid gap-4 md:grid-cols-3">
+    <div class="card p-5 reveal" data-quiz="p3-q1" data-why="n is capped at 7, room for null stays.">
+      <div class="text-sm font-bold">Input is 15. What is n?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">n = 15, copy all</button>
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">n = 7, seal with null</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">n = 0, copy nothing</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="p3-q2" data-why="15 plus null is 16, kept 8 means blocked 8.">
+      <div class="text-sm font-bold">How many bytes stay blocked?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">7, the excess chars</button>
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">8, write minus capacity</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">0, truncation keeps all</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="p3-q3" data-why="No bad access happens, so detectors stay silent.">
+      <div class="text-sm font-bold">What does the sanitizer report?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">Nothing, exit 0</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Truncation warning</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Overflow, exit 1</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap">
+    <a href="index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <div class="flex-1"></div>
+    <button data-complete="phase3" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dsafe)">Mark chapter complete</button>
+    <a data-next href="phase-final.html" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Next: Final</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="assets/course.js"></script>
+<script>
+(function(){
+  var labRunning=false;
+  function labBuild(){
+    var g=document.getElementById("labgrid"); if(!g){return;} g.innerHTML="";
+    for(var i=0;i<8;i++){
+      var c=document.createElement("div"); c.className="mcell mono";
+      c.innerHTML='<div class="L">·</div><div class="O">'+(i<10?"0"+i:""+i)+"</div>";
+      g.appendChild(c);
+    }
+  }
+  function labReset(){
+    labRunning=false; labBuild();
+    var tray=document.getElementById("labtray"); if(tray){tray.innerHTML="";}
+    var st=document.getElementById("labstatus"); if(st){st.textContent="READY"; st.className="chip";}
+    var msg=document.getElementById("labmsg"); if(msg){msg.textContent="Type up to 20 characters, then run.";}
+  }
+  function chip(txt, cls){
+    var s=document.createElement("span"); s.className="chip "+cls; s.textContent=txt; return s;
+  }
+  function labRun(){
+    if(labRunning){return;}
+    var inp=document.getElementById("labinput"); if(!inp){return;}
+    var s=(inp.value||"").slice(0,20);
+    if(!s.length){document.getElementById("labmsg").textContent="Type something first, then run."; return;}
+    var n=Math.min(s.length,7);
+    var cells=document.getElementById("labgrid").children;
+    var tray=document.getElementById("labtray"); tray.innerHTML="";
+    var st=document.getElementById("labstatus"), msg=document.getElementById("labmsg");
+    labRunning=true; st.textContent="COPYING"; st.className="chip y";
+    var i=0, c;
+    for(c=0;c<8;c++){cells[c].querySelector(".L").textContent="·"; cells[c].className="mcell mono";}
+    (function step(){
+      if(i<n){cells[i].querySelector(".L").textContent=s.charAt(i); cells[i].classList.add("b"); i++; setTimeout(step,110); return;}
+      cells[n].querySelector(".L").textContent="null";
+      cells[n].querySelector(".O").textContent=(n<10?"0"+n:""+n)+" null";
+      cells[n].classList.add("g");
+      var blocked=Math.max(0,(s.length+1)-8), k;
+      for(k=n;k<s.length;k++){tray.appendChild(chip(s.charAt(k),"r"));}
+      if(n<s.length){tray.appendChild(chip("null","r"));}
+      if(s.length<=7){st.textContent="FITS"; st.className="chip g"; msg.textContent="Kept "+n+" plus null. Nothing blocked. Matches our green run.";}
+      else{st.textContent="TRUNCATED, "+blocked+" BLOCKED"; st.className="chip y"; msg.textContent="Kept "+n+" plus null ("+s.slice(0,n)+"). Blocked "+blocked+" bytes. Matches our green run.";}
+      labRunning=false;
+    })();
+  }
+  function fixUpdate(){
+    var inp=document.getElementById("fixinput"); if(!inp){return;}
+    var s=(inp.value||"").slice(0,20), n=Math.min(s.length,7);
+    document.getElementById("fixn").textContent="n = "+n;
+    document.getElementById("fixres").textContent=s.slice(0,n)+" + null";
+    var b=Math.max(0,(s.length+1)-8), fb=document.getElementById("fixblocked");
+    fb.textContent="blocked "+b; fb.className="chip "+(b===0?"g":"y");
+  }
+  document.getElementById("labrun").onclick=labRun;
+  document.getElementById("labreset").onclick=labReset;
+  document.getElementById("fixinput").oninput=fixUpdate;
+  var chips=document.querySelectorAll("#layerchips .chip"), detail=document.getElementById("layerdetail");
+  for(var q=0;q<chips.length;q++){
+    (function(el){ el.addEventListener("click", function(){ detail.textContent=el.textContent+": "+el.getAttribute("data-job"); }); })(chips[q]);
+  }
+  labBuild(); fixUpdate();
+})();
+</script>
+</body>
+</html>

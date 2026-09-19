@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handout · Phase 3 Defended Copy: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-3xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm noprint">
+    <a href="index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="handout-phase2.html" data-prev style="color:var(--dmuted)">Prev: Phase 2 handout</a>
+    <a href="index.html" style="color:var(--dmuted)">Map</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="This handout is about our fix. We keep our 8-byte buffer safe against our 15-byte input. We check the size before we copy, we keep 7 plus the ending zero, and we block 8. The program exits 0 with no report. The slide deck has 7 cards and runs about 6 minutes live.">
+    <div class="eyebrow">HANDOUT · PHASE 3 · THE FIX</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">My boundary holds.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">This page is about our fix. We keep our 8-byte buffer safe against our 15-byte input: we check the size before we copy, keep 7 plus the ending zero, and block 8. Exit 0, no report. Slides, 7 cards, about 6 min live.</p>
+    <p class="mt-2 max-w-2xl text-sm leading-relaxed" style="color:var(--dmuted)">After this page you will know how we copy with bounds, why our truncation is safe, how our clean test differs from our crash test, and which layers back up our code.</p>
+    <div class="flex gap-2 flex-wrap mt-5 noprint">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <span class="chip b">BUFFER 8</span><span class="chip g">KEEP 7 + END</span><span class="chip r">BLOCK 8</span><span class="chip">EXIT 0</span>
+    </div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-code" data-say="Our fixed copy is three steps. The buffer is 8. We take n as the smaller of the input size and 7. We copy n bytes, then seal the end with zero at n. A safe input of 7 fits whole. Our oversized 15 is truncated safely to ABCDEFG, and 8 are blocked. Our Phase 2 program was intentionally vulnerable and runs only locally with the sanitizer. This Phase 3 program is safe.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">FIXED CODE · THREE STEPS</div>
+        <h2 class="font-bold text-2xl mt-1">Measure, copy, seal</h2>
+      </div>
+      <button data-say-btn="sec-code" class="px-4 py-2 rounded-full font-bold text-sm card noprint">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">BUFFER_SIZE is 8, n is min(size, 7), memcpy n, null at n. Safe 7 gives FITS. Oversized 15 gives TRUNCATED SAFELY, result ABCDEFG, blocked 8.</div></div>
+    <p class="text-sm mt-3 leading-relaxed" style="color:var(--dmuted)">Phase 2 code was intentionally vulnerable and must run only locally with sanitizer. Phase 3 code here is safe.</p>
+    <div class="flex gap-2 flex-wrap mt-4 noprint">
+      <a href="phase3_fixed_copy.cpp" download class="px-4 py-2 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Download .cpp</a>
+      <a href="phase3-showcase.html" class="px-4 py-2 rounded-full font-bold text-sm card">Open slides</a>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-proof" data-say="Our clean run reads in four lines. No error, because our bound removed the bad access. Copied 7 and blocked 8, from 15 in with 7 plus the zero kept. Result ABCDEFG, hex 41 to 47 kept and 48 to 4F blocked. Exit 0, where plain and sanitizer agree. The same input in Phase 2 gave write 16 at offset 40, aborting, exit 1.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">CLEAN PROOF · 4 LINES</div>
+        <h2 class="font-bold text-2xl mt-1">What the clean run shows</h2>
+      </div>
+      <button data-say-btn="sec-proof" class="px-4 py-2 rounded-full font-bold text-sm card noprint">Narrate</button>
+    </div>
+    <div class="grid gap-3 md:grid-cols-2 mt-4 text-sm">
+      <div class="card p-4"><span class="mono font-bold">No ERROR</span><div class="mt-1" style="color:var(--dmuted)">Our bound removed the bad access.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Copied 7, blocked 8</span><div class="mt-1" style="color:var(--dmuted)">15 in, 7 plus null kept.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Result ABCDEFG</span><div class="mt-1" style="color:var(--dmuted)">Hex 41 to 47 kept, 48 to 4F blocked.</div></div>
+      <div class="card p-4"><span class="mono font-bold">Exit 0</span><div class="mt-1" style="color:var(--dmuted)">Plain and sanitizer agree. Phase 2 same input gave WRITE 16 at offset 40, ABORTING, exit 1.</div></div>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-try" data-say="To replay this at home, build the fixed file twice. Once plain, once with the sanitizer flags, then run each. Both should exit 0.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">TRY LOCALLY</div>
+        <h2 class="font-bold text-2xl mt-1">Two builds, both exit 0</h2>
+      </div>
+      <button data-say-btn="sec-try" class="px-4 py-2 rounded-full font-bold text-sm card noprint">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">g++ -std=c++20 -Wall -Wextra -Wpedantic -g src/phase3_fixed_copy.cpp -o phase3_fixed<br>./phase3_fixed<br>g++ -std=c++20 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -g src/phase3_fixed_copy.cpp -o phase3_fixed_asan<br>./phase3_fixed_asan</div></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-slides" data-say="We present live from the deck. 7 slides with timed speaker notes, in the manner of our mockup deck. No audio track, no video render. The notes panel is the narration.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">SLIDES · LIVE DECK</div>
+        <h2 class="font-bold text-2xl mt-1">Present from the deck</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">We present live from the deck, 7 slides with timed speaker notes, in the manner of our mockup deck. No audio track, no video render. The notes panel is the narration.</p>
+      </div>
+      <button data-say-btn="sec-slides" class="px-4 py-2 rounded-full font-bold text-sm card noprint">Narrate</button>
+    </div>
+    <div class="mt-4 noprint"><a href="phase3-showcase.html" class="px-4 py-2 rounded-full font-bold text-sm text-slate-950 inline-block" style="background:var(--dblue)">Open slides</a></div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap noprint">
+    <a href="index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <a href="phase-3.html" class="px-4 py-2 rounded-full font-bold text-sm card">Back to defense</a>
+    <div class="flex-1"></div>
+    <a data-prev href="handout-phase2.html" class="px-4 py-2 rounded-full font-bold text-sm card">Prev</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="assets/course.js"></script>
+</body>
+</html>

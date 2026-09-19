@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code: phase3_fixed_copy.cpp: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="../../assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm">
+    <a href="../../index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="../phase2/" data-prev style="color:var(--dmuted)">Prev: Code: Phase 2</a>
+    <a href="../../index.html" style="color:var(--dmuted)">Map</a>
+    <a href="../../phase-3.html" style="color:var(--dmuted)">Chapter 4: Phase 3</a>
+    
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="This is the Phase 3 defended source. It measures first, copies at most 7 bytes, then seals with the end marker. The same 15 letters keep 7 plus the end marker and block 8, with exit 0 and no detector report.">
+    <div class="eyebrow">CODE &middot; PHASE 3 DEFENDED</div>
+    <h1 class="font-extrabold tracking-tight mt-2 mono" style="font-size:clamp(26px,3.6vw,40px)">phase3_fixed_copy.cpp</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">Safe demo. Explicit bound before copy: n = min(size, 7), copy n, seal with null. Same 15 letters keep 7 plus the end marker, block 8, exit 0. No vulnerability in this file.</p>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+      <a href="../../phase3_fixed_copy.cpp" download class="px-4 py-2 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Download raw .cpp</a>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-4"><span class="chip g">KEEP 7 + END</span><span class="chip">BLOCK 8</span><span class="chip b">EXIT 0</span></div>
+    
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-code" data-say="Full source listing. Copy it into a local file with the same name and build it with the command below.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">SOURCE LISTING · VERBATIM</div>
+        <h2 class="font-bold text-2xl mt-1">Full file</h2>
+      </div>
+      <button data-say-btn="sec-code" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><pre class="mono" style="margin:0;padding:18px;font-size:13px;line-height:1.65;color:#e2e8f0;white-space:pre-wrap;word-break:break-word;overflow-x:auto">/*
+ * C++ Memory Safety Deep Dive Phase 3
+ * Defended copy with explicit bounds
+ *
+ * Safe demonstration. No vulnerability in this file.
+ * It shows the fix for the Phase 2 strcpy overflow.
+ * Phase 2 code was intentionally vulnerable.
+ * That vulnerable code must run only locally with sanitizer.
+ */
+#include &lt;algorithm&gt;
+#include &lt;array&gt;
+#include &lt;cstddef&gt;
+#include &lt;cstring&gt;
+#include &lt;iostream&gt;
+#include &lt;string_view&gt;
+
+constexpr std::size_t BUFFER_SIZE = 8;
+
+// Fixed copy with explicit bound
+// Keeps room for null terminator
+void fixedFunction(std::string_view input) {
+  std::array&lt;char, BUFFER_SIZE&gt; buffer{};
+  std::cout &lt;&lt; &quot;\n[FIXED FUNCTION]\n&quot;;
+  std::cout &lt;&lt; &quot;Buffer capacity: &quot; &lt;&lt; BUFFER_SIZE &lt;&lt; &quot; bytes\n&quot;;
+  std::cout &lt;&lt; &quot;Input: \&quot;&quot; &lt;&lt; input &lt;&lt; &quot;\&quot;\n&quot;;
+  std::cout &lt;&lt; &quot;Input length: &quot; &lt;&lt; input.size() &lt;&lt; &quot; bytes\n&quot;;
+  // Copy at most 7 plus null
+  const std::size_t n = std::min(input.size(), BUFFER_SIZE - 1);
+  std::memcpy(buffer.data(), input.data(), n);
+  buffer[n] = &#x27;\0&#x27;;
+  std::cout &lt;&lt; &quot;Bytes copied: &quot; &lt;&lt; n &lt;&lt; &quot;\n&quot;;
+  if (input.size() &gt;= BUFFER_SIZE) {
+    std::cout &lt;&lt; &quot;Input truncated safely.\n&quot;;
+  } else {
+    std::cout &lt;&lt; &quot;Input fit exactly.\n&quot;;
+  }
+  std::cout &lt;&lt; &quot;Buffer contains: \&quot;&quot; &lt;&lt; buffer.data() &lt;&lt; &quot;\&quot;\n&quot;;
+  std::cout &lt;&lt; &quot;Status: TRUNCATED SAFELY or FITS, no overflow.\n&quot;;
+}
+
+int main() {
+  std::cout &lt;&lt; &quot;============================================================\n&quot;;
+  std::cout &lt;&lt; &quot;  PHASE 3 DEFENDED COPY OPERATION\n&quot;;
+  std::cout &lt;&lt; &quot;  Safe demonstration, bounds enforced\n&quot;;
+  std::cout &lt;&lt; &quot;============================================================\n&quot;;
+  std::cout &lt;&lt; &quot;\nSame numbers as Phase 1 and Phase 2.\n&quot;;
+  std::cout &lt;&lt; &quot;Buffer 8. Oversized input 15. Write 16 blocked.\n&quot;;
+  std::cout &lt;&lt; &quot;\nControl: safe input 7 bytes fits\n&quot;;
+  fixedFunction(&quot;1234567&quot;);
+  std::cout &lt;&lt; &quot;\nTest: oversized input 15 bytes blocked\n&quot;;
+  std::cout &lt;&lt; &quot;Expect truncation, exit 0, no sanitizer report\n&quot;;
+  fixedFunction(&quot;ABCDEFGHIJKLMNO&quot;);
+  std::cout &lt;&lt; &quot;\n============================================================\n&quot;;
+  std::cout &lt;&lt; &quot;  END OF PHASE 3 DEMO, boundary enforced\n&quot;;
+  std::cout &lt;&lt; &quot;============================================================\n&quot;;
+  return 0;
+}
+</pre></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-build" data-say="Build and run locally. Paste this command in a terminal next to the downloaded file.">
+    <div class="eyebrow">BUILD AND RUN · LOCAL ONLY</div>
+    <h2 class="font-bold text-2xl mt-1">Try it yourself</h2>
+    <div class="codecard mt-4"><pre class="mono" style="margin:0;padding:18px;font-size:13px;color:#e2e8f0;white-space:pre-wrap;word-break:break-word">g++ -std=c++17 -Wall -Wextra -fsanitize=address,undefined -o phase3 phase3_fixed_copy.cpp &amp;&amp; ./phase3</pre></div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap">
+    <a href="../../index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <a href="../../phase-3.html" class="px-4 py-2 rounded-full font-bold text-sm card">Back to chapter</a>
+    
+    <div class="flex-1"></div>
+    
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

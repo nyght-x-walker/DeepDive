@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handout · Initial Prototype: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="../../assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-3xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm noprint">
+    <a href="../../index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="../../index.html" style="color:var(--dmuted)">Map</a>
+    <a href="../phase1/" data-next class="font-bold" style="color:var(--dblue)">Next: Phase 1 handout</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="This handout is the quiet companion to our first chapter. We learn where memory lives. The stack clears itself when the function ends. The heap stays until we return it. The smart pointer holds heap space and returns it for us. One page, kept beside the playground.">
+    <div class="eyebrow">HANDOUT · INITIAL PROTOTYPE · PRINTABLE COMPANION</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">Where memory lives.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">This handout is the quiet companion to our first chapter. We learn where memory lives: the stack clears itself when the function ends, the heap stays until we return it, and the smart pointer holds heap space and returns it for us. It follows <span class="mono">initial_prototype.cpp</span> box for box. One page you can print or keep beside the playground.</p>
+    <div class="flex gap-2 flex-wrap mt-5 noprint">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-code" data-say="Our example builds one small record with an id and a name of 10. We place it on the stack, where it is freed on its own. We place it on the heap with new, where we must call delete. And we hold it in a unique pointer, which is heap space that frees itself.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">CODE · THREE OWNERS</div>
+        <h2 class="font-bold text-2xl mt-1">One record, three homes</h2>
+      </div>
+      <button data-say-btn="sec-code" class="px-4 py-2 rounded-full font-bold text-sm card noprint">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">struct MyData {<br>&nbsp;&nbsp;int id;<br>&nbsp;&nbsp;char name[10];<br>};<br><br>int main() {<br>&nbsp;&nbsp;MyData stackData; stackData.id = 42; &nbsp;// stack, auto<br>&nbsp;&nbsp;MyData *heapData = new MyData(); heapData-&gt;id = 100; &nbsp;// heap, manual<br>&nbsp;&nbsp;delete heapData;<br>&nbsp;&nbsp;auto smartData = make_unique&lt;MyData&gt;(); smartData-&gt;id = 200; &nbsp;// heap, auto (RAII)<br>}</div></div>
+    <div class="flex gap-2 flex-wrap mt-4 noprint">
+      <a href="../../initial_prototype.cpp" download class="px-4 py-2 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Download .cpp</a>
+    </div>
+    <p class="text-xs mt-3 mono" style="color:var(--dfaint)">sizeof(MyData) is 14 bytes · addresses shown in the playground are illustrative</p>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-takeaway" data-say="Four things to carry forward. The stack is fast and automatic, freed when the function ends. Heap memory from new must be freed with delete, or it leaks. A unique pointer is heap memory that frees itself, the safest of the three. Every later chapter uses the same street of boxes, only the owners change.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">WHAT TO TAKE AWAY</div>
+        <h2 class="font-bold text-2xl mt-1">Four lines to remember</h2>
+      </div>
+      <button data-say-btn="sec-takeaway" class="px-4 py-2 rounded-full font-bold text-sm card noprint">Narrate</button>
+    </div>
+    <ul class="text-sm mt-3 leading-loose list-disc ml-5" style="color:var(--dmuted)">
+      <li>Stack is fast and automatic, freed when the function ends.</li>
+      <li>Heap with <span class="mono">new</span> must be freed with <span class="mono">delete</span>, or it leaks.</li>
+      <li><span class="mono">unique_ptr</span> is heap but freed automatically, safest of the three.</li>
+      <li>All later chapters use the same street of boxes, just with different owners.</li>
+    </ul>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap noprint">
+    <a href="../../index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <a href="../../phase-initial.html" class="px-4 py-2 rounded-full font-bold text-sm card">Back to playground</a>
+    <div class="flex-1"></div>
+    <a data-next href="../phase1/" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Next: Phase 1 handout</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

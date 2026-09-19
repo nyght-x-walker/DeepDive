@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond 3: Small Signs, Big Difference: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm">
+    <a href="index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="topic-numbers.html" data-prev style="color:var(--dmuted)">Prev: Numbers</a>
+    <a href="index.html" style="color:var(--dmuted)">Map</a>
+    <a href="topic-functions.html" data-next class="font-bold" style="color:var(--dblue)">Next: Functions</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="In the last chapter we learnt why floats approximate and ints count exactly. In this chapter we look at small signs that change meaning. Plus plus before or after, minus minus, and compound forms like plus equal. Then we see how the same signs can be defined for our own types with operator overloading.">
+    <div class="eyebrow">BEYOND THE DEEPDIVE · 3 OF 4</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">Small signs, big difference.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">In the last chapter we learnt why floats approximate and ints count exactly. In this chapter we look at small signs that change meaning. Plus plus before or after, minus minus, and compound forms like plus equal. Then we see how the same signs can be defined for our own types with operator overloading.</p>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-fulltalk class="px-4 py-2 rounded-full font-bold text-sm card">Play full chapter</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg width="640" height="110" viewBox="0 0 640 110" role="presentation" aria-hidden="true" style="max-width:100%;height:auto;display:block;margin-top:16px" font-family="ui-monospace,Menlo,Consolas,monospace">
+        <rect x="0" y="0" width="640" height="110" rx="12" fill="#0d141f"></rect>
+        <rect x="28" y="25" width="120" height="60" rx="10" fill="none" stroke="#4d9de0" stroke-width="2.5"></rect>
+        <text x="48" y="61" font-size="22" font-weight="700" fill="#ffffff">i = 5</text>
+        <line x1="148" y1="40" x2="262" y2="32" stroke="#f2c14e" stroke-width="2.5"></line>
+        <path d="M262 32 l-12 -5 M262 32 l-12 5" stroke="#f2c14e" stroke-width="2.5" fill="none"></path>
+        <line x1="148" y1="70" x2="262" y2="78" stroke="#66bb6a" stroke-width="2.5"></line>
+        <path d="M262 78 l-12 -5 M262 78 l-12 5" stroke="#66bb6a" stroke-width="2.5" fill="none"></path>
+        <text x="158" y="28" font-size="12" fill="#f2c14e">i++ old</text>
+        <text x="158" y="98" font-size="12" fill="#66bb6a">++i new</text>
+        <rect x="270" y="12" width="170" height="36" rx="8" fill="none" stroke="#f2c14e" stroke-width="2"></rect>
+        <text x="284" y="36" font-size="16" font-weight="700" fill="#ffffff">x = 5 old</text>
+        <rect x="270" y="62" width="170" height="36" rx="8" fill="none" stroke="#66bb6a" stroke-width="2"></rect>
+        <text x="284" y="86" font-size="16" font-weight="700" fill="#ffffff">x = 6 new</text>
+        <text x="460" y="48" font-size="14" fill="#7c3aed">i becomes 6</text>
+        <text x="460" y="70" font-size="13" fill="#4d9de0">step to see</text>
+        <text x="460" y="90" font-size="13" fill="#e0473a">old != new</text>
+      </svg>
+    </div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-prepost" data-say="Plus plus after gives the old value, then adds one. Plus plus before adds one, then gives the new value. The same holds for minus minus. Press Step below to watch i and x change line by line. In real code we prefer the plain form unless we need the value right away, because it is easier to read.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">PRE AND POST</div>
+        <h2 class="font-bold text-2xl mt-1">When does the plus happen</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Plus plus after gives the old value, then adds one. Plus plus before adds one, then gives the new value. The same holds for minus minus. Press Step below to watch i and x change line by line. In real code we prefer the plain form unless we need the value right away, because it is easier to read.</p>
+      </div>
+      <button data-say-btn="sec-prepost" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-4">
+      <button id="top3-step-post" class="px-4 py-2 rounded-full font-bold text-sm card">Step: x = i++</button>
+      <button id="top3-step-pre" class="px-4 py-2 rounded-full font-bold text-sm card">Step: x = ++i</button>
+      <button id="top3-reset" class="px-4 py-2 rounded-full font-bold text-sm card">Reset</button>
+      <span class="chip" id="top3-state">i = 5, x = —</span>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">int i = 5;<br>int x = i++; <span style="color:var(--dfaint)">// x is 5, i becomes 6</span><br>int y = ++i; <span style="color:var(--dfaint)">// i becomes 7, y is 7</span></div></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-compound" data-say="Compound forms are short for longer math. Plus equal adds and stores. Minus equal, multiply equal, and divide equal do the same. They keep the update in one place, so there is less to misread. Use them when you update the same variable you read.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">COMPOUND ASSIGNMENT</div>
+        <h2 class="font-bold text-2xl mt-1">Update in one place</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Compound forms are short for longer math. Plus equal adds and stores. Minus equal, multiply equal, and divide equal do the same. They keep the update in one place, so there is less to misread. Use them when you update the same variable you read.</p>
+      </div>
+      <button data-say-btn="sec-compound" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">i += 2; <span style="color:var(--dfaint)">// i = i + 2</span><br>i *= 3; <span style="color:var(--dfaint)">// i = i * 3</span></div></div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-overload" data-say="Operator overloading lets our own types use the same signs. We define what plus plus means for a Counter, what plus means for a small string, what equal means for a record. The rule stays the same as for built-in types. Keep the meaning expected. Plus plus should step forward by one, not jump or print.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">OPERATOR OVERLOADING</div>
+        <h2 class="font-bold text-2xl mt-1">Same signs for our own types</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Operator overloading lets our own types use the same signs. We define what plus plus means for a Counter, what plus means for a small string, what equal means for a record. The rule stays the same as for built-in types. Keep the meaning expected. Plus plus should step forward by one, not jump or print.</p>
+      </div>
+      <button data-say-btn="sec-overload" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">Counter&amp; operator++() <span style="color:var(--dfaint)">// pre: step, return new</span><br>Counter operator++(int) <span style="color:var(--dfaint)">// post: copy old, step, return old</span></div></div>
+  </section>
+
+  <section class="mt-6 grid gap-4 md:grid-cols-3">
+    <div class="card p-5 reveal" data-quiz="top3-q1" data-why="Post gives old, then steps.">
+      <div class="text-sm font-bold">i is 5. x = i++. x is?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">5, i becomes 6</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">6, i stays 5</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="top3-q2" data-why="Pre steps first, then gives.">
+      <div class="text-sm font-bold">i is 5. y = ++i. y is?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">6</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">5</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+    <div class="card p-5 reveal" data-quiz="top3-q3" data-why="Overload should keep expected meaning.">
+      <div class="text-sm font-bold">Overload ++ for Counter?</div>
+      <div class="grid gap-2 mt-3 text-sm">
+        <button data-opt="1" class="quiz-opt card p-2.5 text-left">Step by one</button>
+        <button data-opt="0" class="quiz-opt card p-2.5 text-left">Print and jump</button>
+      </div>
+      <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+    </div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap">
+    <a href="index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <div class="flex-1"></div>
+    <button data-complete="top3" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dsafe)">Mark chapter complete</button>
+    <a data-next href="topic-functions.html" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Next: Functions</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="assets/course.js"></script>
+<script>
+(function(){
+  var i=5;
+  function paint(x){document.getElementById("top3-state").textContent="i = "+i+", x = "+x;}
+  document.getElementById("top3-step-post").onclick=function(){var x=i;i++;paint(x);};
+  document.getElementById("top3-step-pre").onclick=function(){i++;paint(i);};
+  document.getElementById("top3-reset").onclick=function(){i=5;paint("—");};
+  paint("—");
+})();
+</script>
+</body>
+</html>

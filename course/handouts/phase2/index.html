@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handout · Phase 2 When Bytes Escape: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="../../assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-3xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm noprint">
+    <a href="../../index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="../phase1/" data-prev style="color:var(--dmuted)">Prev: Phase 1 handout</a>
+    <a href="../../index.html" style="color:var(--dmuted)">Map</a>
+    <a href="../phase3/" data-next class="font-bold" style="color:var(--dblue)">Next: Phase 3 handout</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="This handout follows our overflow chapter, calmly and in order. We call a real strcpy into an 8-byte buffer. 15 letters plus the ending zero make 16 bytes into 8. The detector reports stack-buffer-overflow and stops the program. The film runs 7 minutes 20 seconds, 440 seconds, in 1920 by 1080.">
+    <div class="eyebrow">HANDOUT · PHASE 2 · EDUCATIONAL DEMO ONLY</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">When bytes escape.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">This handout follows our overflow chapter, calmly and in order. We call a real <span class="mono">strcpy</span> into a <span class="mono">char buffer[8]</span>: 15 letters plus the ending zero make 16 bytes into 8. The detector reports <span class="mono">stack-buffer-overflow</span> and stops the program. Film 7 min 20 s, 440 s, 1920×1080.</p>
+    <div class="flex gap-2 flex-wrap mt-5 noprint">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <span class="chip b">BUFFER 8</span><span class="chip y">INPUT 15</span><span class="chip r">WRITE 16</span><span class="chip">OFFSET 40</span>
+    </div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-code" data-say="Our vulnerable program is small on purpose. The buffer holds 8. We copy 15 letters plus the ending zero, so 16 bytes land in 8, and 8 run past the end. The file header says it plainly. This is an educational demo, intentionally vulnerable. Run it only on your own machine, only with the sanitizer flags.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">CODE · INTENTIONALLY VULNERABLE</div>
+        <h2 class="font-bold text-2xl mt-1">16 bytes into 8</h2>
+      </div>
+      <button data-say-btn="sec-code" class="px-4 py-2 rounded-full font-bold text-sm card noprint">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">constexpr std::size_t BUFFER_SIZE = 8;<br>char buffer[BUFFER_SIZE];<br>strcpy(buffer, "ABCDEFGHIJKLMNO"); // 15 + null = 16 into 8, 8 past</div></div>
+    <div class="rounded-xl mt-4 p-3 text-xs leading-relaxed" style="background:rgba(224,71,58,.08);border:1px solid rgba(224,71,58,.4);color:#f3c1bb">Header says: educational demo only, intentionally vulnerable. Run only locally with <span class="mono">-fsanitize=address,undefined</span>.</div>
+    <div class="flex gap-2 flex-wrap mt-4 noprint">
+      <a href="../../phase2_vulnerable_strcpy.cpp" download class="px-4 py-2 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Download .cpp</a>
+      <a href="../../videos/intermediate-2-vulnerable-operation.mp4" download class="px-4 py-2 rounded-full font-bold text-sm card">Download film 8.0M</a>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-report" data-say="The detector report reads in four lines. Stack-buffer-overflow means we wrote past a stack buffer. Write of size 16 is our 15 letters plus the zero. Bytes 32 to 40 are our 8-byte buffer at offset 32, declared at line 44. At offset 40 is the first bad byte, 8 past the start. Then the program aborts.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">READING THE REPORT · 4 LINES</div>
+        <h2 class="font-bold text-2xl mt-1">What the detector tells us</h2>
+      </div>
+      <button data-say-btn="sec-report" class="px-4 py-2 rounded-full font-bold text-sm card noprint">Narrate</button>
+    </div>
+    <div class="grid gap-3 md:grid-cols-2 mt-4 text-sm">
+      <div class="card p-4"><span class="mono font-bold">stack-buffer-overflow</span><div class="mt-1" style="color:var(--dmuted)">You wrote past a stack buffer.</div></div>
+      <div class="card p-4"><span class="mono font-bold">WRITE size 16</span><div class="mt-1" style="color:var(--dmuted)">15 letters + zero.</div></div>
+      <div class="card p-4"><span class="mono font-bold">[32,40) 'buffer' line 44</span><div class="mt-1" style="color:var(--dmuted)">8 bytes at offset 32, declared at line 44.</div></div>
+      <div class="card p-4"><span class="mono font-bold">at offset 40</span><div class="mt-1" style="color:var(--dmuted)">First bad byte is 8 past the start. Then <span class="mono">ABORTING</span>.</div></div>
+    </div>
+    <p class="text-xs mt-3 mono leading-relaxed" style="color:var(--dfaint)">Without ASan the same write may show <span class="mono">stack smashing detected</span> (canary) or look fine; both are allowed. That is undefined behavior.</p>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-try" data-say="To replay this at home, build the file twice. Once plain, once with the sanitizer flags, then run each. Keep it on your own machine, never deployed.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">TRY LOCALLY · ISOLATED</div>
+        <h2 class="font-bold text-2xl mt-1">Two builds, one lesson</h2>
+      </div>
+      <button data-say-btn="sec-try" class="px-4 py-2 rounded-full font-bold text-sm card noprint">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">g++ -std=c++20 -Wall -Wextra -Wpedantic -g src/phase2_vulnerable_strcpy.cpp -o phase2_vulnerable<br>./phase2_vulnerable<br>g++ -std=c++20 -Wall -Wextra -Wpedantic -fsanitize=address,undefined -g src/phase2_vulnerable_strcpy.cpp -o phase2_vulnerable_asan<br>./phase2_vulnerable_asan</div></div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap noprint">
+    <a href="../../index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <a href="../../phase-2.html" class="px-4 py-2 rounded-full font-bold text-sm card">Back to playground</a>
+    <div class="flex-1"></div>
+    <a data-prev href="../phase1/" class="px-4 py-2 rounded-full font-bold text-sm card">Prev</a>
+    <a data-next href="../phase3/" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Next: Phase 3 handout</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

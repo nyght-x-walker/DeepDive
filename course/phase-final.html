@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 5: Bringing It All Together: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-5xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm">
+    <a href="index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="phase-3.html" data-prev style="color:var(--dmuted)">Prev: Phase 3</a>
+    <a href="index.html" style="color:var(--dmuted)">Map</a>
+    <a href="topic-operators.html" data-next class="font-bold" style="color:var(--dblue)">Next: Expressions</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="In this final chapter we bring the whole course together in one place. One input drives three side-by-side panels, so you can compare the earlier model, the real overflow count, and the checked copy. The sections below walk through common patterns, safe tools, and short fixes to finish.">
+    <div class="eyebrow">CHAPTER 5 · FINAL</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">Bringing it all together.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">In this final chapter we bring the whole course together in one place. One input drives three side-by-side panels, so you can compare the earlier model, the real overflow count, and the checked copy. The sections below walk through common patterns, safe tools, and short fixes to finish.</p>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-fulltalk class="px-4 py-2 rounded-full font-bold text-sm card">Play full chapter</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+    <div class="hero-art"><svg viewBox="0 0 640 120" width="640" height="120" aria-hidden="true" role="presentation"><rect x="0" y="0" width="640" height="120" rx="12" fill="#0d141f"/><g font-family="monospace" font-size="11" font-weight="bold" text-anchor="middle"><rect x="20" y="14" width="185" height="92" rx="10" fill="#0d141f" stroke="#4d9de0" stroke-width="2"/><rect x="36" y="30" width="50" height="34" rx="4" fill="#4d9de0" opacity="0.85"/><rect x="90" y="30" width="50" height="34" rx="4" fill="none" stroke="#4d9de0" stroke-width="2" stroke-dasharray="4 3"/><rect x="144" y="30" width="45" height="34" rx="4" fill="#4d9de0" opacity="0.35"/><text x="112" y="90" fill="#4d9de0">SAFE · SHOWN</text><rect x="228" y="14" width="184" height="92" rx="10" fill="#0d141f" stroke="#e0473a" stroke-width="2"/><rect x="244" y="30" width="152" height="14" rx="3" fill="#e0473a"/><rect x="244" y="48" width="152" height="14" rx="3" fill="#e0473a" opacity="0.55"/><text x="320" y="90" fill="#e0473a">REAL · ABORT 1</text><rect x="435" y="14" width="185" height="92" rx="10" fill="#0d141f" stroke="#66bb6a" stroke-width="2"/><rect x="451" y="30" width="100" height="34" rx="4" fill="#66bb6a" opacity="0.9"/><rect x="555" y="30" width="49" height="34" rx="4" fill="none" stroke="#66bb6a" stroke-width="2"/><path d="M562 41 l6 6 l10 -12" stroke="#66bb6a" stroke-width="2" fill="none"/><text x="527" y="90" fill="#66bb6a">HELD · EXIT 0</text></g></svg></div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-slides" data-say="The full 7-slide finale deck is embedded here as presented. You step through Start, replay, patterns, tools, checks, fixes, and close. Use Next and Prev or arrow keys, Present for fullscreen, Notes for speaker notes. All labs inside still run.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">SLIDES · FULL FINALE DECK · 7 SLIDES</div>
+        <h2 class="font-bold text-2xl mt-1">The finale deck, embedded</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">The full 7-slide finale deck is embedded here as presented. You step through Start, replay, patterns, tools, checks, fixes, and close. Use Next and Prev or arrow keys, Present for fullscreen, Notes for speaker notes. All labs inside still run.</p>
+      </div>
+      <button data-say-btn="sec-slides" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="mt-4 rounded-2xl overflow-hidden" style="border:1px solid var(--dline);background:#070c12">
+      <iframe src="phase-final-showcase.html" title="Final slides: Bringing it all together" loading="lazy" style="width:100%;height:760px;border:0;display:block;background:#0b0f14" allow="fullscreen"></iframe>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-4">
+      <a href="phase-final-showcase.html" class="px-4 py-2 rounded-full font-bold text-sm card">Open deck fullscreen</a>
+      <span class="chip">7 slides</span>
+      <span class="chip">s1 Start</span>
+      <span class="chip">s2 Replay</span>
+      <span class="chip">s3 Patterns</span>
+      <span class="chip">s4 Tools</span>
+      <span class="chip">s5 Checks</span>
+      <span class="chip">s6 Fixes</span>
+      <span class="chip">s7 Close</span>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-replay" data-say="Look at three panels that update as you type in the input box. The first panel shows the capped visualization, the second counts how many bytes would go past an 8-byte buffer, and the third shows the checked copy that keeps at most 7 letters plus null. Same input and three outcomes, so the cause and effect are easy to compare.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">LAB · TRIPLE REPLAY</div>
+        <h2 class="font-bold text-2xl mt-1">One input shows three outcomes</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Look at three panels that update as you type in the input box. The first panel shows the capped visualization, the second counts how many bytes would go past an 8-byte buffer, and the third shows the checked copy that keeps at most 7 letters plus null. Same input and three outcomes, so the cause and effect are easy to compare.</p>
+      </div>
+      <button data-say-btn="sec-replay" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="flex gap-2 flex-wrap items-center mt-4">
+      <input type="text" id="tri-input" class="lab" value="ABCDEFGHIJKLMNO" maxlength="20" size="16">
+      <span class="chip" id="tri-len">15 chars</span>
+    </div>
+    <div class="grid gap-4 md:grid-cols-3 mt-4">
+      <div class="card p-4">
+        <div class="mono text-xs font-bold" style="color:var(--dsafe)">PHASE 1 · SHOWN</div>
+        <div class="mono text-sm mt-2" id="tri-p1">8 kept, 7 cross, capped, exit 0</div>
+      </div>
+      <div class="card p-4" style="border-color:var(--dred)">
+        <div class="mono text-xs font-bold" style="color:var(--dred)">PHASE 2 · REAL</div>
+        <div class="mono text-sm mt-2" id="tri-p2">write 16 into 8, 8 past, abort 1</div>
+      </div>
+      <div class="card p-4" style="border-color:var(--dsafe)">
+        <div class="mono text-xs font-bold" style="color:var(--dsafe)">PHASE 3 · HELD</div>
+        <div class="mono text-sm mt-2" id="tri-p3">kept ABCDEFG, blocked 8, exit 0</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-bugs" data-say="Look at four common patterns that share the same problem: a copy with no size check. Each card shows a short snippet using strcpy, strcat, scanf, or memcpy. Select a card to see why it writes past the buffer and what checked form to use instead.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">LAB · SPOT THE BUG</div>
+        <h2 class="font-bold text-2xl mt-1">Four patterns with the same problem</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Look at four common patterns that share the same problem: a copy with no size check. Each card shows a short snippet using strcpy, strcat, scanf, or memcpy. Select a card to see why it writes past the buffer and what checked form to use instead.</p>
+      </div>
+      <button data-say-btn="sec-bugs" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="grid gap-3 md:grid-cols-2 mt-4 text-sm">
+      <div class="card card-hover p-4" data-bug data-flaw="No size check: 15 plus null into 8. Fix with min plus null, our Phase 3 habit."><div class="mono">strcpy(b, input);</div><div class="mt-2 font-bold" style="color:var(--dyellow)">Click to reveal the flaw</div></div>
+      <div class="card card-hover p-4" data-bug data-flaw="Concat never asks the remaining space. Fix with snprintf or tracked length."><div class="mono">strcat(log, entry);</div><div class="mt-2 font-bold" style="color:var(--dyellow)">Click to reveal the flaw</div></div>
+      <div class="card card-hover p-4" data-bug data-flaw="Scan without width writes past the buffer. Fix with a width like %7s for size 8."><div class="mono">scanf("%s", name);</div><div class="mt-2 font-bold" style="color:var(--dyellow)">Click to reveal the flaw</div></div>
+      <div class="card card-hover p-4" data-bug data-flaw="Size argument is the source length, not the destination. Fix by passing capacity."><div class="mono">memcpy(dst, src, strlen(src));</div><div class="mt-2 font-bold" style="color:var(--dyellow)">Click to reveal the flaw</div></div>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-apis" data-say="This section lists safe tools that always know their size. Each card names one tool, such as std::string, string_view, snprintf, or memcpy with min, and states its single rule. All of them enforce the same boundary: never copy more than the destination holds.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">TOOLBOX · SAFE APIS</div>
+        <h2 class="font-bold text-2xl mt-1">Tools that carry their size</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">This section lists safe tools that always know their size. Each card names one tool, such as std::string, string_view, snprintf, or memcpy with min, and states its single rule. All of them enforce the same boundary: never copy more than the destination holds.</p>
+      </div>
+      <button data-say-btn="sec-apis" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="grid gap-3 md:grid-cols-2 mt-4 text-sm">
+      <div class="card p-4"><span class="mono font-bold" style="color:var(--dsafe)">std::string</span><div style="color:var(--dmuted)">Grows itself, size always known.</div></div>
+      <div class="card p-4"><span class="mono font-bold" style="color:var(--dsafe)">string_view / span</span><div style="color:var(--dmuted)">Borrow with bounds, never own blindly.</div></div>
+      <div class="card p-4"><span class="mono font-bold" style="color:var(--dsafe)">snprintf</span><div style="color:var(--dmuted)">Prints at most n, always terminates.</div></div>
+      <div class="card p-4"><span class="mono font-bold" style="color:var(--dsafe)">memcpy + min</span><div style="color:var(--dmuted)">Copy min(size, capacity minus 1), seal null.</div></div>
+      <div class="card p-4 md:col-span-2"><span class="mono font-bold" style="color:var(--dsafe)">static analysis + sanitizers</span><div style="color:var(--dmuted)">Catch in review, prove in tests. Our course habit, every copy.</div></div>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-world" data-say="This section explains why the pattern matters outside this course. The same unchecked copy has appeared in widely used software, where extra bytes overwrote nearby memory and caused crashes and costly fixes. The summary here keeps the focus on defense: check the size first, then copy.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">WHY IT MATTERS</div>
+        <h2 class="font-bold text-2xl mt-1">The same shape broke real software</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">This section explains why the pattern matters outside this course. The same unchecked copy has appeared in widely used software, where extra bytes overwrote nearby memory and caused crashes and costly fixes. The summary here keeps the focus on defense: check the size first, then copy.</p>
+      </div>
+      <button data-say-btn="sec-world" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-quiz" data-say="Check what stayed with you with eight short questions. Each card asks one idea from earlier chapters, such as buffer size, overflow count, or null termination. Choose an answer to see the explanation right below the card.">
+    <div class="eyebrow">REVIEW · EIGHT QUESTIONS</div>
+    <h2 class="font-bold text-2xl mt-1">Check what stayed with you</h2>
+    <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Check what stayed with you with eight short questions. Each card asks one idea from earlier chapters, such as buffer size, overflow count, or null termination. Choose an answer to see the explanation right below the card.</p>
+    <div class="grid gap-3 md:grid-cols-2 mt-4 text-sm" id="quizbank">
+      <div class="card p-4" data-quiz="fin-q1" data-why="Heap needs delete, stack frees itself."><div class="font-bold">Who frees heap memory?</div><div class="grid gap-2 mt-2"><button data-opt="0" class="quiz-opt card p-2 text-left">It frees itself</button><button data-opt="1" class="quiz-opt card p-2 text-left">We do, with delete or smart pointers</button></div><div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div></div>
+      <div class="card p-4" data-quiz="fin-q2" data-why="8 capacity against longer input."><div class="font-bold">Buffer 8, input 15. Excess?</div><div class="grid gap-2 mt-2"><button data-opt="1" class="quiz-opt card p-2 text-left">7 past the boundary</button><button data-opt="0" class="quiz-opt card p-2 text-left">23 total</button></div><div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div></div>
+      <div class="card p-4" data-quiz="fin-q3" data-why="No size parameter exists."><div class="font-bold">strcpy flaw in one phrase?</div><div class="grid gap-2 mt-2"><button data-opt="0" class="quiz-opt card p-2 text-left">Too slow to use</button><button data-opt="1" class="quiz-opt card p-2 text-left">No destination size</button></div><div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div></div>
+      <div class="card p-4" data-quiz="fin-q4" data-why="15 plus null equals 16."><div class="font-bold">WRITE of size 16 means?</div><div class="grid gap-2 mt-2"><button data-opt="1" class="quiz-opt card p-2 text-left">15 letters plus null</button><button data-opt="0" class="quiz-opt card p-2 text-left">16 buffers</button></div><div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div></div>
+      <div class="card p-4" data-quiz="fin-q5" data-why="[32,40) spans 8 at offset 32."><div class="font-bold">[32, 40) describes?</div><div class="grid gap-2 mt-2"><button data-opt="0" class="quiz-opt card p-2 text-left">16 bytes at line 16</button><button data-opt="1" class="quiz-opt card p-2 text-left">8 bytes at offset 32</button></div><div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div></div>
+      <div class="card p-4" data-quiz="fin-q6" data-why="Offset 40 is the first byte past."><div class="font-bold">Offset 40 means?</div><div class="grid gap-2 mt-2"><button data-opt="1" class="quiz-opt card p-2 text-left">First byte past our 8</button><button data-opt="0" class="quiz-opt card p-2 text-left">40 bytes leaked</button></div><div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div></div>
+      <div class="card p-4" data-quiz="fin-q7" data-why="n caps at 7 plus null."><div class="font-bold">Fix: input 15 gives n = ?</div><div class="grid gap-2 mt-2"><button data-opt="0" class="quiz-opt card p-2 text-left">15</button><button data-opt="1" class="quiz-opt card p-2 text-left">7, sealed with null</button></div><div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div></div>
+      <div class="card p-4" data-quiz="fin-q8" data-why="Silent success stays undefined."><div class="font-bold">Bug looks fine. Verdict?</div><div class="grid gap-2 mt-2"><button data-opt="1" class="quiz-opt card p-2 text-left">Still undefined, still must fix</button><button data-opt="0" class="quiz-opt card p-2 text-left">Safe on that machine</button></div><div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div></div>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-boss" data-say="Fix three short snippets using what you practised above. Each card shows a small task, such as copying a name, reading a word, or owning memory, with two choices. Choose the checked form each time, then read the result line below the cards.">
+    <div class="eyebrow">FINAL · FIX THREE SNIPPETS</div>
+    <h2 class="font-bold text-2xl mt-1">Fix three short snippets</h2>
+    <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">Fix three short snippets using what you practised above. Each card shows a small task, such as copying a name, reading a word, or owning memory, with two choices. Choose the checked form each time, then read the result line below the cards.</p>
+    <div class="grid gap-3 mt-4 text-sm">
+      <div class="card p-4" data-quiz="fin-b1" data-why="Bounds first: min plus null.">
+        <div class="mono">copy name[8] from input:</div>
+        <div class="grid gap-2 mt-2"><button data-opt="0" class="quiz-opt card p-2 text-left mono">strcpy(name, input)</button><button data-opt="1" class="quiz-opt card p-2 text-left mono">memcpy + min + null</button></div>
+        <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+      </div>
+      <div class="card p-4" data-quiz="fin-b2" data-why="Width caps the scan.">
+        <div class="mono">read a word into buf[8]:</div>
+        <div class="grid gap-2 mt-2"><button data-opt="1" class="quiz-opt card p-2 text-left mono">scanf %7s</button><button data-opt="0" class="quiz-opt card p-2 text-left mono">scanf %s</button></div>
+        <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+      </div>
+      <div class="card p-4" data-quiz="fin-b3" data-why="Own the memory safely.">
+        <div class="mono">own 8 bytes on the heap:</div>
+        <div class="grid gap-2 mt-2"><button data-opt="0" class="quiz-opt card p-2 text-left mono">new char[8], never delete</button><button data-opt="1" class="quiz-opt card p-2 text-left mono">make_unique char[8]</button></div>
+        <div class="text-xs mt-2" style="color:var(--dmuted)" data-feedback></div>
+      </div>
+    </div>
+    <div class="mt-4 p-4 rounded-xl font-extrabold" style="background:rgba(102,187,106,.08);border:1px solid var(--dsafe)" id="verdict">Result: fix all three above to finish.</div>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap">
+    <a href="index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <div class="flex-1"></div>
+    <button data-complete="final" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dsafe)">Mark chapter complete</button>
+    <a data-next href="topic-operators.html" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Next: Expressions</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="assets/course.js"></script>
+<script>
+(function(){
+  var inp = document.getElementById("tri-input");
+  function render(){
+    var s = (inp.value||"").slice(0,20), L = s.length;
+    document.getElementById("tri-len").textContent = L+" chars";
+    var over = Math.max(0, L-8), kept = Math.min(L,7);
+    document.getElementById("tri-p1").textContent = "8 kept, "+over+" cross, capped, exit 0";
+    if(L<=7){ document.getElementById("tri-p2").textContent = "write "+(L+1)+" into 8: fits, no report"; }
+    else{ document.getElementById("tri-p2").textContent = "write "+(L+1)+" into 8, "+(L+1-8)+" past, abort 1"; }
+    document.getElementById("tri-p3").textContent = "kept "+(s.slice(0,kept)||"—")+", blocked "+Math.max(0,(L+1)-8)+", exit 0";
+  }
+  inp.addEventListener("input", render); render();
+  var bugs = document.querySelectorAll("[data-bug]");
+  for(var i=0;i<bugs.length;i++){
+    (function(card){
+      card.addEventListener("click", function(){
+        var label = card.querySelector("div:last-child");
+        label.textContent = "Flaw: "+card.getAttribute("data-flaw");
+        label.style.color = "var(--dsafe)";
+      });
+    })(bugs[i]);
+  }
+  var need = ["fin-b1","fin-b2","fin-b3"], timer = setInterval(check, 800);
+  function check(){
+    var ok = true, i;
+    for(i=0;i<need.length;i++){
+      var box = document.querySelector('[data-quiz="'+need[i]+'"]');
+      if(!box || !box.querySelector(".picked-right")){ ok=false; }
+    }
+    if(ok){
+      document.getElementById("verdict").textContent = "Result: all three fixed. You held the boundary.";
+      try{ var d=JSON.parse(localStorage.getItem("deepdive.done")||"{}"); d.final=true; localStorage.setItem("deepdive.done", JSON.stringify(d)); }catch(e){}
+      clearInterval(timer);
+    }
+  }
+})();
+</script>
+</body>
+</html>

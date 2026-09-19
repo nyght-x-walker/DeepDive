@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handout · Phase 1 Seeing the Boundary: DeepDive Course</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="../../assets/course.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body class="bg-grid">
+<div class="max-w-3xl mx-auto px-5 sm:px-8 pb-16">
+  <nav class="flex items-center gap-3 py-5 flex-wrap text-sm noprint">
+    <a href="../../index.html" class="flex items-center gap-2 font-extrabold tracking-tight">
+      <span class="w-8 h-8 rounded-lg grid place-items-center text-white text-sm font-bold mono" style="background:linear-gradient(135deg,#4d9de0,#7c3aed)">D</span>
+      <span>DeepDive <span class="font-medium" style="color:var(--dmuted)">Course</span></span>
+    </a>
+    <div class="flex-1"></div>
+    <a href="../initial/" data-prev style="color:var(--dmuted)">Prev: Initial handout</a>
+    <a href="../../index.html" style="color:var(--dmuted)">Map</a>
+    <a href="../phase2/" data-next class="font-bold" style="color:var(--dblue)">Next: Phase 2 handout</a>
+  </nav>
+
+  <header class="rounded-3xl p-8 sm:p-10 hero-glow card reveal" id="sec-hero" data-say="This handout is the printable companion to our boundary chapter. We build one shelf of 20 boxes and mark three parts. Our buffer is 8, the flag is 4, and the second buffer is 8. Nothing here really overflows. Every copy is capped, so the crossing is only shown. The film runs 9 minutes 41 seconds.">
+    <div class="eyebrow">HANDOUT · PHASE 1 · PRINTABLE COMPANION</div>
+    <h1 class="font-extrabold tracking-tight mt-2" style="font-size:clamp(32px,4.4vw,52px)">Seeing the boundary.</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed" style="color:var(--dmuted)">This handout is the printable companion to our boundary chapter. We lay out one contiguous array of 20 bytes in three regions, and we draw the line we will defend later. Nothing here really overflows. Every copy is capped, so the crossing is only shown. The film runs 9 min 41 s.</p>
+    <div class="flex gap-2 flex-wrap mt-5 noprint">
+      <button data-say-btn="sec-hero" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+      <button data-stop class="px-4 py-2 rounded-full font-bold text-sm card">Stop</button>
+    </div>
+    <div class="flex gap-2 flex-wrap mt-5">
+      <span class="chip b">BUFFER 8</span><span class="chip y">INPUT 15</span><span class="chip">HEX 41 TO 4F</span>
+    </div>
+  </header>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-model" data-say="Our layout is simple. Cells 00 to 07 are our buffer of 8, in blue. Cells 08 to 11 are the 4-byte flag, in orange. Cells 12 to 19 are the second buffer of 8, in green. We start with SAFE in the first cells, zero in the flag, and SECURE in the green cells. Our rule is one line. We stay inside 00 to 07. Everything past 07 is adjacent, not ours.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">THE MODEL</div>
+        <h2 class="font-bold text-2xl mt-1">Three parts with one boundary</h2>
+      </div>
+      <button data-say-btn="sec-model" class="px-4 py-2 rounded-full font-bold text-sm card noprint">Narrate</button>
+    </div>
+    <div class="grid gap-3 md:grid-cols-2 mt-4 text-sm">
+      <div class="card p-4"><span class="mono font-bold">Layout</span><div class="mt-1" style="color:var(--dmuted)"><span class="mono">buffer[8] 00…07</span> blue · <span class="mono">criticalFlag 4B 08…11</span> orange · <span class="mono">buffer2[8] 12…19</span> green</div></div>
+      <div class="card p-4"><span class="mono font-bold">Start</span><div class="mt-1" style="color:var(--dmuted)"><span class="mono">SAFE</span> at 00…03, <span class="mono">0x00</span> at 08…11, <span class="mono">SECURE</span> at 12…17</div></div>
+    </div>
+    <div class="rounded-xl mt-4 p-3 text-sm leading-relaxed" style="background:rgba(242,193,78,.08);border:1px solid rgba(242,193,78,.4);color:var(--dtext)"><span class="font-bold">Rule.</span> <span style="color:var(--dmuted)">Stay in 00…07. Everything past 07 is adjacent, not yours.</span></div>
+    <div class="flex gap-2 flex-wrap mt-4">
+      <span class="chip g">HELLO 5 fits</span><span class="chip r">ABCDEFGHIJKLMNO 15 crosses 7</span><span class="chip">Hex 41…4F</span>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-code" data-say="Our code holds one array of 20 and never writes past it. We measure the input, keep at most 20, and copy only that much. Phase 1 never writes past the 20. The crossing is only shown on the shelf.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">CODE · THE SAFETY CAP</div>
+        <h2 class="font-bold text-2xl mt-1">Capped, so it is safe to explore</h2>
+      </div>
+      <button data-say-btn="sec-code" class="px-4 py-2 rounded-full font-bold text-sm card noprint">Narrate</button>
+    </div>
+    <div class="codecard mt-4"><div class="p-4 mono text-sm" style="color:var(--dmuted)">std::array&lt;unsigned char,20&gt; memory{};<br>// init SAFE, 0x00, SECURE<br>auto n = std::min(input.size(), memory.size());<br>memcpy(memory.data(), input.data(), n); // never past 20</div></div>
+    <p class="text-sm mt-3 leading-relaxed" style="color:var(--dmuted)">Phase 1 never writes past the 20. The “crossing” is only shown.</p>
+    <div class="flex gap-2 flex-wrap mt-4 noprint">
+      <a href="../../phase1_boundary_model.cpp" download class="px-4 py-2 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Download .cpp</a>
+      <a href="../../videos/phase1.mp4" download class="px-4 py-2 rounded-full font-bold text-sm card">Download film 37M</a>
+    </div>
+  </section>
+
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-how" data-say="Use this handout in three passes. First watch the film once without pausing. Then rewatch the 20-box shelf and note the red marker between 07 and 08. Then open the playground and type HELLO, which fills 00 to 04, against the 15-letter input, which spills to 08 to 14 and leaves URE at 15 to 17.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">HOW TO USE</div>
+        <h2 class="font-bold text-2xl mt-1">Three passes</h2>
+      </div>
+      <button data-say-btn="sec-how" class="px-4 py-2 rounded-full font-bold text-sm card noprint">Narrate</button>
+    </div>
+    <ul class="text-sm mt-3 leading-loose list-disc ml-5" style="color:var(--dmuted)">
+      <li>Watch once without pausing.</li>
+      <li>Rewatch the 20-box shelf, note the red marker at 07|08.</li>
+      <li>Use the playground: type HELLO (fills 00..04) vs 15 letters (spills to 08..14, leaves URE at 15..17).</li>
+    </ul>
+  </section>
+
+  <div class="flex items-center gap-3 mt-8 flex-wrap noprint">
+    <a href="../../index.html" class="px-4 py-2 rounded-full font-bold text-sm card">Map</a>
+    <a href="../../phase-1.html" class="px-4 py-2 rounded-full font-bold text-sm card">Back to playground</a>
+    <div class="flex-1"></div>
+    <a data-prev href="../initial/" class="px-4 py-2 rounded-full font-bold text-sm card">Prev</a>
+    <a data-next href="../phase2/" class="px-5 py-2.5 rounded-full font-bold text-sm text-slate-950" style="background:var(--dblue)">Next: Phase 2 handout</a>
+  </div>
+  <footer class="mt-6 text-xs" style="color:var(--dfaint)">Voice: <select class="lab" data-voicepick></select></footer>
+</div>
+<script src="../../assets/course.js"></script>
+</body>
+</html>
