@@ -192,7 +192,7 @@
     document.getElementById("tri-p1").textContent = "8 kept, "+over+" cross, capped, exit 0";
     if(L<=7){ document.getElementById("tri-p2").textContent = "write "+(L+1)+" into 8: fits, no report"; }
     else{ document.getElementById("tri-p2").textContent = "write "+(L+1)+" into 8, "+(L+1-8)+" past, abort 1"; }
-    document.getElementById("tri-p3").textContent = "kept "+(s.slice(0,kept)||"—")+", blocked "+Math.max(0,(L+1)-8)+", exit 0";
+    document.getElementById("tri-p3").textContent = "kept "+(s.slice(0,kept)||"-")+", blocked "+Math.max(0,(L+1)-8)+", exit 0";
   }
   inp.addEventListener("input", render); render();
   var bugs = document.querySelectorAll("[data-bug]");

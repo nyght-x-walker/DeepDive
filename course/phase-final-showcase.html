@@ -195,7 +195,7 @@
     <section class="slide active" id="s1">
       <div class="eyebrow">C++ MEMORY SAFETY · FINAL</div>
       <h1>Bringing it all <span class="grad">together.</span></h1>
-      <p class="sub">One input, three outcomes. We replay the full arc — shown, broken, held — and finish with tools that hold the boundary every time.</p>
+      <p class="sub">One input, three outcomes. We replay the full arc. Shown, broken, held. We finish with tools that hold the boundary every time.</p>
       <div class="chips">
         <span class="chip b">BUFFER 8</span><span class="chip y">INPUT 15</span><span class="chip r">WRITE 16</span><span class="chip">OFFSET 40</span><span class="chip">HEX 41-4F</span>
       </div>
@@ -232,7 +232,7 @@
       <h2>Same flaw, four shapes.</h2>
       <p class="sub">Each card is one copy with no size check. Click a card to reveal its flaw and fix.</p>
       <div class="cols2">
-        <div class="card bugcard" data-fin-bug data-fin-flaw="Flaw: no size check — 15 plus null into 8. Fix: min(input.size(), 7) + null, our Phase 3 habit."><div class="lablabel">PATTERN 1 · COPY</div><div class="mono" style="margin-top:6px">strcpy(b, input);</div><div class="qfb" data-fin-buglabel>Click to reveal the flaw + fix</div></div>
+        <div class="card bugcard" data-fin-bug data-fin-flaw="Flaw: no size check. 15 plus null into 8. Fix: min(input.size(), 7) + null, our Phase 3 habit."><div class="lablabel">PATTERN 1 · COPY</div><div class="mono" style="margin-top:6px">strcpy(b, input);</div><div class="qfb" data-fin-buglabel>Click to reveal the flaw + fix</div></div>
         <div class="card bugcard" data-fin-bug data-fin-flaw="Flaw: concat never asks remaining space. Fix: snprintf or tracked length."><div class="lablabel">PATTERN 2 · CONCAT</div><div class="mono" style="margin-top:6px">strcat(log, entry);</div><div class="qfb" data-fin-buglabel>Click to reveal the flaw + fix</div></div>
         <div class="card bugcard" data-fin-bug data-fin-flaw="Flaw: scan without width writes past the buffer. Fix: width like %7s for size 8."><div class="lablabel">PATTERN 3 · SCAN</div><div class="mono" style="margin-top:6px">scanf(&quot;%s&quot;, name);</div><div class="qfb" data-fin-buglabel>Click to reveal the flaw + fix</div></div>
         <div class="card bugcard" data-fin-bug data-fin-flaw="Flaw: size argument is source length, not destination. Fix: pass destination capacity."><div class="lablabel">PATTERN 4 · COPY N</div><div class="mono" style="margin-top:6px">memcpy(dst, src, strlen(src));</div><div class="qfb" data-fin-buglabel>Click to reveal the flaw + fix</div></div>
@@ -260,7 +260,7 @@
       <h2>Four quick checks.</h2>
       <p class="sub">Pick one answer per card. Feedback appears right below.</p>
       <div class="cols2">
-        <div class="card" data-fin-check data-fin-why="Heap needs delete — stack frees itself.">
+        <div class="card" data-fin-check data-fin-why="Heap needs delete. Stack frees itself.">
           <div class="lablabel">CHECK 1 · HEAP FREE</div>
           <div style="font-weight:800;margin-top:6px">Who frees heap memory?</div>
           <button class="qbtn" data-opt="0">It frees itself</button>
@@ -274,7 +274,7 @@
           <button class="qbtn" data-opt="0">23 total</button>
           <div class="qfb" data-fin-feedback></div>
         </div>
-        <div class="card" data-fin-check data-fin-why="No size parameter exists — strcpy copies until null.">
+        <div class="card" data-fin-check data-fin-why="No size parameter exists. Strcpy copies until null.">
           <div class="lablabel">CHECK 3 · STRCPY FLAW</div>
           <div style="font-weight:800;margin-top:6px">strcpy flaw in one phrase?</div>
           <button class="qbtn" data-opt="0">Too slow to use</button>
@@ -577,7 +577,7 @@ function finFixVerdict(){
   var ok=0;
   for(var i=0;i<cards.length;i++){if(cards[i].querySelector(".picked-right")){ok++;}}
   if(ok===cards.length){v.textContent="Result: all three fixed. You held the boundary."; v.classList.add("good");}
-  else{v.textContent="Result: "+ok+" of 3 fixed — keep going."; v.classList.remove("good");}
+  else{v.textContent="Result: "+ok+" of 3 fixed. Keep going."; v.classList.remove("good");}
 }
 function finChipDetail(chipAttr, detailId){
   var box=document.getElementById(detailId); if(!box){return;}
