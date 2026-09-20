@@ -58,6 +58,25 @@
     </div>
   </section>
 
+  <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-film" data-say="We present the full arc in this film. We replay shown, broken, held in one run with our recorded voice. Captions are on by default.">
+    <div class="flex items-start gap-3 flex-wrap">
+      <div class="flex-1 min-w-[240px]">
+        <div class="eyebrow">FILM · FINAL · 7 SLIDES · 5:10</div>
+        <h2 class="font-bold text-2xl mt-1">Watch the full replay</h2>
+        <p class="text-sm mt-2 leading-relaxed" style="color:var(--dmuted)">We present the full arc in this film. Shown, broken, held in one run with our recorded voice. Captions stay small and low.</p>
+      </div>
+      <button data-say-btn="sec-film" class="px-4 py-2 rounded-full font-bold text-sm card">Narrate</button>
+    </div>
+    <div class="codecard mt-4" style="padding:0"><video controls preload="metadata" style="width:100%;border-radius:12px;background:#0b0f14"><source src="videos/phase_final_presentation.mp4" type="video/mp4" /><track kind="captions" src="videos/phase_final_presentation.vtt" srclang="en" label="English" default />Your browser does not support video.</video></div>
+    <div class="flex gap-2 flex-wrap mt-4">
+      <a href="videos/phase_final_presentation.mp4" download class="px-4 py-2 rounded-full font-bold text-sm card">Download film (12M)</a>
+      <a href="videos/phase_final_presentation.vtt" download class="px-4 py-2 rounded-full font-bold text-sm card">Captions</a>
+      <span class="chip g">EXIT 0</span>
+      <span class="chip">BUFFER 8</span>
+      <span class="chip y">REPLAY + HOLD</span>
+    </div>
+  </section>
+
   <section class="card p-6 sm:p-8 mt-6 reveal" id="sec-replay" data-say="Look at three panels that update as you type in the input box. The first panel shows the capped visualization, the second counts how many bytes would go past an 8-byte buffer, and the third shows the checked copy that keeps at most 7 letters plus null. Same input and three outcomes, so the cause and effect are easy to compare.">
     <div class="flex items-start gap-3 flex-wrap">
       <div class="flex-1 min-w-[240px]">
